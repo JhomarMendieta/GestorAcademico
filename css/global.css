@@ -4,5 +4,14 @@
     /* Colores */
     --negro: #000;
     --blanco: #fff;
+
+    /* Degradados de fondo */
+    --deg1: #000;
+    --deg2: #353535;
+    --deg3: #5e5e5e;
+
     /* Fuentes */
+}
+body{
+    background: linear-gradient(45deg, var(--deg1), var(--deg2), var(--deg3));
 }
