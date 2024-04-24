@@ -1,0 +1,77 @@
+body{
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.contenedor_formulario{
+    background-color: white;
+    width: 80%;
+    max-width: 600px;
+    height: auto;
+    padding: 100px 0px;
+    border-radius: 20px;
+    border: 1px solid #aaaaaa;
+    box-shadow: 1px 0 7px #838383;
+}
+.contenedor_logo{
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+}
+.contenedor_logo .logo{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.contenedor_logo img{
+    width: 160px;
+}
+.contenedor_formulario .contenedor_logo p{
+    width: 100%;
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+
+.formulario{
+    padding: 20px 0;
+    margin: auto;
+    width: 500px;
+    height: fit-content;
+}
+.formulario > *:not(.linea){
+    padding: 15px 0;
+}
+.formulario .usuario input, .formulario .contrasena input{
+    background-color: #f3f3f3;
+    width: 100%;
+    height: 40px;
+    border: 1px solid #969696;
+    outline: none;
+    border-radius: 15px;
+    padding-left: 20px;
+    font-size: 1.2rem;
+}
+.formulario .olvido{
+    color: #0279da;
+}
+.formulario .enviar input{
+    background-color: #b6b6b6;
+    padding: 7px;
+    font-size: 1.2rem;
+    border: 1px solid #969696;
+    outline: none;
+    border-radius: 5px;
+}
+.formulario .linea{
+    width: calc(100% - 100px);
+    border: 2px solid #969696;
+    margin: 0 auto;
+    border-radius: 10px;
+    margin-top: 20px;
+}

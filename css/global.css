@@ -1,4 +1,4 @@
-
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap');
 
 :root{
     /* Colores */
@@ -6,12 +6,21 @@
     --blanco: #fff;
 
     /* Degradados de fondo */
-    --deg1: #000;
-    --deg2: #353535;
-    --deg3: #5e5e5e;
+    --deg1: rgb(221, 221, 221);
+    --deg2: #e7e7e7;
+    --deg3: #ffffff;
 
     /* Fuentes */
+    --JosefinSans: "Josefin Sans", sans-serif;
+}
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial;
 }
 body{
-    background: linear-gradient(45deg, var(--deg1), var(--deg2), var(--deg3));
+    background: linear-gradient(180deg, var(--deg1), var(--deg2), var(--deg3));
+    background-size: 100% 100vh;
+    background-attachment: fixed;
 }
