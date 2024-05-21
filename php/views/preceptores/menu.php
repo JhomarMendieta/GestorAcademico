@@ -10,11 +10,12 @@
 
 <body>
     <header class="header">
-        <nav class="navbar" id="navlateral">
+        <input type="checkbox" name="navlateral" id="navlateral">
+        <nav class="navbar">
             <div class="logo">
                 <img src="../../../img/LogoEESTN1.png" alt="Logo de la EEST 1">
                 <label for="navlateral">
-                    <div class="lienas">
+                    <div class="lineas">
                         <div class="linea l1"></div>
                         <div class="linea l2"></div>
                         <div class="linea l3"></div>
@@ -30,7 +31,8 @@
                 </div>
             </div>
         </nav>
-        <nav class="navlateral" id="navlateral">
+        <label for="navlateral" class="gris"></label>
+        <nav class="navlateral">
 
         </nav>
     </header>
