@@ -33,7 +33,9 @@
         </nav>
         <label for="navlateral" class="gris"></label>
         <nav class="navlateral">
-
+            <div class="logo">
+                <img src="../../../img/LogoEESTN1.png" alt="">
+            </div>
         </nav>
     </header>
 
