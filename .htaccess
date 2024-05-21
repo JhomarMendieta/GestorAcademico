@@ -1,0 +1,11 @@
+RewriteEngine On
+RewriteBase /
+
+# Redirige /index.php a /
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\\ /.*index\\.php
+RewriteRule ^GestorAcademico/index.php/?(.*)$ $1 [R=301,L]
+
+# Redirige todo lo que no sea un archivo real a index.php
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ GestorAcademico/index.php/$1?%{QUERY_STRING} [L]
