@@ -88,10 +88,52 @@
     height: 100vh;
 }
 .header #navlateral:checked ~ .navlateral{
+    left: 0;
+}
+.header .navlateral{
     position: absolute;
     top: 0;
-    left: 0;
-    background-color: #00000062;
+    left: -400px;
+    background-color: #ffffff;
     width: 400px;
     height: 100vh;
+    transition: all .5s ease;
+
+}
+
+.header .navlateral .logo{
+    width: 100%;
+    height: 80px;
+}
+.header .navlateral .logo{
+    width: 100%;
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+}
+.header .navlateral .logo img{
+    height: 100%;
+}
+.header .navlateral .logo .cruz{
+    height: 100%;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+.header .navlateral .logo .cruz:hover .linea{
+    box-shadow: 0 0 5px #686868;
+}
+.header .navlateral .logo .linea{
+    background-color: #000;
+    width: 40px;
+    height: 5px ;
+    border-radius: 10px;
+}
+.header .navlateral .logo .l1{
+    transform: translateX(40px)rotate(45deg);
+}
+.header .navlateral .logo .l2{
+    transform: rotate(-45deg);
 }
