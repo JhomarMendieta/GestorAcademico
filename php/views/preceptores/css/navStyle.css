@@ -1,0 +1,139 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: monospace;
+}
+.header{
+    width: 100%;
+    height: 80px;
+    border: 3px solid #bbbbbb;
+}
+.header .navbar{
+    width: 100%;
+    max-width: 1900px;
+    height: 100%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.header .navbar .logo{
+    height: 100%;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.header .navbar .logo img{
+    height: 100%;
+}
+.header .navbar .usuario{
+    display: flex;
+    align-items: center;
+    gap: 20px   ;
+}
+.header .navbar .icon{
+    background-color: #d4d4d4;
+    width: 40px;
+    height: 40px;
+    border-radius: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.9rem;
+    color: #fff;
+}
+.header .navbar .lineas{
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+.header .navbar .linea{
+    background-color: #000000;
+    width: 40px;
+    height: 5px;
+    border-radius: 100px;
+    transition: all .5s ease;
+}
+
+
+
+
+/* navlateral */
+
+
+
+
+/* Para que funcione la navlateral */
+#navlateral{
+    display: none;
+}
+.header #navlateral:checked ~ .navbar .logo .lineas .l2{
+    display: none;
+}
+.header #navlateral:checked ~ .navbar .logo .lineas .l1{
+    transform: rotate(45deg)translateY(8px);
+}
+.header #navlateral:checked ~ .navbar .logo .lineas .l3{
+    transform: rotate(-45deg)translateY(-9px);
+}
+
+.header #navlateral:checked ~ .gris{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #00000062;
+    width: 100%;
+    height: 100vh;
+}
+.header #navlateral:checked ~ .navlateral{
+    left: 0;
+}
+.header .navlateral{
+    position: absolute;
+    top: 0;
+    left: -400px;
+    background-color: #ffffff;
+    width: 400px;
+    height: 100vh;
+    transition: all .5s ease;
+
+}
+
+.header .navlateral .logo{
+    width: 100%;
+    height: 80px;
+}
+.header .navlateral .logo{
+    width: 100%;
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+}
+.header .navlateral .logo img{
+    height: 100%;
+}
+.header .navlateral .logo .cruz{
+    height: 100%;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+.header .navlateral .logo .cruz:hover .linea{
+    box-shadow: 0 0 5px #686868;
+}
+.header .navlateral .logo .linea{
+    background-color: #000;
+    width: 40px;
+    height: 5px ;
+    border-radius: 10px;
+}
+.header .navlateral .logo .l1{
+    transform: translateX(40px)rotate(45deg);
+}
+.header .navlateral .logo .l2{
+    transform: rotate(-45deg);
+}
