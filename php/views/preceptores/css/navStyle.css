@@ -137,3 +137,37 @@
 .header .navlateral .logo .l2{
     transform: rotate(-45deg);
 }
+.header .navlateral .opciones .principal{
+    margin-top: 50px;
+}
+
+
+
+
+
+.tipo_usuario{
+    font-size: 15px; 
+    font-weight: bold;
+}
+div.opciones {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+    }
+    
+    div.opcion {
+    display: flex;
+    flex-direction: column;
+    }
+    
+    div.container {
+    margin-top: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    }
+.titulop{
+    text-align: center;
+}

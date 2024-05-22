@@ -1,0 +1,67 @@
+body {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+
+div.container {
+    margin-top: 2%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+form {
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+}
+
+form div {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+#logo img {
+    height: 6vh;
+}
+
+.navbar {
+    min-height: 7vh;
+}
+
+@media (max-width: 1000px) {
+   
+}
+
+h1 {
+    text-align: center;
+}
+
+.radio {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+
+#extranjero {
+    margin-top: 5px;
+}
+
+.dnicuil {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+#col1 {
+    gap: 15px;
+}
+
+#col2 {
+    gap: 10px;
+}

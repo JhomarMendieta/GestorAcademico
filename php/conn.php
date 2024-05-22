@@ -1,20 +1,12 @@
 <?php
-$host = 'localhost';
-$dbname = 'proyecto_academicas';
-$username = 'root';
-$password = '';
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "proyecto_academicas";
 
-try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-    
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    
-    // queries
-    // $query = "SELECT * FROM tabla";
-    // $statement = $pdo->query($query);
-    
+$conn = new mysqli($servername, $username, $password, $dbname);
 
-} catch (PDOException $e) {
-    echo "Conexión fallida: " . $e->getMessage();
+if ($conn->connect_error) {
+    die("Conexión fallida: " . $conn->connect_error);
 }
 ?>

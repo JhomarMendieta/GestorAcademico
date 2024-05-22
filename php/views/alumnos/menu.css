@@ -1,0 +1,45 @@
+body {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+div.opciones {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+}
+
+div.opcion {
+    display: flex;
+    flex-direction: column;
+}
+
+div.container {
+    margin-top: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#logo img {
+    height: 6vh;
+}
+
+.navbar {
+    min-height: 7vh;
+    border-bottom: 1px grey solid;
+}
+
+@media (max-width: 1000px) {
+    div.opciones {
+        flex-direction: column;
+    }
+}
+
+h1 {
+    text-align: center;
+}
