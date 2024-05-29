@@ -23,7 +23,7 @@
                         <a class="nav-link active" aria-current="page" href="reinscripcion.php">Solicitud de reinscripción</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="#">Ver RITE</a>
+                        <a class="nav-link" aria-current="page" href="rite.php">Ver RITE</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="#">Ver materias</a>

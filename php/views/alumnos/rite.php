@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="rite.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="./menu.css">
 </head>
 <body>
-
+    
 <!-- navbar -->
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -34,25 +34,19 @@
     </div>
   </div>
 </nav>
+<!-- !!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- ACCEDER A localhost/gestoracademico/php/views/alumnos/RITE.PHP?id=1
+y en id pasar el id del alumno a ver-->
 
-<!-- funcionalidad -->
+
 <div class="container">
-    <div class="opciones">
-        <div class="opcion">
-            <h1>Alumnos</h1>
-            <a type="button" class="btn btn-secondary" href="reinscripcion.php">Solicitud de reinscripción</a>
-        </div>
-        <div class="opcion">
-            <h1>R.I.T.E</h1>
-            <button type="button" class="btn btn-secondary" href="rite.php">Ver RITE</button>
-        </div>
-        <div class="opcion">
-            <h1>Materias</h1>
-            <button type="button" class="btn btn-secondary">Ver materias</button>
-        </div>
-    </div>
+<?php 
+
+include ('rite_get.php');
+
+?>
 </div>
-    
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>

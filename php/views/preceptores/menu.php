@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="css/navStyle.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
+
 <body>
 <header class="header">
         <input type="checkbox" name="navlateral" id="navlateral">
@@ -51,41 +54,42 @@
             </div>
         </nav>
     </header>
-    <h1>Seleccionar un Curso</h1>
-    <label for="select" class="select">
-    <input type="radio" name="list" value="not_changed" id="bg" checked />
-    <input type="radio" name="list" value="not_changed" id="select">
-    <label class="bg" for="bg"></label>
-    <div class="items">
-      <input type="radio" name="list" value="first_value" id="list[0]">
-      <label for="list[0]">7°2</label>
-      <input type="radio" name="list" value="second_value" id="list[1]">
-      <label for="list[1]">7°1</label>
-      <span id="text">Cursos...</span>
+    <br>
+    <br>
+    <div class="titulop">
+        <h1>PRECEPTORES</h1>
+    </div>
+    <div class="container">
+    <div class="opciones">
+        <div class="opcion">
+            <h1>R.I.T.E</h1>
+            <a href="rite.php">
+            <button type="button" class="btn-secondary">Ver RITE</button></a>
+            <br>
+            <a href="cargar-rite.php">
+            <button type="button" class="btn-secondary">Cargar RITE</button>
+        </a>
+    </div>
+        <div class="opcion">
+            <h1>Materias</h1>
+            <br>
+            <a href="materias.php">
+            <button type="button" class="btn-secondary">Ver materias</button>
+            </a>
         </div>
-    </label>
-    <h1>Ver alumnos por curso</h1> 
-    <?php include 'alumnos.php'; ?>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js">
-            $(document).ready(function(){
-    $('input[name="list"]').change(function(){
-        var selectedValue = $(this).val();
-        if(selectedValue === "first_value" || selectedValue === "second_value") {
-            $.ajax({
-                url: 'alumnos.php',
-                type: 'GET',
-                success: function(data) {
-                    // Aquí puedes mostrar o hacer algo con la respuesta de la consulta PHP
-                    console.log(data);
-                },
-                error: function() {
-                    console.log('Error al ejecutar la consulta PHP');
-                }
-            });
-        }
-    });
-    });
-    </script>
-    
+        <div class="opcion">
+            <h1>Listado</h1>
+            <br>
+            <a href="curso.php">
+            <button type="button" class="btn-secondary">Ver alumnos por curso</button>
+            </a>
+        </div>
+    </div>
+</div>
+
+
+    <script src="https://kit.fontawesome.com/d5f1649c82.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
+
 </html>
