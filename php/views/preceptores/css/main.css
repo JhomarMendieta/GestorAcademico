@@ -67,5 +67,5 @@
 }
 .secciones .opcion:active{
     box-shadow: 0 0 0;
-    transform: translate(3px,3px);
+    transform: translate(2px,2px);
 }
