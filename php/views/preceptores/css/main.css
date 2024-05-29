@@ -1,0 +1,71 @@
+.body{
+    background-color: #fff;
+    width: 100%;
+    max-width: 1400px;
+    height: calc(100vh - 200px);
+    margin: 30px auto;
+    border: 2px solid #bbbbbb;
+    border-radius: 10px  ;
+}  
+.items{
+    width: 100%;
+    height: fit-content;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+}
+.apartado .seccion{
+    height: 100px;
+    display: grid;
+    place-items: center;
+    gap: 10px;
+    padding-bottom: 20px;
+}
+.apartado .seccion .icon i{
+    font-size: 3rem;
+}
+.apartado .seccion p.text_icon{
+    text-transform: uppercase;
+}
+.apartado .secciones{
+    display: grid;
+    gap: 20px;
+    justify-content: center;
+}
+.apartado .secciones .opcion{
+    background-color: #bbbbbb;
+    width: 200px;
+    height: fit-content;
+    min-height: 40px;
+    color: #585858;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    box-shadow: 5px 5px 1px #686868;
+    display: grid;
+    place-items: center;
+    transition: all .2s ease;
+}
+.secciones .separacion{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.secciones .separacion .circulo{
+    background-color: #bbbbbb;
+    padding: 3px;
+    border-radius: 10px;
+}
+.secciones .separacion .linea{
+    background-color: #bbbbbb;
+    width: calc(100% - 30px);
+    height: 2px;
+}
+.secciones .opcion:hover{
+    background-color: #9c9c9c;
+}
+.secciones .opcion:active{
+    box-shadow: 0 0 0;
+    transform: translate(3px,3px);
+}
