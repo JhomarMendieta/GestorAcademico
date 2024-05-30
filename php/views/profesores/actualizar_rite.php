@@ -46,6 +46,49 @@ $stmt->bind_result($profesorId);
 $stmt->fetch();
 $stmt->close();
 
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['save'])) {
+    $materiaId = $_POST['materia_id'];
+    $alumnoId = $_POST['alumno_id'];
+
+    if ($_POST['save'] == 'add') {
+        $nombre = $_POST['nombre'];
+        $calificacion = $_POST['calificacion'];
+        $instancia = $_POST['instancia'];
+
+        // Insertar nueva nota
+        $query = "INSERT INTO nota (nombre, calificacion, instancia, id_materia, id_alumno) VALUES (?, ?, ?, ?, ?)";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("sssii", $nombre, $calificacion, $instancia, $materiaId, $alumnoId);
+        $stmt->execute();
+        $stmt->close();
+    } elseif ($_POST['save'] == 'edit') {
+        $notaId = $_POST['nota_id'];
+        $nombre = $_POST['nombre'];
+        $calificacion = $_POST['calificacion'];
+        $instancia = $_POST['instancia'];
+
+        // Actualizar nota existente
+        $query = "UPDATE nota SET nombre = ?, calificacion = ?, instancia = ? WHERE id = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("sssi", $nombre, $calificacion, $instancia, $notaId);
+        $stmt->execute();
+        $stmt->close();
+    } elseif ($_POST['save'] == 'delete') {
+        $notaId = $_POST['nota_id'];
+
+        // Eliminar nota
+        $query = "DELETE FROM nota WHERE id = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("i", $notaId);
+        $stmt->execute();
+        $stmt->close();
+    }
+
+    // Recargar la página para reflejar los cambios
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit;
+}
+
 // Obtener las materias que enseña el profesor
 $query = "SELECT materia.id, materia.nombre FROM profesor_materia
           INNER JOIN materia ON profesor_materia.id_materia = materia.id
@@ -55,6 +98,28 @@ $stmt->bind_param("i", $profesorId);
 $stmt->execute();
 $result = $stmt->get_result();
 ?>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Notas</title>
+    <style>
+        .form-container {
+            display: none;
+        }
+    </style>
+    <script>
+        function showForm(formId) {
+            document.querySelectorAll('.form-container').forEach(function (form) {
+                form.style.display = 'none';
+            });
+            document.getElementById(formId).style.display = 'block';
+        }
+    </script>
+</head>
+<body>
 <h1>Seleccione una Materia</h1>
 <form method="POST" action="">
     <select name="materia_id" required>
@@ -83,7 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['materia_id'])) {
 
     echo "<h2>Alumnos Inscritos</h2>";
     echo "<table class='table table-striped'>";
-    echo "<tr><th>Apellido</th><th>Nombre</th><th>Calificación</th><th>Instancia</th><th>Indicador</th></tr>";
+    echo "<tr><th>Apellido</th><th>Nombre</th><th>Calificación</th><th>Indicador</th><th>Instancia</th><th>Acciones</th></tr>";
     
     while ($row = $result->fetch_assoc()) {
         $alumnoId = $row['id'];
@@ -99,7 +164,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['materia_id'])) {
     
         // Inicializar variables para las notas del alumno
         $notas = [];
-      
     
         while ($nota = $resultNotas->fetch_assoc()) {
             $notas[] = $nota;
@@ -115,135 +179,98 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['materia_id'])) {
             echo "<div>" . $nota['calificacion'] . "</div>";
         }
         echo "</td>";
-        echo "<td>";
-        foreach ($notas as $nota) {
-            echo "<div>" . $nota['instancia'] . "</div>";
-        }
-        echo "</td>";
+
         echo "<td>";
         foreach ($notas as $nota) {
             echo "<div>" . $nota['nombre'] . "</div>";
         }
         echo "</td>";
-        echo "</tr>";
-    }
-    echo "</table>";
-        
-        // Fila adicional para los formularios
-        echo "<tr>";
-        echo "<td colspan='3'>";
-        
-        // Formulario para agregar nota
-        echo "<form method='POST' action='' style='margin-bottom: 10px;'>
-                <input type='hidden' name='materia_id' value='{$materiaId}'>
-                <input type='hidden' name='alumno_id' value='{$alumnoId}'>
-                <label for='nombre'>Nombre de la Nota:</label>
-                <input type='text' name='nombre' required>
-                <label for='calificacion'>Calificación:</label>
-                <input type='text' name='calificacion' required>
-                <label for='instancia'>Instancia:</label>
-                <select name='instancia' required>
-                <option value= 'disabled' selected>Seleccione instancia</option>
-                    <option value='MAYO'>MAYO</option>
-                    <option value='JULIO'>JULIO</option>
-                    <option value='SEPTIEMBRE'>SEPTIEMBRE</option>
-                    <option value='NOVIEMBRE'>NOVIEMBRE</option>
-                </select>
-                <button type='submit' name='save' value='add'>Agregar</button>
-              </form>";
-        
-        // Formulario para editar nota
-        echo "<form method='POST' action='' style='margin-bottom: 10px;'>
-                <input type='hidden' name='materia_id' value='{$materiaId}'>
-                <input type='hidden' name='alumno_id' value='{$alumnoId}'>
-                <label for='nota_id'>Seleccionar Nota:</label>
-                <select name='nota_id' required>";
-        foreach ($notas as $index => $nota) {
-            echo "<option value='{$nota['id']}'>Nota " . ($index + 1) . " - " . $nota['nombre'] . "</option>";
+        echo "<td>";
+        foreach ($notas as $nota) {
+            echo "<div>" . $nota['instancia'] . "</div>";
         }
-        echo "</select>
-                <label for='nombre'>Nuevo Nombre de la Nota:</label>
-                <input type='text' name='nombre' required>
-                <label for='calificacion'>Nueva Calificación:</label>
-                <input type='text' name='calificacion' required>
-                <label for='instancia'>Nueva Instancia:</label>
-                <select name='instancia' required>
-                <option value= 'disabled' selected>Seleccione instancia</option>
-                    <option value='MAYO'>MAYO</option>
-                    <option value='JULIO'>JULIO</option>
-                    <option value='SEPTIEMBRE'>SEPTIEMBRE</option>
-                    <option value='NOVIEMBRE'>NOVIEMBRE</option>
-                </select>
-                <button type='submit' name='save' value='edit'>Editar</button>
-              </form>";
-        
-        // Formulario para borrar nota
-        echo "<form method='POST' action=''>
-                <input type='hidden' name='materia_id' value='{$materiaId}'>
-                <input type='hidden' name='alumno_id' value='{$alumnoId}'>
-                <label for='nota_id'>Seleccionar Nota:</label>
-                <select name='nota_id' required>";
-        foreach ($notas as $index => $nota) {
-            echo "<option value='{$nota['id']}'>Nota " . ($index + 1) . " - " . $nota['nombre'] . "</option>";
-        }
-        echo "</select>
-                <button type='submit' name='save' value='delete'>Borrar</button>
-              </form>";
-
         echo "</td>";
+        echo "<td>
+                <select onchange='showForm(this.value)'>
+                    <option value='' disabled selected>Seleccionar</option>
+                    <option value='form-add-{$alumnoId}'>Agregar Nota</option>
+                    <option value='form-edit-{$alumnoId}'>Editar Nota</option>
+                    <option value='form-delete-{$alumnoId}'>Borrar Nota</option>
+                </select>
+              </td>";
         echo "</tr>";
+        echo "<table>";
+        // Formularios para agregar, editar y borrar nota
+        echo "<tr id='form-add-{$alumnoId}' class='form-container'>
+                <td colspan='6'>
+                    <form method='POST' action=''>
+                        <input type='hidden' name='materia_id' value='{$materiaId}'>
+                        <input type='hidden' name='alumno_id' value='{$alumnoId}'>
+                        <label for='nombre'>Nombre de la Nota:</label>
+                        <input type='text' name='nombre' required>
+                        <label for='calificacion'>Calificación:</label>
+                        <input type='text' name='calificacion' required>
+                        <label for='instancia'>Instancia:</label>
+                        <select name='instancia' required>
+                            <option value='' disabled selected>Seleccione instancia</option>
+                            <option value='MAYO'>MAYO</option>
+                            <option value='JULIO'>JULIO</option>
+                            <option value='SEPTIEMBRE'>SEPTIEMBRE</option>
+                            <option value='NOVIEMBRE'>NOVIEMBRE</option>
+                        </select>
+                        <button type='submit' name='save' value='add'>Agregar</button>
+                    </form>
+                </td>
+              </tr>";
+        
+        echo "<tr id='form-edit-{$alumnoId}' class='form-container'>
+                <td colspan='6'>
+                    <form method='POST' action=''>
+                        <input type='hidden' name='materia_id' value='{$materiaId}'>
+                        <input type='hidden' name='alumno_id' value='{$alumnoId}'>
+                        <label for='nota_id'>Seleccionar Nota:</label>
+                        <select name='nota_id' required>
+                        <option value='' disabled selected>Elija indicador</option>";
+        foreach ($notas as $nota) {
+            echo "
+            <option value='{$nota['id']}'>" . $nota['nombre'] . "</option>";
+        }
+        echo "  </select>
+                        <label for='nombre'>Nombre de la Nota:</label>
+                        <input type='text' name='nombre' required>
+                        <label for='calificacion'>Calificación:</label>
+                        <input type='text' name='calificacion' required>
+                        <label for='instancia'>Instancia:</label>
+                        <select name='instancia' required>
+                            <option value='' disabled selected>Seleccione instancia</option>
+                            <option value='MAYO'>MAYO</option>
+                            <option value='JULIO'>JULIO</option>
+                            <option value='SEPTIEMBRE'>SEPTIEMBRE</option>
+                            <option value='NOVIEMBRE'>NOVIEMBRE</option>
+                        </select>
+                        <button type='submit' name='save' value='edit'>Guardar Cambios</button>
+                    </form>
+                </td>
+              </tr>";
+        
+        echo "<tr id='form-delete-{$alumnoId}' class='form-container'>
+                <td colspan='6'>
+                    <form method='POST' action=''>
+                        <input type='hidden' name='materia_id' value='{$materiaId}'>
+                        <input type='hidden' name='alumno_id' value='{$alumnoId}'>
+                        <label for='nota_id'>Seleccionar Nota:</label>
+                        <select name='nota_id' required>";
+        foreach ($notas as $nota) {
+            echo "<option value='{$nota['id']}'>" . $nota['nombre'] . "</option>";
+        }
+        echo "</select>
+                        <button type='submit' name='save' value='delete'>Borrar Nota</button>
+                    </form>
+                </td>
+              </tr>";
     }
     echo "</table>";
-
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['save'])) {
-    $materiaId = $_POST['materia_id'];
-    $alumnoId = $_POST['alumno_id'];
-
-    if ($_POST['save'] == 'add') {
-        $nombre = $_POST['nombre'];
-        $calificacion = $_POST['calificacion'];
-        $instancia = $_POST['instancia'];
-
-        // Insertar nueva nota
-        $query = "INSERT INTO nota (nombre, calificacion, instancia, id_materia, id_alumno) VALUES (?, ?, ?, ?, ?)";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("sssii", $nombre, $calificacion, $instancia, $materiaId, $alumnoId);
-        if ($stmt->execute()) {
-            echo "Nota agregada exitosamente.";
-        } else {
-            echo "Error al agregar la nota.";
-        }
-    } elseif ($_POST['save'] == 'edit') {
-        $notaId = $_POST['nota_id'];
-        $nombre = $_POST['nombre'];
-        $calificacion = $_POST['calificacion'];
-        $instancia = $_POST['instancia'];
-
-        // Actualizar nota existente
-        $query = "UPDATE nota SET nombre = ?, calificacion = ?, instancia = ? WHERE id = ?";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("sssi", $nombre, $calificacion, $instancia, $notaId);
-        if ($stmt->execute()) {
-            echo "Nota actualizada exitosamente.";
-        } else {
-            echo "Error al actualizar la nota.";
-        }
-    } elseif ($_POST['save'] == 'delete') {
-        $notaId = $_POST['nota_id'];
-
-        // Borrar nota existente
-        $query = "DELETE FROM nota WHERE id = ?";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("i", $notaId);
-        if ($stmt->execute()) {
-            echo "Nota borrada exitosamente.";
-        } else {
-            echo "Error al borrar la nota.";
-        }
-    }
 }
-
 $conn->close();
 ?>
 
