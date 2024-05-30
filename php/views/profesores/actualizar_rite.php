@@ -83,6 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['materia_id'])) {
 
     echo "<h2>Alumnos Inscritos</h2>";
     echo "<table class='table table-striped'>";
+    echo "<tr><th>Apellido</th><th>Nombre</th><th>Calificación</th><th>Instancia</th><th>Indicador</th></tr>";
     
     while ($row = $result->fetch_assoc()) {
         $alumnoId = $row['id'];
@@ -98,20 +99,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['materia_id'])) {
     
         // Inicializar variables para las notas del alumno
         $notas = [];
-
+      
+    
         while ($nota = $resultNotas->fetch_assoc()) {
             $notas[] = $nota;
         }
     
         // Mostrar los datos en columnas separadas
-        
-        echo "{$apellidoAlumno}";
-        echo " {$nombreAlumno}";
         echo "<tr>";
-        echo "<tr><th>Calificacion</th><th>Instancia</th><th>Indicador</th></tr>";
+        echo "<td>{$apellidoAlumno}</td>";
+        echo "<td>{$nombreAlumno}</td>";
+        
         echo "<td>";
         foreach ($notas as $nota) {
-            echo "<div> " . $nota['calificacion'] . "</div>";
+            echo "<div>" . $nota['calificacion'] . "</div>";
         }
         echo "</td>";
         echo "<td>";
@@ -126,10 +127,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['materia_id'])) {
         echo "</td>";
         echo "</tr>";
     }
-
+    echo "</table>";
         
         // Fila adicional para los formularios
-        
         echo "<tr>";
         echo "<td colspan='3'>";
         
@@ -143,6 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['materia_id'])) {
                 <input type='text' name='calificacion' required>
                 <label for='instancia'>Instancia:</label>
                 <select name='instancia' required>
+                <option value= 'disabled' selected>Seleccione instancia</option>
                     <option value='MAYO'>MAYO</option>
                     <option value='JULIO'>JULIO</option>
                     <option value='SEPTIEMBRE'>SEPTIEMBRE</option>
@@ -167,6 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['materia_id'])) {
                 <input type='text' name='calificacion' required>
                 <label for='instancia'>Nueva Instancia:</label>
                 <select name='instancia' required>
+                <option value= 'disabled' selected>Seleccione instancia</option>
                     <option value='MAYO'>MAYO</option>
                     <option value='JULIO'>JULIO</option>
                     <option value='SEPTIEMBRE'>SEPTIEMBRE</option>
