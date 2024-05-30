@@ -25,7 +25,7 @@
           <a class="nav-link" aria-current="page" href="reinscripcion.php">Solicitud de reinscripción</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="rite.php">Ver RITE</a>
+          <a class="nav-link" aria-current="page" href="rite.php?id=1">Ver RITE</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" aria-current="page" href="#">Ver materias</a>
@@ -44,7 +44,7 @@
         </div>
         <div class="opcion">
             <h1>R.I.T.E</h1>
-            <button type="button" class="btn btn-secondary" href="rite.php">Ver RITE</button>
+            <a type="button" class="btn btn-secondary" href="rite.php?id=1">Ver RITE</a>
         </div>
         <div class="opcion">
             <h1>Materias</h1>

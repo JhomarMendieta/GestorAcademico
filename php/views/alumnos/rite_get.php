@@ -8,7 +8,7 @@ include_once('../../conn.php');
 $alumno_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
 // Consulta para obtener el nombre del alumno
-$alumno_query = "SELECT nombres FROM alumno WHERE id = $alumno_id";
+$alumno_query = "SELECT nombres, apellidos FROM alumno WHERE id = $alumno_id";
 $alumno_result = $conn->query($alumno_query);
 
 if ($alumno_result->num_rows > 0) {
@@ -17,24 +17,29 @@ if ($alumno_result->num_rows > 0) {
     die("Alumno no encontrado.");
 }
 
-// Consulta para obtener las notas del alumno, incluyendo curso y año
+// Consulta para obtener las notas del alumno, incluyendo curso, año y instancia
 $notas_query = "
-    SELECT materia.nombre AS materia, curso.anio_lectivo AS anio, nota.calificacion, nota.nombre AS nombre_nota
+    SELECT curso.anio_lectivo AS anio_lectivo, curso.anio AS anio_curso, curso.division AS division, 
+           materia.nombre AS materia, nota.nombre AS nombre_nota, nota.calificacion, nota.instancia
     FROM nota
     INNER JOIN materia ON nota.id_materia = materia.id
     INNER JOIN curso ON materia.id_curso = curso.id
     WHERE nota.id_alumno = $alumno_id
-    ORDER BY materia.nombre ASC, nota.id ASC
+    ORDER BY curso.anio_lectivo ASC, curso.anio ASC, curso.division ASC, materia.nombre ASC, nota.id ASC
 ";
 $notas_result = $conn->query($notas_query);
 
-// Organizar las notas por materia
-$notas_por_materia = [];
+// Organizar las notas por año lectivo, curso y materia
+$notas_por_anio_lectivo = [];
 while ($row = $notas_result->fetch_assoc()) {
-    $notas_por_materia[$row['materia']]['anio'] = $row['anio'];
-    $notas_por_materia[$row['materia']]['notas'][] = [
+    $anio_lectivo = $row['anio_lectivo'];
+    $anio_curso = $row['anio_curso'];
+    $division = $row['division'];
+    $materia = $row['materia'];
+    $notas_por_anio_lectivo[$anio_lectivo][$anio_curso][$division][$materia][] = [
         'calificacion' => $row['calificacion'],
-        'nombre_nota' => $row['nombre_nota']
+        'nombre_nota' => $row['nombre_nota'],
+        'instancia' => $row['instancia']
     ];
 }
 ?>
@@ -43,41 +48,50 @@ while ($row = $notas_result->fetch_assoc()) {
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Notas de <?php echo htmlspecialchars($alumno['nombres']); ?></title>
+    <title>Notas de <?php echo htmlspecialchars($alumno['nombres']); ?> <?php echo htmlspecialchars($alumno['apellidos']); ?></title>
     <style>
-        table {
-            width: 70%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-        table, th, td {
-            border: 1px solid black;
-        }
-        th, td {
-            padding: 10px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
+
+
     </style>
 </head>
 <body>
-    <h1>Notas de <?php echo htmlspecialchars($alumno['nombres']); ?></h1>
+    <h1>Notas de <?php echo htmlspecialchars($alumno['nombres']); ?> <?php echo htmlspecialchars($alumno['apellidos']); ?></h1>
     <?php
-    if (!empty($notas_por_materia)) {
-        foreach ($notas_por_materia as $materia => $detalles) {
-            echo "<h2>" . htmlspecialchars($materia) . " (Año: " . htmlspecialchars($detalles['anio']) . ")</h2>";
-            echo "<table>";
-            echo "<thead>";
-            echo "<tr><th>Nombre de la Nota</th><th>Calificación</th></tr>";
-            echo "</thead>";
-            echo "<tbody>";
-            foreach ($detalles['notas'] as $nota) {
-                echo "<tr><td>" . htmlspecialchars($nota['nombre_nota']) . "</td><td>" . htmlspecialchars($nota['calificacion']) . "</td></tr>";
+    if (!empty($notas_por_anio_lectivo)) {
+        foreach ($notas_por_anio_lectivo as $anio_lectivo => $cursos) {
+            echo "<div class='curso'><h2>" . htmlspecialchars($anio_lectivo);
+            foreach ($cursos as $anio_curso => $divisiones) {
+                foreach ($divisiones as $division => $materias) {
+                    echo " - ". htmlspecialchars($anio_curso) . "° " . htmlspecialchars($division) . "°</h2>";
+                    foreach ($materias as $materia => $notas) {
+                        echo "<div class='materia'><h4>Materia: " . htmlspecialchars($materia) . "</h4>";
+                        echo "<table class='table table-light'>";
+                        echo "<thead>";
+                        echo "<tr class='table-secondary'><th scope='row'>Nombre de la Nota</th><th scope='row'>Instancia</th><th scope='row'>Calificación</th></tr>";
+                        echo "</thead>";
+                        echo "<tbody>";
+                        $sum = 0;
+                        $count = 0;
+                        foreach ($notas as $nota) {
+                            echo "<tr><td class='nota-nombre'>" . htmlspecialchars($nota['nombre_nota']) . "</td><td>" . htmlspecialchars($nota['instancia']) . "</td><td>" . htmlspecialchars($nota['calificacion']) . "</td></tr>";
+                            $sum += $nota['calificacion'];
+                            $count++;
+                        }
+                        $promedio = $count > 0 ? $sum / $count : 0;
+                        $etiqueta = "";
+                        if ($promedio >= 0 && $promedio < 3) {
+                            $etiqueta = "TED";
+                        } elseif ($promedio >= 3 && $promedio < 4) {
+                            $etiqueta = "TEP";
+                        } elseif ($promedio >= 4 && $promedio <= 5) {
+                            $etiqueta = "TEA";
+                        }
+                        echo "</tbody>";
+                        echo "</table>";
+                        echo "<h5>Promedio: " . htmlspecialchars(number_format($promedio, 2)) . " - " . htmlspecialchars($etiqueta) . " (PRELIMINAR) </h5></div></div>";
+                    }
+                }
             }
-            echo "</tbody>";
-            echo "</table>";
         }
     } else {
         echo "<p>No se encontraron notas.</p>";
