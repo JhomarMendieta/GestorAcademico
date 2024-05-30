@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="actualizar_rite.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <title>Menu</title>
 </head>
 <body>
+<!-- ------------------------------------------------------------------------------------------------------------------------------------------------- -->
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
     <a class="navbar-brand" href="menu.php">Navbar</a>
@@ -106,19 +108,7 @@ $result = $stmt->get_result();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Notas</title>
-    <style>
-        .form-container {
-            display: none;
-        }
-    </style>
-    <script>
-        function showForm(formId) {
-            document.querySelectorAll('.form-container').forEach(function (form) {
-                form.style.display = 'none';
-            });
-            document.getElementById(formId).style.display = 'block';
-        }
-    </script>
+
 </head>
 <body>
 <h1>Seleccione una Materia</h1>
@@ -146,6 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['materia_id'])) {
     $stmt->bind_param("i", $materiaId);
     $stmt->execute();
     $result = $stmt->get_result();
+    //Obtener nombre de la materia.
     $queryMateria = "SELECT nombre FROM materia WHERE id = ?";
     $stmtMateria = $conn->prepare($queryMateria);
     $stmtMateria->bind_param("i", $materiaId);
@@ -225,7 +216,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['alumno_id'])) {
         echo "</table>";
 
         // Formulario para agregar nota
-        echo "<div>
+        echo "<div id='form-add' class='form-container '>
                 <form method='POST' action=''>
                     <input type='hidden' name='materia_id' value='{$materiaId}'>
                     <input type='hidden' name='alumno_id' value='{$alumnoId}'>
@@ -247,7 +238,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['alumno_id'])) {
 
         // Formularios para editar y borrar nota por cada nota existente
         foreach ($notas as $nota) {
-            echo "<div id='form-edit-{$nota['id']}' class='form-container'>
+            echo "<div id='form-edit-{$nota['id']}' class='form-container' style='display: none;'>
                     <form method='POST' action=''>
                         <input type='hidden' name='materia_id' value='{$materiaId}'>
                         <input type='hidden' name='alumno_id' value='{$alumnoId}'>
@@ -268,7 +259,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['alumno_id'])) {
                     </form>
                   </div>";
 
-            echo "<div id='form-delete-{$nota['id']}' class='form-container'>
+            echo "<div id='form-delete-{$nota['id']}' class='form-container' style='display: none;'>
                     <form method='POST' action=''>
                         <input type='hidden' name='materia_id' value='{$materiaId}'>
                         <input type='hidden' name='alumno_id' value='{$alumnoId}'>
@@ -283,8 +274,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['alumno_id'])) {
 
 $conn->close();
 ?>
-
-
+<script src="actualizar_rite.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
