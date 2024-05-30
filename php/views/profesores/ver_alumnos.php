@@ -66,86 +66,97 @@ $userId = 1;
         <button type="submit">Ver Alumnos</button>
     </form>
 <!-- -------------------------------------------------------------------------------------------------------------------------------------- -->
-    <?php
-    // Mostrar alumnos inscritos en la materia seleccionada
-    // Verificar si se ha enviado el formulario y el campo materia_id está presente
-    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['materia_id'])) {
-      $materiaId = $_POST['materia_id'];
-  
-      // Consulta para obtener y mostrar los alumnos inscritos en la materia seleccionada junto con sus notas
-      $query = "SELECT alumno.*, GROUP_CONCAT(nota.calificacion ORDER BY nota.id) AS calificaciones
-                FROM alumno
-                INNER JOIN alumno_curso ON alumno.id = alumno_curso.id_alumno
-                INNER JOIN curso ON alumno_curso.id_curso = curso.id
-                INNER JOIN materia ON curso.id = materia.id_curso
-                LEFT JOIN nota ON alumno.id = nota.id_alumno AND materia.id = nota.id_materia
-                WHERE materia.id = ?
-                GROUP BY alumno.id";
-      $stmt = $conn->prepare($query);
-      $stmt->bind_param("i", $materiaId);
-      $stmt->execute();
-      $result = $stmt->get_result();
-  
-      // Verificar si se encontraron resultados
-      if ($result->num_rows > 0) {
-          // Inicializar variables para rastrear la cantidad máxima de notas
-          $maxNotas = 0;
-          $alumnos = [];
-  
-          while ($row = $result->fetch_assoc()) {
-              $calificaciones = array_filter(explode(",", $row['calificaciones']));
-              $row['calificaciones'] = $calificaciones;
-              $alumnos[] = $row;
-  
-              // Actualizar la cantidad máxima de notas
-              $maxNotas = max($maxNotas, count($calificaciones));
-          }
-  
-          echo "<h2>Alumnos</h2>";
-          echo "<table border='1'>";
-          echo "<tr><th>ID</th><th>Legajo</th><th>Nombre</th><th>Apellido</th>";
-  
-          // Generar dinámicamente los encabezados de las notas
-          if ($maxNotas == 0) {
-              echo "<th>Indicador</th>";
-          } else {
-              for ($i = 1; $i <= $maxNotas; $i++) {
-                  echo "<th>Indicador $i</th>";
-              }
-          }
-          echo "</tr>";
-  
-          // Generar dinámicamente las filas de alumnos y sus notas
-          foreach ($alumnos as $alumno) {
-              echo "<tr>";
-              echo "<td>" . $alumno['id'] . "</td>";
-              echo "<td>" . $alumno['legajo'] . "</td>";
-              echo "<td>" . $alumno['nombres'] . "</td>";
-              echo "<td>" . $alumno['apellidos'] . "</td>";
-  
-              // Imprimir las notas del alumno
-              if ($maxNotas == 0) {
-                  echo "<td>-</td>";
-              } else {
-                  for ($i = 0; $i < $maxNotas; $i++) {
-                      echo "<td>" . (isset($alumno['calificaciones'][$i]) ? $alumno['calificaciones'][$i] : "-") . "</td>";
-                  }
-              }
-              echo "</tr>";
-          }
-          echo "</table>";
-      } else {
-          echo "No se encontraron alumnos inscritos en esta materia.";
-      }
-  
-      $stmt->close(); // Cerrar la consulta preparada
-  } else {
-      echo "Por favor, selecciona una materia.";
-  }
-  
-  // Cerrar la conexión a la base de datos
-  $conn->close();
-  ?>
+<?php
+include '../../conn.php';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['materia_id'])) {
+    $materiaId = $_POST['materia_id'];
+
+    // Consulta para obtener el nombre de la materia
+    $queryMateria = "SELECT nombre FROM materia WHERE id = ?";
+    $stmtMateria = $conn->prepare($queryMateria);
+    $stmtMateria->bind_param("i", $materiaId);
+    $stmtMateria->execute();
+    $stmtMateria->bind_result($nombreMateria);
+    $stmtMateria->fetch();
+    $stmtMateria->close();
+
+    echo "<h2>$nombreMateria</h2>";
+
+    // Consulta para obtener y mostrar los alumnos inscritos en la materia seleccionada junto con sus notas
+    $query = "SELECT alumno.*, GROUP_CONCAT(nota.calificacion ORDER BY nota.id) AS calificaciones
+              FROM alumno
+              INNER JOIN alumno_curso ON alumno.id = alumno_curso.id_alumno
+              INNER JOIN curso ON alumno_curso.id_curso = curso.id
+              INNER JOIN materia ON curso.id = materia.id_curso
+              LEFT JOIN nota ON alumno.id = nota.id_alumno AND materia.id = nota.id_materia
+              WHERE materia.id = ?
+              GROUP BY alumno.id";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $materiaId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    // Verificar si se encontraron resultados
+    if ($result->num_rows > 0) {
+        // Inicializar variables para rastrear la cantidad máxima de notas
+        $maxNotas = 0;
+        $alumnos = [];
+
+        while ($row = $result->fetch_assoc()) {
+            $calificaciones = array_filter(explode(",", $row['calificaciones']));
+            $row['calificaciones'] = $calificaciones;
+            $alumnos[] = $row;
+
+            // Actualizar la cantidad máxima de notas
+            $maxNotas = max($maxNotas, count($calificaciones));
+        }
+
+        echo "<h2>Alumnos</h2>";
+        echo "<table class='table table-striped'>";
+        echo "<tr><th>Legajo</th><th>Apellido</th><th>Nombre</th>";
+
+        // Generar dinámicamente los encabezados de las notas
+        if ($maxNotas == 0) {
+            echo "<th>Indicador</th>";
+        } else {
+            for ($i = 1; $i <= $maxNotas; $i++) {
+                echo "<th>Indicador $i</th>";
+            }
+        }
+        echo "</tr>";
+
+        // Generar dinámicamente las filas de alumnos y sus notas
+        foreach ($alumnos as $alumno) {
+            echo "<tr>";
+            echo "<td>" . $alumno['legajo'] . "</td>";
+            echo "<td>" . $alumno['apellidos'] . "</td>";
+            echo "<td>" . $alumno['nombres'] . "</td>";
+
+            // Imprimir las notas del alumno
+            if ($maxNotas == 0) {
+                echo "<td>-</td>";
+            } else {
+                for ($i = 0; $i < $maxNotas; $i++) {
+                    echo "<td>" . (isset($alumno['calificaciones'][$i]) ? $alumno['calificaciones'][$i] : "-") . "</td>";
+                }
+            }
+            echo "</tr>";
+        }
+        echo "</table>";
+    } else {
+        echo "No se encontraron alumnos inscritos en esta materia.";
+    }
+
+    $stmt->close(); // Cerrar la consulta preparada
+} else {
+    echo "Seleccione una materia.";
+}
+
+// Cerrar la conexión a la base de datos
+$conn->close();
+?>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>

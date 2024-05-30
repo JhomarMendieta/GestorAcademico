@@ -49,6 +49,7 @@ $stmt->close();
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['save'])) {
     $materiaId = $_POST['materia_id'];
     $alumnoId = $_POST['alumno_id'];
+    
 
     if ($_POST['save'] == 'add') {
         $nombre = $_POST['nombre'];
@@ -145,132 +146,141 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['materia_id'])) {
     $stmt->bind_param("i", $materiaId);
     $stmt->execute();
     $result = $stmt->get_result();
+    $queryMateria = "SELECT nombre FROM materia WHERE id = ?";
+    $stmtMateria = $conn->prepare($queryMateria);
+    $stmtMateria->bind_param("i", $materiaId);
+    $stmtMateria->execute();
+    $stmtMateria->bind_result($nombreMateria);
+    $stmtMateria->fetch();
+    $stmtMateria->close();
+    echo"<h4>Materia {$nombreMateria}</h4>";
+    echo "<h2>Seleccione un Alumno</h2>";
+    echo "<form method='POST' action=''>";
+    echo "<input type='hidden' name='materia_id' value='{$materiaId}'>";
+    echo "<select name='alumno_id' required>";
+    echo "<option value='' disabled selected>Seleccione un Alumno</option>";
 
-    echo "<h2>Alumnos Inscritos</h2>";
+    while($row = $result->fetch_assoc()) {
+        echo "<option value='{$row['id']}'>{$row['apellidos']} {$row['nombres']}</option>";
+    }
+
+    echo "</select>";
+    echo "<button type='submit'>Ver Notas</button>";
+    echo "</form>";
+}
+?>
+
+<?php
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['alumno_id'])) {
+    $materiaId = $_POST['materia_id'];
+    $alumnoId = $_POST['alumno_id'];
+
+    // Obtener el nombre y apellido del alumno seleccionado
+    $queryAlumno = "SELECT nombres, apellidos FROM alumno WHERE id = ?";
+    $stmtAlumno = $conn->prepare($queryAlumno);
+    $stmtAlumno->bind_param("i", $alumnoId);
+    $stmtAlumno->execute();
+    $stmtAlumno->bind_result($nombreAlumno, $apellidoAlumno);
+    $stmtAlumno->fetch();
+    $stmtAlumno->close();
+
+
+
+    // Obtener las notas del alumno seleccionado
+    $queryNotas = "SELECT id, nombre, calificacion, instancia FROM nota WHERE id_alumno = ? AND id_materia = ?";
+    $stmtNotas = $conn->prepare($queryNotas);
+    $stmtNotas->bind_param("ii", $alumnoId, $materiaId);
+    $stmtNotas->execute();
+    $resultNotas = $stmtNotas->get_result();
+
+    // Inicializar el arreglo de notas
+    $notas = [];
+    while ($nota = $resultNotas->fetch_assoc()) {
+        $notas[] = $nota;
+    }
+
+    // Mostrar las notas del alumno
+    echo "<h3>Notas del Alumno: {$apellidoAlumno} {$nombreAlumno} </h3>";
+  
     echo "<table class='table table-striped'>";
-    echo "<tr><th>Apellido</th><th>Nombre</th><th>Calificación</th><th>Indicador</th><th>Instancia</th><th>Acciones</th></tr>";
+    echo "<tr><th>Calificación</th><th>Indicador</th><th>Instancia</th><th>Acciones</th></tr>";
     
-    while ($row = $result->fetch_assoc()) {
-        $alumnoId = $row['id'];
-        $nombreAlumno = $row['nombres'];
-        $apellidoAlumno = $row['apellidos'];
-    
-        // Obtener las notas del alumno
-        $queryNotas = "SELECT id, nombre, calificacion, instancia FROM nota WHERE id_alumno = ? AND id_materia = ?";
-        $stmtNotas = $conn->prepare($queryNotas);
-        $stmtNotas->bind_param("ii", $alumnoId, $materiaId);
-        $stmtNotas->execute();
-        $resultNotas = $stmtNotas->get_result();
-    
-        // Inicializar variables para las notas del alumno
-        $notas = [];
-    
-        while ($nota = $resultNotas->fetch_assoc()) {
-            $notas[] = $nota;
-        }
-    
-        // Mostrar los datos en columnas separadas
+    foreach ($notas as $nota) {
         echo "<tr>";
-        echo "<td>{$apellidoAlumno}</td>";
-        echo "<td>{$nombreAlumno}</td>";
-        
-        echo "<td>";
-        foreach ($notas as $nota) {
-            echo "<div>" . $nota['calificacion'] . "</div>";
-        }
-        echo "</td>";
-
-        echo "<td>";
-        foreach ($notas as $nota) {
-            echo "<div>" . $nota['nombre'] . "</div>";
-        }
-        echo "</td>";
-        echo "<td>";
-        foreach ($notas as $nota) {
-            echo "<div>" . $nota['instancia'] . "</div>";
-        }
-        echo "</td>";
+        echo "<td>{$nota['calificacion']}</td>";
+        echo "<td>{$nota['nombre']}</td>";
+        echo "<td>{$nota['instancia']}</td>";
         echo "<td>
                 <select onchange='showForm(this.value)'>
                     <option value='' disabled selected>Seleccionar</option>
-                    <option value='form-add-{$alumnoId}'>Agregar Nota</option>
-                    <option value='form-edit-{$alumnoId}'>Editar Nota</option>
-                    <option value='form-delete-{$alumnoId}'>Borrar Nota</option>
+                    <option value='form-edit-{$nota['id']}'>Editar Nota</option>
+                    <option value='form-delete-{$nota['id']}'>Borrar Nota</option>
                 </select>
               </td>";
         echo "</tr>";
-        echo "<table>";
-        // Formularios para agregar, editar y borrar nota
-        echo "<tr id='form-add-{$alumnoId}' class='form-container'>
-                <td colspan='6'>
-                    <form method='POST' action=''>
-                        <input type='hidden' name='materia_id' value='{$materiaId}'>
-                        <input type='hidden' name='alumno_id' value='{$alumnoId}'>
-                        <label for='nombre'>Nombre de la Nota:</label>
-                        <input type='text' name='nombre' required>
-                        <label for='calificacion'>Calificación:</label>
-                        <input type='text' name='calificacion' required>
-                        <label for='instancia'>Instancia:</label>
-                        <select name='instancia' required>
-                            <option value='' disabled selected>Seleccione instancia</option>
-                            <option value='MAYO'>MAYO</option>
-                            <option value='JULIO'>JULIO</option>
-                            <option value='SEPTIEMBRE'>SEPTIEMBRE</option>
-                            <option value='NOVIEMBRE'>NOVIEMBRE</option>
-                        </select>
-                        <button type='submit' name='save' value='add'>Agregar</button>
-                    </form>
-                </td>
-              </tr>";
-        
-        echo "<tr id='form-edit-{$alumnoId}' class='form-container'>
-                <td colspan='6'>
-                    <form method='POST' action=''>
-                        <input type='hidden' name='materia_id' value='{$materiaId}'>
-                        <input type='hidden' name='alumno_id' value='{$alumnoId}'>
-                        <label for='nota_id'>Seleccionar Nota:</label>
-                        <select name='nota_id' required>
-                        <option value='' disabled selected>Elija indicador</option>";
+    }
+    echo "</table>";
+
+
+        echo "</table>";
+
+        // Formulario para agregar nota
+        echo "<div>
+                <form method='POST' action=''>
+                    <input type='hidden' name='materia_id' value='{$materiaId}'>
+                    <input type='hidden' name='alumno_id' value='{$alumnoId}'>
+                    <label for='nombre'>Nombre de la Nota:</label>
+                    <input type='text' name='nombre' required>
+                    <label for='calificacion'>Calificación:</label>
+                    <input type='text' name='calificacion' required>
+                    <label for='instancia'>Instancia:</label>
+                    <select name='instancia' required>
+                        <option value='' disabled selected>Seleccione instancia</option>
+                        <option value='MAYO'>MAYO</option>
+                        <option value='JULIO'>JULIO</option>
+                        <option value='SEPTIEMBRE'>SEPTIEMBRE</option>
+                        <option value='NOVIEMBRE'>NOVIEMBRE</option>
+                    </select>
+                    <button type='submit' name='save' value='add'>Agregar</button>
+                </form>
+              </div>";
+
+        // Formularios para editar y borrar nota por cada nota existente
         foreach ($notas as $nota) {
-            echo "
-            <option value='{$nota['id']}'>" . $nota['nombre'] . "</option>";
-        }
-        echo "  </select>
+            echo "<div id='form-edit-{$nota['id']}' class='form-container'>
+                    <form method='POST' action=''>
+                        <input type='hidden' name='materia_id' value='{$materiaId}'>
+                        <input type='hidden' name='alumno_id' value='{$alumnoId}'>
+                        <input type='hidden' name='nota_id' value='{$nota['id']}'>
                         <label for='nombre'>Nombre de la Nota:</label>
-                        <input type='text' name='nombre' required>
+                        <input type='text' name='nombre' value='{$nota['nombre']}' required>
                         <label for='calificacion'>Calificación:</label>
-                        <input type='text' name='calificacion' required>
+                        <input type='text' name='calificacion' value='{$nota['calificacion']}' required>
                         <label for='instancia'>Instancia:</label>
                         <select name='instancia' required>
-                            <option value='' disabled selected>Seleccione instancia</option>
-                            <option value='MAYO'>MAYO</option>
-                            <option value='JULIO'>JULIO</option>
-                            <option value='SEPTIEMBRE'>SEPTIEMBRE</option>
-                            <option value='NOVIEMBRE'>NOVIEMBRE</option>
+                            <option value='' disabled>Seleccione instancia</option>
+                            <option value='MAYO' " . ($nota['instancia'] == 'MAYO' ? 'selected' : '') . ">MAYO</option>
+                            <option value='JULIO' " . ($nota['instancia'] == 'JULIO' ? 'selected' : '') . ">JULIO</option>
+                            <option value='SEPTIEMBRE' " . ($nota['instancia'] == 'SEPTIEMBRE' ? 'selected' : '') . ">SEPTIEMBRE</option>
+                            <option value='NOVIEMBRE' " . ($nota['instancia'] == 'NOVIEMBRE' ? 'selected' : '') . ">NOVIEMBRE</option>
                         </select>
                         <button type='submit' name='save' value='edit'>Guardar Cambios</button>
                     </form>
-                </td>
-              </tr>";
-        
-        echo "<tr id='form-delete-{$alumnoId}' class='form-container'>
-                <td colspan='6'>
+                  </div>";
+
+            echo "<div id='form-delete-{$nota['id']}' class='form-container'>
                     <form method='POST' action=''>
                         <input type='hidden' name='materia_id' value='{$materiaId}'>
                         <input type='hidden' name='alumno_id' value='{$alumnoId}'>
-                        <label for='nota_id'>Seleccionar Nota:</label>
-                        <select name='nota_id' required>";
-        foreach ($notas as $nota) {
-            echo "<option value='{$nota['id']}'>" . $nota['nombre'] . "</option>";
-        }
-        echo "</select>
-                        <button type='submit' name='save' value='delete'>Borrar Nota</button>
+                        <input type='hidden' name='nota_id' value='{$nota['id']}'>
+                        <p>¿Estás seguro de que quieres eliminar esta nota?</p>
+                        <button type='submit' name='save' value='delete'>Eliminar</button>
                     </form>
-                </td>
-              </tr>";
+                  </div>";
+        }
     }
-    echo "</table>";
-}
+
+
 $conn->close();
 ?>
 
