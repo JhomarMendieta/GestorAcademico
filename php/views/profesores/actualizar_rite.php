@@ -87,9 +87,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['save'])) {
         $stmt->close();
     }
 
-    // Recargar la página para reflejar los cambios
-    header("Location: " . $_SERVER['PHP_SELF']);
-    exit;
+
+
 }
 
 // Obtener las materias que enseña el profesor
