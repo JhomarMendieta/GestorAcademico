@@ -12,3 +12,9 @@ function showForm(formId) {
             document.getElementById('form-add').style.display = 'block';
         }
 }
+function submitForm() {
+    document.getElementById("materiaForm").submit();
+}
+function submitAlumnoForm() {
+    document.getElementById('alumnoForm').submit();
+}

@@ -111,15 +111,15 @@ $result = $stmt->get_result();
 </head>
 <body>
 <h1>Seleccione una Materia</h1>
-<form method="POST" action="">
-    <select name="materia_id" required>
+    <form id="materiaForm" method="POST" action="">
+    <select name="materia_id" required onchange="this.form.submit()">
         <option value="" disabled selected>Seleccione una Materia</option>
         <?php while($row = $result->fetch_assoc()): ?>
             <option value="<?php echo $row['id']; ?>"><?php echo $row['nombre']; ?></option>
         <?php endwhile; ?>
     </select>
-    <button type="submit">Ver Alumnos</button>
 </form>
+
 
 <?php
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['materia_id'])) {
@@ -145,17 +145,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['materia_id'])) {
     $stmtMateria->close();
     echo"<h4>Materia {$nombreMateria}</h4>";
     echo "<h2>Seleccione un Alumno</h2>";
-    echo "<form method='POST' action=''>";
+    echo "<form id='alumnoForm' method='POST' action=''>";
     echo "<input type='hidden' name='materia_id' value='{$materiaId}'>";
-    echo "<select name='alumno_id' required>";
+    echo "<select name='alumno_id' required onchange='submitAlumnoForm()'>";
     echo "<option value='' disabled selected>Seleccione un Alumno</option>";
-
+    
     while($row = $result->fetch_assoc()) {
         echo "<option value='{$row['id']}'>{$row['apellidos']} {$row['nombres']}</option>";
     }
-
+    
     echo "</select>";
-    echo "<button type='submit'>Ver Notas</button>";
     echo "</form>";
 }
 ?>

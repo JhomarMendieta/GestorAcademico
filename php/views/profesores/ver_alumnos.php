@@ -56,15 +56,20 @@ $userId = 1;
     ?>
     
     <h1>Seleccione una Materia</h1>
-    <form method="POST" action="">
-    <select name="materia_id" required>
-    <option value="" disabled selected>Seleccione una Materia</option>
-    <?php while($row = $result->fetch_assoc()): ?>
-        <option value="<?php echo $row['id']; ?>"><?php echo $row['nombre']; ?></option>
-    <?php endwhile; ?>
-</select>
-        <button type="submit">Ver Alumnos</button>
-    </form>
+    <form id="materiaForm" method="POST" action="">
+    <select name="materia_id" required onchange="this.form.submit()">
+        <option value="" disabled selected>Seleccione una Materia</option>
+        <?php while($row = $result->fetch_assoc()): ?>
+            <option value="<?php echo $row['id']; ?>"><?php echo $row['nombre']; ?></option>
+        <?php endwhile; ?>
+    </select>
+</form>
+    <script>
+    function submitForm() {
+        document.getElementById("materiaForm").submit();
+    }
+</script>
+
 <!-- -------------------------------------------------------------------------------------------------------------------------------------- -->
 <?php
 include '../../conn.php';
