@@ -64,9 +64,7 @@ $result = $stmt->get_result();
     </select>
 </form>
 <script>
-function submitForm() {
-    document.getElementById("materiaForm").submit();
-}
+
 </script>
 
 <?php
@@ -89,7 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['materia_id'])) {
     echo "<form method='POST' action=''>";
     echo "<input type='hidden' name='materia_id' value='$materiaId'>";
     echo "<select name='instancia' onchange='this.form.submit()'>";
-    echo "<option value='' disabled >Seleccione una Instancia</option>";
+    echo "<option value='' disabled selected>Seleccione una Instancia</option>";
     $instancias = ["MAYO", "JULIO", "SEPTIEMBRE", "NOVIEMBRE"];
     foreach ($instancias as $instancia) {
         $selected = ($instanciaFiltro == $instancia) ? "selected" : "";
@@ -179,7 +177,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['materia_id'])) {
 $conn->close();
 ?>
 
-
+<script src = "ver_rite.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
