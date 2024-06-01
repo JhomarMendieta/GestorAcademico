@@ -153,6 +153,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['materia_id'])) {
             echo "</tr>";
         }
         echo "</table>";
+        echo "<button id='botonOcultar' onclick='ocultarMateria()'>Ocultar</button>";
     } else {
         echo "No se encontraron alumnos inscritos en esta materia.";
     }
@@ -166,7 +167,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['materia_id'])) {
 $conn->close();
 ?>
 
-<button id="botonOcultar" onclick="ocultarMateria()">Ocultar</button>
+
+
+
 
 <script src= "ver_materia.js" ></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
