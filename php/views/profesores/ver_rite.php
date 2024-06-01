@@ -63,9 +63,6 @@ $result = $stmt->get_result();
         <?php endwhile; ?>
     </select>
 </form>
-<script>
-
-</script>
 
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['materia_id'])) {

@@ -32,9 +32,9 @@
   </div>
 </nav>
 <?php
-// Incluir el archivo de conexión a la base de datos
+// --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 include '../../conn.php';
-$userId = 1;
+$userId = 1;//reemplazar por logica de logueo.
 
 // Obtener el id del profesor basado en el id del usuario
 $query = "SELECT numLegajo FROM profesores WHERE id_usuario = ?";
@@ -57,20 +57,20 @@ $stmt->execute();
 $result = $stmt->get_result();
 ?>
 
-<h1>Seleccione una Materia</h1>
+<h1>Materias</h1>
 <form id="materiaForm" method="POST" action="">
     <input type="hidden" name="materia_id" id="materia_id" value="">
     <table class="table table-hover">
         <thead>
             <tr>
                 <th>Curso</th>
-                <th>Nombre</th>
+                <th>Materia</th>
             </tr>
         </thead>
         <tbody>
             <?php while($row = $result->fetch_assoc()): ?>
                 <tr onclick="selectMateria('<?php echo $row['id']; ?>')">
-                    <td><?php echo $row['division'] . "° " . $row['anio'] . "° " . $row['especialidad']; ?></td>
+                    <td><?php echo $row['anio'] . "° " . $row['division'] . "° " . $row['especialidad']; ?></td>
                     <td><?php echo $row['nombre']; ?></td>
                 </tr>
             <?php endwhile; ?>
@@ -172,13 +172,14 @@ echo "<h2 id='materiaMostrada'>$nombreMateria - $anio ° $division ° $especiali
             echo "<td> - </td>";
             echo "<td> - </td>";
             echo "</tr>";
-
+            echo "</table>";
+            echo "<button id='botonOcultar' onclick='ocultarMateria()'>Ocultar</button>";
       
       }
 
     $stmt->close(); // Cerrar la consulta preparada
 } else {
-    echo "Seleccione una materia.";
+    echo "Seleccione una materia para ver mas detalles.";
 }
 
 // Cerrar la conexión a la base de datos
