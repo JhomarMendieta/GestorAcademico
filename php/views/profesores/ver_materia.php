@@ -82,16 +82,25 @@ $result = $stmt->get_result();
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['materia_id'])) {
     $materiaId = $_POST['materia_id'];
 
-    // Consulta para obtener el nombre de la materia
-    $queryMateria = "SELECT nombre FROM materia WHERE id = ?";
-    $stmtMateria = $conn->prepare($queryMateria);
-    $stmtMateria->bind_param("i", $materiaId);
-    $stmtMateria->execute();
-    $stmtMateria->bind_result($nombreMateria);
-    $stmtMateria->fetch();
-    $stmtMateria->close();
+// Consulta para obtener el nombre de la materia
+$queryMateria = "SELECT nombre, id_curso FROM materia WHERE id = ?";
+$stmtMateria = $conn->prepare($queryMateria);
+$stmtMateria->bind_param("i", $materiaId);
+$stmtMateria->execute();
+$stmtMateria->bind_result($nombreMateria, $idCurso);
+$stmtMateria->fetch();
+$stmtMateria->close();
 
-    echo "<h2 id='materiaMostrada'>$nombreMateria</h2>";
+// Consulta para obtener el nombre del curso
+$queryCurso = "SELECT division, anio, especialidad FROM curso WHERE id = ?";
+$stmtCurso = $conn->prepare($queryCurso);
+$stmtCurso->bind_param("i", $idCurso);
+$stmtCurso->execute();
+$stmtCurso->bind_result($division, $anio, $especialidad);
+$stmtCurso->fetch();
+$stmtCurso->close();
+
+echo "<h2 id='materiaMostrada'>$nombreMateria - $anio ° $division ° $especialidad</h2>";
 
     // Consulta para obtener y mostrar los alumnos inscritos en la materia seleccionada junto con sus notas
     $query = "SELECT alumno.*, GROUP_CONCAT(nota.calificacion ORDER BY nota.id) AS calificaciones
@@ -123,7 +132,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['materia_id'])) {
         }
 
         echo "<table id='alumnosMostrados' class='table table-striped'>";
-        echo "<tr><th>Legajo</th><th>Apellido</th><th>Nombre</th>";
+        echo "<tr><th>Apellido</th><th>Nombre</th>";
 
         // Generar dinámicamente los encabezados de las notas
         if ($maxNotas == 0) {
@@ -138,7 +147,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['materia_id'])) {
         // Generar dinámicamente las filas de alumnos y sus notas
         foreach ($alumnos as $alumno) {
             echo "<tr>";
-            echo "<td>" . $alumno['legajo'] . "</td>";
             echo "<td>" . $alumno['apellidos'] . "</td>";
             echo "<td>" . $alumno['nombres'] . "</td>";
 
@@ -155,8 +163,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['materia_id'])) {
         echo "</table>";
         echo "<button id='botonOcultar' onclick='ocultarMateria()'>Ocultar</button>";
     } else {
-        echo "No se encontraron alumnos inscritos en esta materia.";
-    }
+
+      echo "<table id='alumnosMostrados' class='table table-striped'>";
+      echo "<tr><th>Apellido</th><th>Nombre</th><th>Indicador</th>";
+      echo "</tr>";
+            echo "<tr>";
+            echo "<td> - </td>";
+            echo "<td> - </td>";
+            echo "<td> - </td>";
+            echo "</tr>";
+
+      
+      }
 
     $stmt->close(); // Cerrar la consulta preparada
 } else {
