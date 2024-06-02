@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="actualizar_rite.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <title>Menu</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Actualizar RITEs</title>
 </head>
 <body>
 <!-- ------------------------------------------------------------------------------------------------------------------------------------------------- -->
@@ -29,6 +30,9 @@
         <li class="nav-item">
           <a class="nav-link" href="ver_materia.php">Ver materias</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="gestionar_indicador.php">Gestionar indicadores</a>
+        </li>
       </ul>
     </div>
   </div>
@@ -51,7 +55,6 @@ $stmt->close();
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['save'])) {
     $materiaId = $_POST['materia_id'];
     $alumnoId = $_POST['alumno_id'];
-    
 
     if ($_POST['save'] == 'add') {
         $nombre = $_POST['nombre'];
@@ -86,9 +89,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['save'])) {
         $stmt->execute();
         $stmt->close();
     }
-
-
-
 }
 
 // Obtener las materias que enseña el profesor
@@ -100,18 +100,8 @@ $stmt->bind_param("i", $profesorId);
 $stmt->execute();
 $result = $stmt->get_result();
 ?>
-
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Notas</title>
-
-</head>
-<body>
 <h1>Seleccione una Materia</h1>
-    <form id="materiaForm" method="POST" action="">
+<form id="materiaForm" method="POST" action="">
     <select name="materia_id" required onchange="this.form.submit()">
         <option value="" disabled selected>Seleccione una Materia</option>
         <?php while($row = $result->fetch_assoc()): ?>
@@ -120,12 +110,11 @@ $result = $stmt->get_result();
     </select>
 </form>
 
-
 <?php
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['materia_id'])) {
     $materiaId = $_POST['materia_id'];
+    $instancia = isset($_POST['instancia']) ? $_POST['instancia'] : '';
 
-    // Obtener los alumnos inscritos en la materia seleccionada
     $query = "SELECT alumno.id, alumno.nombres, alumno.apellidos FROM alumno
               INNER JOIN alumno_curso ON alumno.id = alumno_curso.id_alumno
               INNER JOIN curso ON alumno_curso.id_curso = curso.id
@@ -135,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['materia_id'])) {
     $stmt->bind_param("i", $materiaId);
     $stmt->execute();
     $result = $stmt->get_result();
-    //Obtener nombre de la materia.
+
     $queryMateria = "SELECT nombre FROM materia WHERE id = ?";
     $stmtMateria = $conn->prepare($queryMateria);
     $stmtMateria->bind_param("i", $materiaId);
@@ -143,28 +132,68 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['materia_id'])) {
     $stmtMateria->bind_result($nombreMateria);
     $stmtMateria->fetch();
     $stmtMateria->close();
-    echo"<h4>Materia {$nombreMateria}</h4>";
-    echo "<h2>Seleccione un Alumno</h2>";
-    echo "<form id='alumnoForm' method='POST' action=''>";
+
+    echo "<h4>Materia {$nombreMateria}</h4>";
+    echo "<h2>Seleccione una Instancia</h2>";
+    echo "<form id='instanciaForm' method='POST' action=''>";
     echo "<input type='hidden' name='materia_id' value='{$materiaId}'>";
-    echo "<select name='alumno_id' required onchange='submitAlumnoForm()'>";
-    echo "<option value='' disabled selected>Seleccione un Alumno</option>";
-    
-    while($row = $result->fetch_assoc()) {
-        echo "<option value='{$row['id']}'>{$row['apellidos']} {$row['nombres']}</option>";
-    }
-    
+    echo "<select name='instancia' required onchange='this.form.submit()'>";
+    echo "<option value='' disabled selected>Seleccione una Instancia</option>";
+    echo "<option value='MAYO'" . ($instancia == 'MAYO' ? ' selected' : '') . ">MAYO</option>";
+    echo "<option value='JULIO'" . ($instancia == 'JULIO' ? ' selected' : '') . ">JULIO</option>";
+    echo "<option value='SEPTIEMBRE'" . ($instancia == 'SEPTIEMBRE' ? ' selected' : '') . ">SEPTIEMBRE</option>";
+    echo "<option value='NOVIEMBRE'" . ($instancia == 'NOVIEMBRE' ? ' selected' : '') . ">NOVIEMBRE</option>";
     echo "</select>";
     echo "</form>";
 }
 ?>
 
 <?php
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['alumno_id'])) {
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['instancia']) && isset($_POST['materia_id'])) {
+    $materiaId = $_POST['materia_id'];
+    $instancia = $_POST['instancia'];
+
+    $query = "SELECT alumno.id, alumno.nombres, alumno.apellidos FROM alumno
+              INNER JOIN alumno_curso ON alumno.id = alumno_curso.id_alumno
+              INNER JOIN curso ON alumno_curso.id_curso = curso.id
+              INNER JOIN materia ON curso.id = materia.id_curso
+              WHERE materia.id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $materiaId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $queryMateria = "SELECT nombre FROM materia WHERE id = ?";
+    $stmtMateria = $conn->prepare($queryMateria);
+    $stmtMateria->bind_param("i", $materiaId);
+    $stmtMateria->execute();
+    $stmtMateria->bind_result($nombreMateria);
+    $stmtMateria->fetch();
+    $stmtMateria->close();
+
+    echo "<h4>Materia {$nombreMateria} - Instancia {$instancia}</h4>";
+    echo "<h2>Seleccione un Alumno</h2>";
+    echo "<form id='alumnoForm' method='POST' action=''>";
+    echo "<input type='hidden' name='materia_id' value='{$materiaId}'>";
+    echo "<input type='hidden' name='instancia' value='{$instancia}'>";
+    echo "<select name='alumno_id' required onchange='this.form.submit()'>";
+    echo "<option value='' disabled selected>Seleccione un Alumno</option>";
+
+    while ($row = $result->fetch_assoc()) {
+        echo "<option value='{$row['id']}'>{$row['apellidos']} {$row['nombres']}</option>";
+    }
+
+    echo "</select>";
+    echo "</form>";
+}
+?>
+
+<?php
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['alumno_id']) && isset($_POST['instancia']) && isset($_POST['materia_id'])) {
     $materiaId = $_POST['materia_id'];
     $alumnoId = $_POST['alumno_id'];
+    $instancia = $_POST['instancia'];
 
-    // Obtener el nombre y apellido del alumno seleccionado
     $queryAlumno = "SELECT nombres, apellidos FROM alumno WHERE id = ?";
     $stmtAlumno = $conn->prepare($queryAlumno);
     $stmtAlumno->bind_param("i", $alumnoId);
@@ -173,105 +202,83 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['alumno_id'])) {
     $stmtAlumno->fetch();
     $stmtAlumno->close();
 
+    $queryNombres = "SELECT DISTINCT nombre FROM nota WHERE id_materia = ? AND instancia = ? AND calificacion IS NULL AND id_alumno IS NULL";
+    $stmtNombres = $conn->prepare($queryNombres);
+    $stmtNombres->bind_param("is", $materiaId, $instancia);
+    $stmtNombres->execute();
+    $resultNombres = $stmtNombres->get_result();
+    $nombres = [];
+    while ($nombreRow = $resultNombres->fetch_assoc()) {
+        $nombres[] = $nombreRow['nombre'];
+    }
 
-
-    // Obtener las notas del alumno seleccionado
-    $queryNotas = "SELECT id, nombre, calificacion, instancia FROM nota WHERE id_alumno = ? AND id_materia = ?";
+    $queryNotas = "SELECT id, nombre, calificacion, instancia FROM nota WHERE id_alumno = ? AND id_materia = ? AND instancia = ?";
     $stmtNotas = $conn->prepare($queryNotas);
-    $stmtNotas->bind_param("ii", $alumnoId, $materiaId);
+    $stmtNotas->bind_param("iis", $alumnoId, $materiaId, $instancia);
     $stmtNotas->execute();
     $resultNotas = $stmtNotas->get_result();
+    ?>
 
-    // Inicializar el arreglo de notas
-    $notas = [];
-    while ($nota = $resultNotas->fetch_assoc()) {
-        $notas[] = $nota;
-    }
+    <h2>Notas de <?php echo "{$apellidoAlumno} {$nombreAlumno}"; ?> en la Materia <?php echo $nombreMateria; ?> - Instancia <?php echo $instancia; ?></h2>
+    <table  class='table table-striped'>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Calificación</th>
+                <th>Instancia</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php while ($row = $resultNotas->fetch_assoc()): ?>
+                <tr>
+                    <td><?php echo $row['nombre']; ?></td>
+                    <td><?php echo $row['calificacion']; ?></td>
+                    <td><?php echo $row['instancia']; ?></td>
+                    <td>
+                        <form method="POST" action="" class="d-inline-block">
+                            <input type="hidden" name="nota_id" value="<?php echo $row['id']; ?>">
+                            <input type="hidden" name="materia_id" value="<?php echo $materiaId; ?>">
+                            <input type="hidden" name="alumno_id" value="<?php echo $alumnoId; ?>">
+                            <input type="hidden" name="instancia" value="<?php echo $instancia; ?>">
+                            <button type="button" onclick="editNota(<?php echo $row['id']; ?>, '<?php echo $row['nombre']; ?>', '<?php echo $row['calificacion']; ?>', '<?php echo $row['instancia']; ?>')">Editar</button>
+                            <button type="submit" name="save" value="delete">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            <?php endwhile; ?>
+        </tbody>
+    </table>
 
-    // Mostrar las notas del alumno
-    echo "<h3>Notas del Alumno: {$apellidoAlumno} {$nombreAlumno} </h3>";
-  
-    echo "<table class='table table-striped'>";
-    echo "<tr><th>Calificación</th><th>Indicador</th><th>Instancia</th><th>Acciones</th></tr>";
-    
-    foreach ($notas as $nota) {
-        echo "<tr>";
-        echo "<td>{$nota['calificacion']}</td>";
-        echo "<td>{$nota['nombre']}</td>";
-        echo "<td>{$nota['instancia']}</td>";
-        echo "<td>
-                <select onchange='showForm(this.value)'>
-                    <option value='' disabled selected>Seleccionar</option>
-                    <option value='form-edit-{$nota['id']}'>Editar Nota</option>
-                    <option value='form-delete-{$nota['id']}'>Borrar Nota</option>
-                </select>
-              </td>";
-        echo "</tr>";
-    }
-    echo "</table>";
-
-
-        echo "</table>";
-
-        // Formulario para agregar nota
-        echo "<div id='form-add' class='form-container '>
-                <form method='POST' action=''>
-                    <input type='hidden' name='materia_id' value='{$materiaId}'>
-                    <input type='hidden' name='alumno_id' value='{$alumnoId}'>
-                    <label for='nombre'>Nombre de la Nota:</label>
-                    <input type='text' name='nombre' required>
-                    <label for='calificacion'>Calificación:</label>
-                    <input type='text' name='calificacion' required>
-                    <label for='instancia'>Instancia:</label>
-                    <select name='instancia' required>
-                        <option value='' disabled selected>Seleccione instancia</option>
-                        <option value='MAYO'>MAYO</option>
-                        <option value='JULIO'>JULIO</option>
-                        <option value='SEPTIEMBRE'>SEPTIEMBRE</option>
-                        <option value='NOVIEMBRE'>NOVIEMBRE</option>
-                    </select>
-                    <button type='submit' name='save' value='add'>Agregar</button>
-                </form>
-              </div>";
-
-        // Formularios para editar y borrar nota por cada nota existente
-        foreach ($notas as $nota) {
-            echo "<div id='form-edit-{$nota['id']}' class='form-container' style='display: none;'>
-                    <form method='POST' action=''>
-                        <input type='hidden' name='materia_id' value='{$materiaId}'>
-                        <input type='hidden' name='alumno_id' value='{$alumnoId}'>
-                        <input type='hidden' name='nota_id' value='{$nota['id']}'>
-                        <label for='nombre'>Nombre de la Nota:</label>
-                        <input type='text' name='nombre' value='{$nota['nombre']}' required>
-                        <label for='calificacion'>Calificación:</label>
-                        <input type='text' name='calificacion' value='{$nota['calificacion']}' required>
-                        <label for='instancia'>Instancia:</label>
-                        <select name='instancia' required>
-                            <option value='' disabled>Seleccione instancia</option>
-                            <option value='MAYO' " . ($nota['instancia'] == 'MAYO' ? 'selected' : '') . ">MAYO</option>
-                            <option value='JULIO' " . ($nota['instancia'] == 'JULIO' ? 'selected' : '') . ">JULIO</option>
-                            <option value='SEPTIEMBRE' " . ($nota['instancia'] == 'SEPTIEMBRE' ? 'selected' : '') . ">SEPTIEMBRE</option>
-                            <option value='NOVIEMBRE' " . ($nota['instancia'] == 'NOVIEMBRE' ? 'selected' : '') . ">NOVIEMBRE</option>
-                        </select>
-                        <button type='submit' name='save' value='edit'>Guardar Cambios</button>
-                    </form>
-                  </div>";
-
-            echo "<div id='form-delete-{$nota['id']}' class='form-container' style='display: none;'>
-                    <form method='POST' action=''>
-                        <input type='hidden' name='materia_id' value='{$materiaId}'>
-                        <input type='hidden' name='alumno_id' value='{$alumnoId}'>
-                        <input type='hidden' name='nota_id' value='{$nota['id']}'>
-                        <p>¿Estás seguro de que quieres eliminar esta nota?</p>
-                        <button type='submit' name='save' value='delete'>Eliminar</button>
-                    </form>
-                  </div>";
-        }
-    }
-
-
-$conn->close();
+    <h3 id="formTitle">Agregar Nota</h3>
+    <form id="notaForm" method="POST" action="">
+        <input type="hidden" name="materia_id" value="<?php echo $materiaId; ?>">
+        <input type="hidden" name="alumno_id" value="<?php echo $alumnoId; ?>">
+        <input type="hidden" name="instancia" value="<?php echo $instancia; ?>">
+        <input type="hidden" name="nota_id" id="nota_id" value="">
+        <div class="form-group">
+            <label for="nombre">Nombre</label>
+            <select id="nombre" name="nombre" class="form-control" required>
+                <option value="" disabled selected>Seleccione un Nombre</option>
+                <?php foreach ($nombres as $nombre): ?>
+                    <option value="<?php echo $nombre; ?>"><?php echo $nombre; ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="calificacion">Calificación</label>
+            <input type="text" id="calificacion" name="calificacion" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="instancia">Instancia</label>
+            <input type="text" id="instancia" name="instancia" class="form-control" value="<?php echo $instancia; ?>" readonly>
+        </div>
+        <button type="submit" name="save" value="add" id="saveButton">Agregar</button>
+    </form>
+    <?php
+}
 ?>
+
 <script src="actualizar_rite.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
