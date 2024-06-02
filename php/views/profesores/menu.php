@@ -27,15 +27,19 @@
         <li class="nav-item">
           <a class="nav-link" href="ver_materia.php">Ver materias</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="gestionar_indicador.php">Gestionar indicadores</a>
+        </li>
       </ul>
     </div>
   </div>
 </nav>
 
-<a href="veralumnos.php">Ver alumnos</a>
-<a href="actualizarrite.php">Actualizar RITE</a>
-<a href="verrite.php">Ver RITE</a>
-<a href="vermateria.php">Ver materias</a>
+<a href="ver_alumnos.php">Ver alumnos</a>
+<a href="actualizar_rite.php">Actualizar RITE</a>
+<a href="ver_rite.php">Ver RITE</a>
+<a href="ver_materia.php">Ver materias</a>
+<a href="gestionar_indicadores.php">Gestionar indicadores</a>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
