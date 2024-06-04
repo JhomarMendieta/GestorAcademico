@@ -17,16 +17,32 @@ if ($alumno_result->num_rows > 0) {
     die("Alumno no encontrado.");
 }
 
-// Consulta para obtener las notas del alumno, incluyendo curso, año y instancia
+// Obtener el año lectivo seleccionado
+$anio_seleccionado = isset($_GET['anio_lectivo']) ? (int)$_GET['anio_lectivo'] : 0;
+
+// Consulta para obtener los años lectivos disponibles
+$anios_query = "SELECT DISTINCT curso.anio_lectivo FROM curso 
+                INNER JOIN materia ON curso.id = materia.id_curso
+                INNER JOIN nota ON materia.id = nota.id_materia
+                WHERE nota.id_alumno = $alumno_id
+                ORDER BY curso.anio_lectivo ASC";
+$anios_result = $conn->query($anios_query);
+
+$anios_lectivos = [];
+while ($row = $anios_result->fetch_assoc()) {
+    $anios_lectivos[] = $row['anio_lectivo'];
+}
+
+// Consulta para obtener las notas del alumno, filtrando por el año lectivo seleccionado si se ha elegido uno
 $notas_query = "
     SELECT curso.anio_lectivo AS anio_lectivo, curso.anio AS anio_curso, curso.division AS division, 
            materia.nombre AS materia, nota.nombre AS nombre_nota, nota.calificacion, nota.instancia
     FROM nota
     INNER JOIN materia ON nota.id_materia = materia.id
     INNER JOIN curso ON materia.id_curso = curso.id
-    WHERE nota.id_alumno = $alumno_id
-    ORDER BY curso.anio_lectivo ASC, curso.anio ASC, curso.division ASC, materia.nombre ASC, nota.id ASC
-";
+    WHERE nota.id_alumno = $alumno_id"
+    . ($anio_seleccionado ? " AND curso.anio_lectivo = $anio_seleccionado" : "") . 
+    " ORDER BY curso.anio_lectivo ASC, curso.anio ASC, curso.division ASC, materia.nombre ASC, nota.id ASC";
 $notas_result = $conn->query($notas_query);
 
 // Organizar las notas por año lectivo, curso y materia
@@ -50,12 +66,25 @@ while ($row = $notas_result->fetch_assoc()) {
     <meta charset="UTF-8">
     <title>Notas de <?php echo htmlspecialchars($alumno['nombres']); ?> <?php echo htmlspecialchars($alumno['apellidos']); ?></title>
     <style>
-
-
+        /* Agrega tu CSS aquí */
     </style>
 </head>
 <body>
     <h1>Notas de <?php echo htmlspecialchars($alumno['nombres']); ?> <?php echo htmlspecialchars($alumno['apellidos']); ?></h1>
+    
+    <form method="GET" action="">
+        <input type="hidden" name="id" value="<?php echo $alumno_id; ?>">
+        <label for="anio_lectivo">Seleccionar año lectivo:</label>
+        <select name="anio_lectivo" id="anio_lectivo" onchange="this.form.submit()">
+            <option value="">Todos los años</option>
+            <?php foreach ($anios_lectivos as $anio): ?>
+                <option value="<?php echo $anio; ?>" <?php if ($anio == $anio_seleccionado) echo 'selected'; ?>>
+                    <?php echo $anio; ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </form>
+
     <?php
     if (!empty($notas_por_anio_lectivo)) {
         foreach ($notas_por_anio_lectivo as $anio_lectivo => $cursos) {
@@ -67,7 +96,7 @@ while ($row = $notas_result->fetch_assoc()) {
                         echo "<div class='materia'><h4>Materia: " . htmlspecialchars($materia) . "</h4>";
                         echo "<table class='table table-light'>";
                         echo "<thead>";
-                        echo "<tr class='table-secondary'><th scope='row'>Nombre de la Nota</th><th scope='row'>Instancia</th><th scope='row'>Calificación</th></tr>";
+                        echo "<tr class='table-secondary'><th scope='row'>Indicador</th><th scope='row'>Instancia</th><th scope='row'>Calificación</th></tr>";
                         echo "</thead>";
                         echo "<tbody>";
                         $sum = 0;
@@ -97,6 +126,7 @@ while ($row = $notas_result->fetch_assoc()) {
         echo "<p>No se encontraron notas.</p>";
     }
     ?>
+
 </body>
 </html>
 
