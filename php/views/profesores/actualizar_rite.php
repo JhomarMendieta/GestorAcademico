@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="../../../img/LogoEESTN1.png" type="image/x-icon">
     <link rel="stylesheet" href="actualizar_rite.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -38,6 +37,9 @@
     </div>
   </div>
 </nav>
+<div class = "titulo">
+    <h1>Actualizar RITE</h1>
+</div>
 <!-- ------------------------------------------------------------------------------------------------------------------------------------------------- -->
 <?php
 include '../../conn.php';
@@ -101,16 +103,18 @@ $stmt->bind_param("i", $profesorId);
 $stmt->execute();
 $result = $stmt->get_result();
 ?>
-<h1>Seleccione una Materia</h1>
-<form id="materiaForm" method="POST" action="">
-    <select name="materia_id" required onchange="this.form.submit()">
-        <option value="" disabled selected>Seleccione una Materia</option>
-        <?php while($row = $result->fetch_assoc()): ?>
-            <option value="<?php echo $row['id']; ?>"><?php echo $row['nombre']; ?></option>
-        <?php endwhile; ?>
-    </select>
-</form>
+<div class = "select-materia">
 
+    <form id="materiaForm" method="POST" action="">
+        <label for="materiaForm">Seleccione materia</label>
+        <select name="materia_id" required onchange="this.form.submit()">
+            <option value="" disabled selected>Seleccione una Materia</option>
+            <?php while($row = $result->fetch_assoc()): ?>
+                <option value="<?php echo $row['id']; ?>"><?php echo $row['nombre']; ?></option>
+            <?php endwhile; ?>
+        </select>
+    </form>
+</div>
 <?php
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['materia_id'])) {
     $materiaId = $_POST['materia_id'];
@@ -134,9 +138,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['materia_id'])) {
     $stmtMateria->fetch();
     $stmtMateria->close();
 
-    echo "<h4>Materia {$nombreMateria}</h4>";
-    echo "<h2>Seleccione una Instancia</h2>";
+    echo "<p>Materia: {$nombreMateria}</p>";
     echo "<form id='instanciaForm' method='POST' action=''>";
+    echo "<label for='instanciaForm'>Seleccione una instancia   </label>";
     echo "<input type='hidden' name='materia_id' value='{$materiaId}'>";
     echo "<select name='instancia' required onchange='this.form.submit()'>";
     echo "<option value='' disabled selected>Seleccione una Instancia</option>";
@@ -172,9 +176,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['instancia']) && isset(
     $stmtMateria->fetch();
     $stmtMateria->close();
 
-    echo "<h4>Materia {$nombreMateria} - Instancia {$instancia}</h4>";
-    echo "<h2>Seleccione un Alumno</h2>";
+    echo "<p>Materia {$nombreMateria} - Instancia {$instancia}</p>";
     echo "<form id='alumnoForm' method='POST' action=''>";
+    echo "<label for='alumnoForm'>Seleccione un alumno </label>";
     echo "<input type='hidden' name='materia_id' value='{$materiaId}'>";
     echo "<input type='hidden' name='instancia' value='{$instancia}'>";
     echo "<select name='alumno_id' required onchange='this.form.submit()'>";
@@ -183,7 +187,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['instancia']) && isset(
     while ($row = $result->fetch_assoc()) {
         echo "<option value='{$row['id']}'>{$row['apellidos']} {$row['nombres']}</option>";
     }
-
     echo "</select>";
     echo "</form>";
 }
@@ -220,7 +223,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['alumno_id']) && isset(
     $resultNotas = $stmtNotas->get_result();
     ?>
 
-    <h2>Notas de <?php echo "{$apellidoAlumno} {$nombreAlumno}"; ?> en la Materia <?php echo $nombreMateria; ?> - Instancia <?php echo $instancia; ?></h2>
+    <p>Notas de <?php echo "{$apellidoAlumno} {$nombreAlumno}"; ?> en la Materia <?php echo $nombreMateria; ?> - Instancia <?php echo $instancia; ?></p>
     <table  class='table table-striped'>
         <thead>
             <tr>
