@@ -1,0 +1,74 @@
+body {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+h1, h2 {
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    margin-top: 50px;
+}
+
+.container .row {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+div.materias {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 25px;
+}
+
+div.materia {
+    display: grid;
+    margin: 0 auto;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+}
+
+div.materia img {
+    border-radius: 5px;
+    height: 175px;
+    width: 350px;
+    margin-bottom: -10px;
+}
+
+div.container {
+    margin-top: 50px;
+}
+
+#logo img {
+    height: 6vh;
+}
+
+.navbar {
+    min-height: 7vh;
+    border-bottom: 1px grey solid;
+}
+
+.btn {
+    width: 350px;
+    border-radius: 5px;
+    height: 175px;
+    position: absolute;
+    opacity: 0;
+}
+
+.btn:hover {
+    opacity: 0.3;
+}
+
+.espacio {
+    background-color: #6c757d;
+    width: 350px;
+    height: 40px;
+    margin-top: -40px;
+    font-size: 20px;
+    color: white;
+    text-align: center;
+}
