@@ -3,152 +3,197 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-    <link rel="stylesheet" href="./ver_materias.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <title>Ver materia</title>
 </head>
 <body>
-
-<!-- PHP para obtener los datos de la base de datos -->
-<?php
-$servername = 'localhost';
-$dbname = 'proyecto_academicas';
-$username = 'root';
-$password = '';
-
-// Crear conexión
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Verificar conexión
-if ($conn->connect_error) {
-    die("Conexión fallida: " . $conn->connect_error);
-}
-
-// Obtener el id_curso basado en la división y año
-$division = 1;
-$anio = 1;
-
-$sqlCurso = "SELECT id FROM curso WHERE division = ? AND anio = ?";
-$stmtCurso = $conn->prepare($sqlCurso);
-
-if (!$stmtCurso) {
-    die("Error en la preparación de la consulta: " . $conn->error);
-}
-
-$stmtCurso->bind_param("ii", $division, $anio);
-$stmtCurso->execute();
-$resultCurso = $stmtCurso->get_result();
-
-if ($resultCurso->num_rows > 0) {
-    $curso = $resultCurso->fetch_assoc();
-    $id_curso = $curso['id'];
-
-    // Obtener las materias que corresponden al id_curso
-    $sqlMaterias = "SELECT nombre FROM materia WHERE id_curso = ?";
-    $stmtMaterias = $conn->prepare($sqlMaterias);
-
-    if (!$stmtMaterias) {
-        die("Error en la preparación de la consulta: " . $conn->error);
-    }
-
-    $stmtMaterias->bind_param("i", $id_curso);
-    $stmtMaterias->execute();
-    $resultMaterias = $stmtMaterias->get_result();
-
-    $materias = array();
-    while ($row = $resultMaterias->fetch_assoc()) {
-        $materias[] = $row;
-    }
-
-    $stmtMaterias->close();
-} else {
-    echo "No se encontró el curso con la división y año especificados.";
-}
-
-$stmtCurso->close();
-$conn->close();
-?>
-
-<!-- navbar -->
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
-    <a id="logo" class="navbar-brand" href="#">
-        <img src="../../../img/LogoEESTN1.png" alt="">
-    </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <a class="navbar-brand" href="menu.php">Navbar</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="reinscripcion.php">Solicitud de reinscripción</a>
+          <a class="nav-link" aria-current="page" href="ver_alumnos.php">Ver alumnos</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="rite.php?id=1">Ver RITE</a>
+          <a class="nav-link" href="actualizar_rite.php">Actualizar RITE</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="ver_materias.php">Ver materias</a>
+          <a class="nav-link" href="ver_rite.php">Ver RITE</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="ver_materia.php">Ver materias</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="gestionar_indicador.php">Gestionar indicadores</a>
         </li>
       </ul>
     </div>
   </div>
 </nav>
+<?php
+// --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+include '../../conn.php';
+$userId = 1;//reemplazar por logica de logueo.
 
-<h1>Ver Materias</h1>
+// Obtener el id del profesor basado en el id del usuario
+$query = "SELECT numLegajo FROM profesores WHERE id_usuario = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $userId);
+$stmt->execute();
+$stmt->bind_result($profesorId);
+$stmt->fetch();
+$stmt->close();
 
-<!-- Barra de búsqueda -->
-<div class="container mt-3">
-    <input type="text" id="search" class="form-control" placeholder="Buscar materias...">
-</div>
+// Obtener las materias que enseña el profesor junto con el nombre del curso
+$query = "SELECT materia.id, materia.nombre, curso.division, curso.anio, curso.especialidad 
+          FROM profesor_materia
+          INNER JOIN materia ON profesor_materia.id_materia = materia.id
+          INNER JOIN curso ON materia.id_curso = curso.id
+          WHERE profesor_materia.id_profesor = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $profesorId);
+$stmt->execute();
+$result = $stmt->get_result();
+?>
 
-<!-- Resultados de búsqueda -->
-<div class="container mt-3">
-    <h2>Resultados de la búsqueda</h2>
-    <br>
-    <div id="search-results" class="materias"></div>
-</div>
+<h1>Materias</h1>
+<form id="materiaForm" method="POST" action="">
+    <input type="hidden" name="materia_id" id="materia_id" value="">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Curso</th>
+                <th>Materia</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php while($row = $result->fetch_assoc()): ?>
+                <tr onclick="selectMateria('<?php echo $row['id']; ?>')">
+                    <td><?php echo $row['anio'] . "° " . $row['division'] . "° " . $row['especialidad']; ?></td>
+                    <td><?php echo $row['nombre']; ?></td>
+                </tr>
+            <?php endwhile; ?>
+        </tbody>
+    </table>
+</form>
 
-<!-- Materias generales -->
-<div class="container">
-    <h2>Materias</h2>
-    <br>
-    <div class="materias" id="materias">
-        <!-- Insertar las materias obtenidas de la base de datos -->
-        <?php 
-        $images = ["ejemplo1.png", "ejemplo2.png", "ejemplo3.png", "ejemplo4.png", "ejemplo5.png", "ejemplo6.png", "ejemplo7.png", "ejemplo8.png", "ejemplo9.png", "ejemplo10.png","ejemplo11.png", "ejemplo12.png", "ejemplo13.png", "ejemplo14.png"];
-        foreach ($materias as $materia): 
-            $image = $images[array_rand($images)]; // Selecciona una imagen de forma aleatoria
-        ?>
-            <div class="materia" data-name="<?php echo htmlspecialchars($materia['nombre']); ?>">
-                <button type="button" class="btn btn-secondary"></button>
-                <img src="../../../img/<?php echo htmlspecialchars($image); ?>" alt="<?php echo htmlspecialchars($materia['nombre']); ?>">
-                <div class="espacio"><?php echo htmlspecialchars($materia['nombre']); ?></div>
-            </div>
-        <?php endforeach; ?>
-    </div>
-</div>
+<?php
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['materia_id'])) {
+    $materiaId = $_POST['materia_id'];
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
-<script>
-$(document).ready(function() {
-    $('#search').on('input', function() {
-        var search = $(this).val();
-        if (search.trim() === '') {
-            $('#search-results').empty();
-            return;
+// Consulta para obtener el nombre de la materia
+$queryMateria = "SELECT nombre, id_curso FROM materia WHERE id = ?";
+$stmtMateria = $conn->prepare($queryMateria);
+$stmtMateria->bind_param("i", $materiaId);
+$stmtMateria->execute();
+$stmtMateria->bind_result($nombreMateria, $idCurso);
+$stmtMateria->fetch();
+$stmtMateria->close();
+
+// Consulta para obtener el nombre del curso
+$queryCurso = "SELECT division, anio, especialidad FROM curso WHERE id = ?";
+$stmtCurso = $conn->prepare($queryCurso);
+$stmtCurso->bind_param("i", $idCurso);
+$stmtCurso->execute();
+$stmtCurso->bind_result($division, $anio, $especialidad);
+$stmtCurso->fetch();
+$stmtCurso->close();
+
+echo "<h2 id='materiaMostrada'>$nombreMateria - $anio ° $division ° $especialidad</h2>";
+
+    // Consulta para obtener y mostrar los alumnos inscritos en la materia seleccionada junto con sus notas
+    $query = "SELECT alumno.*, GROUP_CONCAT(nota.calificacion ORDER BY nota.id) AS calificaciones
+              FROM alumno
+              INNER JOIN alumno_curso ON alumno.id = alumno_curso.id_alumno
+              INNER JOIN curso ON alumno_curso.id_curso = curso.id
+              INNER JOIN materia ON curso.id = materia.id_curso
+              LEFT JOIN nota ON alumno.id = nota.id_alumno AND materia.id = nota.id_materia
+              WHERE materia.id = ?
+              GROUP BY alumno.id";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $materiaId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    // Verificar si se encontraron resultados
+    if ($result->num_rows > 0) {
+        // Inicializar variables para rastrear la cantidad máxima de notas
+        $maxNotas = 0;
+        $alumnos = [];
+
+        while ($row = $result->fetch_assoc()) {
+            $calificaciones = array_filter(explode(",", $row['calificaciones']));
+            $row['calificaciones'] = $calificaciones;
+            $alumnos[] = $row;
+
+            // Actualizar la cantidad máxima de notas
+            $maxNotas = max($maxNotas, count($calificaciones));
         }
 
-        $.ajax({
-            url: 'buscar_materias.php',
-            type: 'GET',
-            data: { search: search },
-            success: function(data) {
-                $('#search-results').html(data);
+        echo "<table id='alumnosMostrados' class='table table-striped'>";
+        echo "<tr><th>Apellido</th><th>Nombre</th>";
+
+        // Generar dinámicamente los encabezados de las notas
+        if ($maxNotas == 0) {
+            echo "<th>Indicador</th>";
+        } else {
+            for ($i = 1; $i <= $maxNotas; $i++) {
+                echo "<th>Indicador $i</th>";
             }
-        });
-    });
-});
-</script>
+        }
+        echo "</tr>";
+
+        // Generar dinámicamente las filas de alumnos y sus notas
+        foreach ($alumnos as $alumno) {
+            echo "<tr>";
+            echo "<td>" . $alumno['apellidos'] . "</td>";
+            echo "<td>" . $alumno['nombres'] . "</td>";
+
+            // Imprimir las notas del alumno
+            if ($maxNotas == 0) {
+                echo "<td>-</td>";
+            } else {
+                for ($i = 0; $i < $maxNotas; $i++) {
+                    echo "<td>" . (isset($alumno['calificaciones'][$i]) ? $alumno['calificaciones'][$i] : "-") . "</td>";
+                }
+            }
+            echo "</tr>";
+        }
+        echo "</table>";
+        echo "<button id='botonOcultar' onclick='ocultarMateria()'>Ocultar</button>";
+    } else {
+
+      echo "<table id='alumnosMostrados' class='table table-striped'>";
+      echo "<tr><th>Apellido</th><th>Nombre</th><th>Indicador</th>";
+      echo "</tr>";
+            echo "<tr>";
+            echo "<td> - </td>";
+            echo "<td> - </td>";
+            echo "<td> - </td>";
+            echo "</tr>";
+            echo "</table>";
+            echo "<button id='botonOcultar' onclick='ocultarMateria()'>Ocultar</button>";
+      
+      }
+
+    $stmt->close(); // Cerrar la consulta preparada
+} else {
+    echo "Seleccione una materia para ver mas detalles.";
+}
+
+// Cerrar la conexión a la base de datos
+$conn->close();
+?>
+
+
+
+
+
+<script src= "ver_materia.js" ></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
