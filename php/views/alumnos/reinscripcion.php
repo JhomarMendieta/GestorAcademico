@@ -26,7 +26,7 @@
                     <a class="nav-link" aria-current="page" href="rite.php?id=1">Ver RITE</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="#">Ver materias</a>
+                        <a class="nav-link" aria-current="page" href="ver_materias.php">Ver materias</a>
                     </li>
                 </ul>
             </div>
