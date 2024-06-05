@@ -39,9 +39,9 @@
 </nav>
 
 <!-- ------------------------------------------------------------------------------------------------------------------------------------------------- -->
-<div class="container">
+<div class="container-update">
 
-<div class = "titulo">
+<div class = "titulo-update">
     <h1>Actualizar RITE</h1>
 </div>
 
@@ -109,7 +109,6 @@ $result = $stmt->get_result();
 ?>
 <div class = "select-materia">
     <form id="materiaForm" method="POST" action="">
-        <label for="materiaForm">Seleccione materia</label>
         <select name="materia_id" class='form-select' required onchange="this.form.submit()">
             <option value="" disabled selected>Seleccione una Materia</option>
             <?php while($row = $result->fetch_assoc()): ?>
@@ -143,7 +142,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['materia_id'])) {
     echo "<div class = 'instancia-form'>";
     echo "<p>Materia: {$nombreMateria}</p>";
     echo "<form id='instanciaForm' method='POST' action=''>";
-    echo "<label for='instanciaForm'>Seleccione una instancia   </label>";
     echo "<input type='hidden' name='materia_id' value='{$materiaId}'>";
     echo "<select name='instancia' class='form-select' required onchange='this.form.submit()'>";
     echo "<option value='' disabled selected>Seleccione una Instancia</option>";
@@ -182,7 +180,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['instancia']) && isset(
 
     echo "<p>Materia {$nombreMateria} - Instancia {$instancia}</p>";
     echo "<form id='alumnoForm' method='POST' action=''>";
-    echo "<label for='alumnoForm'>Seleccione un alumno </label>";
     echo "<input type='hidden' name='materia_id' value='{$materiaId}'>";
     echo "<input type='hidden' name='instancia' value='{$instancia}'>";
     echo "<select name='alumno_id' class='form-select' required onchange='this.form.submit()'>";
@@ -229,6 +226,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['alumno_id']) && isset(
     ?>
 
 <h5>Notas de <?php echo "{$apellidoAlumno} {$nombreAlumno}"; ?> en la Materia <?php echo $nombreMateria; ?> - Instancia <?php echo $instancia; ?></h5>
+<div class="table-responsive">
     <table  class='table table-striped'>
         <thead>
             <tr>
@@ -259,6 +257,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['alumno_id']) && isset(
             <?php endwhile; ?>
         </tbody>
     </table>
+    </div>
 
     <h3 id="formTitle">Subir Nota</h3>
     <form id="notaForm" method="POST" action="">
