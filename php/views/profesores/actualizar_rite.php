@@ -37,10 +37,14 @@
     </div>
   </div>
 </nav>
+
+<!-- ------------------------------------------------------------------------------------------------------------------------------------------------- -->
+<div class="container">
+
 <div class = "titulo">
     <h1>Actualizar RITE</h1>
 </div>
-<!-- ------------------------------------------------------------------------------------------------------------------------------------------------- -->
+
 <?php
 include '../../conn.php';
 
@@ -104,10 +108,9 @@ $stmt->execute();
 $result = $stmt->get_result();
 ?>
 <div class = "select-materia">
-
     <form id="materiaForm" method="POST" action="">
         <label for="materiaForm">Seleccione materia</label>
-        <select name="materia_id" required onchange="this.form.submit()">
+        <select name="materia_id" class='form-select' required onchange="this.form.submit()">
             <option value="" disabled selected>Seleccione una Materia</option>
             <?php while($row = $result->fetch_assoc()): ?>
                 <option value="<?php echo $row['id']; ?>"><?php echo $row['nombre']; ?></option>
@@ -137,12 +140,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['materia_id'])) {
     $stmtMateria->bind_result($nombreMateria);
     $stmtMateria->fetch();
     $stmtMateria->close();
-
+    echo "<div class = 'instancia-form'>";
     echo "<p>Materia: {$nombreMateria}</p>";
     echo "<form id='instanciaForm' method='POST' action=''>";
     echo "<label for='instanciaForm'>Seleccione una instancia   </label>";
     echo "<input type='hidden' name='materia_id' value='{$materiaId}'>";
-    echo "<select name='instancia' required onchange='this.form.submit()'>";
+    echo "<select name='instancia' class='form-select' required onchange='this.form.submit()'>";
     echo "<option value='' disabled selected>Seleccione una Instancia</option>";
     echo "<option value='MAYO'" . ($instancia == 'MAYO' ? ' selected' : '') . ">MAYO</option>";
     echo "<option value='JULIO'" . ($instancia == 'JULIO' ? ' selected' : '') . ">JULIO</option>";
@@ -150,6 +153,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['materia_id'])) {
     echo "<option value='NOVIEMBRE'" . ($instancia == 'NOVIEMBRE' ? ' selected' : '') . ">NOVIEMBRE</option>";
     echo "</select>";
     echo "</form>";
+    
 }
 ?>
 
@@ -181,7 +185,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['instancia']) && isset(
     echo "<label for='alumnoForm'>Seleccione un alumno </label>";
     echo "<input type='hidden' name='materia_id' value='{$materiaId}'>";
     echo "<input type='hidden' name='instancia' value='{$instancia}'>";
-    echo "<select name='alumno_id' required onchange='this.form.submit()'>";
+    echo "<select name='alumno_id' class='form-select' required onchange='this.form.submit()'>";
     echo "<option value='' disabled selected>Seleccione un Alumno</option>";
 
     while ($row = $result->fetch_assoc()) {
@@ -189,6 +193,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['instancia']) && isset(
     }
     echo "</select>";
     echo "</form>";
+    echo "</div>";
 }
 ?>
 
@@ -223,7 +228,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['alumno_id']) && isset(
     $resultNotas = $stmtNotas->get_result();
     ?>
 
-    <p>Notas de <?php echo "{$apellidoAlumno} {$nombreAlumno}"; ?> en la Materia <?php echo $nombreMateria; ?> - Instancia <?php echo $instancia; ?></p>
+<h5>Notas de <?php echo "{$apellidoAlumno} {$nombreAlumno}"; ?> en la Materia <?php echo $nombreMateria; ?> - Instancia <?php echo $instancia; ?></h5>
     <table  class='table table-striped'>
         <thead>
             <tr>
@@ -247,6 +252,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['alumno_id']) && isset(
                             <input type="hidden" name="instancia" value="<?php echo $instancia; ?>">
                             <button type="button" onclick="editNota(<?php echo $row['id']; ?>, '<?php echo $row['nombre']; ?>', '<?php echo $row['calificacion']; ?>', '<?php echo $row['instancia']; ?>')">Editar</button>
                             <button type="submit" name="save" value="delete">Eliminar</button>
+                            
                         </form>
                     </td>
                 </tr>
@@ -254,16 +260,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['alumno_id']) && isset(
         </tbody>
     </table>
 
-    <h3 id="formTitle">Agregar Nota</h3>
+    <h3 id="formTitle">Subir Nota</h3>
     <form id="notaForm" method="POST" action="">
         <input type="hidden" name="materia_id" value="<?php echo $materiaId; ?>">
         <input type="hidden" name="alumno_id" value="<?php echo $alumnoId; ?>">
         <input type="hidden" name="instancia" value="<?php echo $instancia; ?>">
         <input type="hidden" name="nota_id" id="nota_id" value="">
         <div class="form-group">
-            <label for="nombre">Nombre</label>
-            <select id="nombre" name="nombre" class="form-control" required>
-                <option value="" disabled selected>Seleccione un Nombre</option>
+            <label for="nombre">Indicador</label>
+            <select id="nombre" name="nombre" class="form-select" required>
+                <option value="" disabled selected>Seleccione un indicador</option>
                 <?php foreach ($nombres as $nombre): ?>
                     <option value="<?php echo $nombre; ?>"><?php echo $nombre; ?></option>
                 <?php endforeach; ?>
@@ -279,10 +285,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['alumno_id']) && isset(
         </div>
         <button type="submit" name="save" value="add" id="saveButton">Agregar</button>
     </form>
+
     <?php
 }
-?>
 
+?>
+</div>
 <script src="actualizar_rite.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
