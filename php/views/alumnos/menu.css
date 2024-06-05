@@ -16,6 +16,7 @@ div.opciones {
 div.opcion {
     display: flex;
     flex-direction: column;
+    gap: 5px;
 }
 
 div.container {

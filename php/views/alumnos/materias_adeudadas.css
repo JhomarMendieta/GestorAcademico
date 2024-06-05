@@ -1,0 +1,19 @@
+body {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+#logo img {
+    height: 6vh;
+}
+
+.table-container {
+    overflow-x: auto; /* Hace que la tabla sea scrollable horizontalmente */
+    margin-top: 20px; /* Ajuste opcional de margen superior */
+}
+
+table {
+    min-width: 100%; /* Asegura que la tabla tenga al menos el ancho del contenedor */
+}

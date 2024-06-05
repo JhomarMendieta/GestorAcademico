@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="../../../img/LogoEESTN1.png" type="image/x-icon">
     <title>Document</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
     <link rel="stylesheet" href="./ver_materias.css">
@@ -73,7 +72,7 @@ $conn->close();
 <!-- navbar -->
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
-    <a id="logo" class="navbar-brand" href="#">
+    <a id="logo" class="navbar-brand" href="menu.php">
         <img src="../../../img/LogoEESTN1.png" alt="">
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,13 +81,16 @@ $conn->close();
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="#">Solicitud de reinscripción</a>
+          <a class="nav-link" aria-current="page" href="reinscripcion.php">Solicitud de reinscripción</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="#">Ver RITE</a>
+          <a class="nav-link" aria-current="page" href="rite.php?id=1">Ver RITE</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="#">Ver materias</a>
+          <a class="nav-link active" aria-current="page" href="ver_materias.php">Ver materias</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" aria-current="page" href="materias_adeudadas.php?id_alumno=1">Ver materias adeudadas</a>
         </li>
       </ul>
     </div>

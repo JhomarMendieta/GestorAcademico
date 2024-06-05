@@ -94,30 +94,55 @@ while ($row = $notas_result->fetch_assoc()) {
                     echo " - ". htmlspecialchars($anio_curso) . "° " . htmlspecialchars($division) . "°</h2>";
                     foreach ($materias as $materia => $notas) {
                         echo "<div class='materia'><h4>Materia: " . htmlspecialchars($materia) . "</h4>";
-                        echo "<table class='table table-light'>";
+                        echo "<table class='table table-light tabla-notas'>";
                         echo "<thead>";
                         echo "<tr class='table-secondary'><th scope='row'>Indicador</th><th scope='row'>Instancia</th><th scope='row'>Calificación</th></tr>";
                         echo "</thead>";
                         echo "<tbody>";
-                        $sum = 0;
-                        $count = 0;
+                        
+                        $sum_julio = 0;
+                        $count_julio = 0;
+                        $sum_noviembre = 0;
+                        $count_noviembre = 0;
+
                         foreach ($notas as $nota) {
                             echo "<tr><td class='nota-nombre'>" . htmlspecialchars($nota['nombre_nota']) . "</td><td>" . htmlspecialchars($nota['instancia']) . "</td><td>" . htmlspecialchars($nota['calificacion']) . "</td></tr>";
-                            $sum += $nota['calificacion'];
-                            $count++;
+                            if ($nota['instancia'] == 'JULIO') {
+                                $sum_julio += $nota['calificacion'];
+                                $count_julio++;
+                            } elseif ($nota['instancia'] == 'NOVIEMBRE') {
+                                $sum_noviembre += $nota['calificacion'];
+                                $count_noviembre++;
+                            }
                         }
-                        $promedio = $count > 0 ? $sum / $count : 0;
-                        $etiqueta = "";
-                        if ($promedio >= 0 && $promedio < 3) {
-                            $etiqueta = "TED";
-                        } elseif ($promedio >= 3 && $promedio < 4) {
-                            $etiqueta = "TEP";
-                        } elseif ($promedio >= 4 && $promedio <= 5) {
-                            $etiqueta = "TEA";
+
+                        $promedio_julio = $count_julio > 0 ? $sum_julio / $count_julio : 0;
+                        $promedio_noviembre = $count_noviembre > 0 ? $sum_noviembre / $count_noviembre : 0;
+
+                        $etiqueta_julio = '';
+                        $etiqueta_noviembre = '';
+
+                        if ($promedio_julio >= 0 && $promedio_julio < 3) {
+                            $etiqueta_julio = 'TED';
+                        } elseif ($promedio_julio >= 3 && $promedio_julio < 4) {
+                            $etiqueta_julio = 'TEP';
+                        } elseif ($promedio_julio >= 4 && $promedio_julio <= 5) {
+                            $etiqueta_julio = 'TEA';
                         }
+
+                        if ($promedio_noviembre >= 0 && $promedio_noviembre < 3) {
+                            $etiqueta_noviembre = 'TED';
+                        } elseif ($promedio_noviembre >= 3 && $promedio_noviembre < 4) {
+                            $etiqueta_noviembre = 'TEP';
+                        } elseif ($promedio_noviembre >= 4 && $promedio_noviembre <= 5) {
+                            $etiqueta_noviembre = 'TEA';
+                        }
+
                         echo "</tbody>";
                         echo "</table>";
-                        echo "<h5>Promedio: " . htmlspecialchars(number_format($promedio, 2)) . " - " . htmlspecialchars($etiqueta) . " (PRELIMINAR) </h5></div></div>";
+                        echo "<h6>Promedio 1er cuatrimestre (JULIO): " . htmlspecialchars(number_format($promedio_julio, 2)) . " - " . htmlspecialchars($etiqueta_julio) . " (PRELIMINAR)</h6>";
+                        echo "<h6>Promedio 2do cuatrimestre (NOVIEMBRE): " . htmlspecialchars(number_format($promedio_noviembre, 2)) . " - " . htmlspecialchars($etiqueta_noviembre) . " (PRELIMINAR)</h6>";
+                        echo "</div></div>";
                     }
                 }
             }
