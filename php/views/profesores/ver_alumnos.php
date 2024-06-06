@@ -167,7 +167,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['materia_id'])) {
 
     $stmt->close(); // Cerrar la consulta preparada
 } else {
-    echo "Seleccione una materia.";
+    
 }
 
 // Cerrar la conexión a la base de datos
