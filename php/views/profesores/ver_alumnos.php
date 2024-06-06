@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="ver_alumnos.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="shortcut icon" href="../../../img/LogoEESTN1.png" type="image/x-icon">
     <title>Ver Alumnos</title>
@@ -35,6 +36,7 @@
     </div>
   </div>
 </nav>
+<div class="container-alumnos">
 <?php
 // Incluir el archivo de conexión a la base de datos
 include '../../conn.php';
@@ -58,10 +60,11 @@ $userId = 1;
     $stmt->execute();
     $result = $stmt->get_result();
     ?>
-    
-    <h1>Seleccione una Materia</h1>
+    <div class="titulo-alumnos">
+    <h1>Ver alumnos</h1>
+    </div>
     <form id="materiaForm" method="POST" action="">
-    <select name="materia_id" required onchange="this.form.submit()">
+    <select class='form-select' name="materia_id" required onchange="this.form.submit()">
         <option value="" disabled selected>Seleccione una Materia</option>
         <?php while($row = $result->fetch_assoc()): ?>
             <option value="<?php echo $row['id']; ?>"><?php echo $row['nombre']; ?></option>
@@ -76,7 +79,7 @@ $userId = 1;
 
 <!-- -------------------------------------------------------------------------------------------------------------------------------------- -->
 <?php
-include '../../conn.php';
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['materia_id'])) {
     $materiaId = $_POST['materia_id'];
@@ -90,7 +93,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['materia_id'])) {
     $stmtMateria->fetch();
     $stmtMateria->close();
 
-    echo "<h2>$nombreMateria</h2>";
+    echo "<div class='subtitulo-alumno'>"; 
+    echo "<h5> Materia seleccionada: $nombreMateria</h5>";
+    echo "</div>";
 
     // Consulta para obtener y mostrar los alumnos inscritos en la materia seleccionada junto con sus notas
     $query = "SELECT alumno.*, GROUP_CONCAT(nota.calificacion ORDER BY nota.id) AS calificaciones
@@ -120,8 +125,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['materia_id'])) {
             // Actualizar la cantidad máxima de notas
             $maxNotas = max($maxNotas, count($calificaciones));
         }
-
+        echo "<div class='subtitulo-nombre'>"; 
         echo "<h2>Alumnos</h2>";
+        echo"</div>";
+        echo "<div class='table-responsive'>";
         echo "<table class='table table-striped'>";
         echo "<tr><th>Legajo</th><th>Apellido</th><th>Nombre</th>";
 
@@ -153,6 +160,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['materia_id'])) {
             echo "</tr>";
         }
         echo "</table>";
+        echo "</div>";
     } else {
         echo "No se encontraron alumnos inscritos en esta materia.";
     }
@@ -165,7 +173,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['materia_id'])) {
 // Cerrar la conexión a la base de datos
 $conn->close();
 ?>
-
+</div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
