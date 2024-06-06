@@ -1,0 +1,87 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.container-materia{
+    width: 100%;
+    max-width: 1000px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+}
+
+.titulo-materia{
+    text-align: center;
+    margin-bottom: 20px;
+}
+.form-instancia{
+    margin-bottom: 1%;
+}
+.subtitulo-rite{
+    margin-left: 0.5%;
+    margin-top: 1%;
+}
+.subtitulo-rite{
+    margin-left: 0.5%;
+}
+
+.select-materia, .instancia-form, .alumno-form {
+    margin-bottom: 20px;
+}
+
+.select-materia select, .instancia-form select, .alumno-form select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto; /* Añadir desplazamiento horizontal si es necesario */
+    margin-top: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table th, table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #dee2e6;
+}
+table th {
+    background-color: #e9ecef;
+}
+
+.form-control, .btn-primary {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 4px;
+}
+
+.navbar {
+    margin-bottom: 20px;
+    width: 100%;
+    margin: 0;
+}
+@media (max-width: 500px) {
+    .container-materia{
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    }
+}
