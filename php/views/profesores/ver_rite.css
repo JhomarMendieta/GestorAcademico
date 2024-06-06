@@ -81,7 +81,7 @@ table th {
     margin: 0;
 }
 @media (max-width: 500px) {
-    .container-alumnos{
+    .container-rite{
         box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
     }
 }
