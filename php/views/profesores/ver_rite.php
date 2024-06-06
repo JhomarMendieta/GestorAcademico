@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="ver_rite.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="shortcut icon" href="../../../img/LogoEESTN1.png" type="image/x-icon">
     <title>Ver RITEs</title>
@@ -35,6 +36,7 @@
     </div>
   </div>
 </nav>
+<div class="container-rite">
 <?php
 include '../../conn.php';
 $userId = 1;
@@ -57,10 +59,11 @@ $stmt->bind_param("i", $profesorId);
 $stmt->execute();
 $result = $stmt->get_result();
 ?>
-    
-<h1>Seleccione una Materia</h1>
+<div class="titulo-rite">
+<h1>Ver RITEs</h1>
+</div>
 <form id="materiaForm" method="POST" action="">
-    <select name="materia_id" required onchange="this.form.submit()">
+    <select class='form-select' name="materia_id" required onchange="this.form.submit()">
         <option value="" disabled selected>Seleccione una Materia</option>
         <?php while($row = $result->fetch_assoc()): ?>
             <option value="<?php echo $row['id']; ?>"><?php echo $row['nombre']; ?></option>
@@ -82,12 +85,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['materia_id'])) {
     $stmtMateria->fetch();
     $stmtMateria->close();
 
-    echo "<h2>$nombreMateria</h2>";
+    echo "<h4>$nombreMateria</h4>";
 
     // Mostrar selector de instancia
     echo "<form method='POST' action=''>";
     echo "<input type='hidden' name='materia_id' value='$materiaId'>";
-    echo "<select name='instancia' onchange='this.form.submit()'>";
+    echo "<div class= 'form-instancia'>";
+    echo "<select class='form-select' name='instancia' onchange='this.form.submit()'>";
     echo "<option value='' disabled selected>Seleccione una Instancia</option>";
     $instancias = ["MAYO", "JULIO", "SEPTIEMBRE", "NOVIEMBRE"];
     foreach ($instancias as $instancia) {
@@ -95,11 +99,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['materia_id'])) {
         echo "<option value='$instancia' $selected>$instancia</option>";
     }
     echo "</select>";
+    echo "</div>";
     echo "</form>";
 
     // Mostrar la instancia actualmente seleccionada
     if (!empty($instanciaFiltro)) {
-        echo "<h2>Instancia Seleccionada: $instanciaFiltro</h2>";
+        echo "<h4>Instancia Seleccionada: $instanciaFiltro</h4>";
     }
 
     // Consulta para obtener y mostrar los alumnos inscritos en la materia seleccionada junto con sus notas
@@ -171,13 +176,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['materia_id'])) {
 
     $stmt->close(); // Cerrar la consulta preparada
 } else {
-    echo "Seleccione una materia.";
+    
 }
 
 // Cerrar la conexión a la base de datos
 $conn->close();
 ?>
-
+</div>
 <script src = "ver_rite.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
