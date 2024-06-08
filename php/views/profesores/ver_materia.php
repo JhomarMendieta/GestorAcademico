@@ -137,10 +137,12 @@ echo "<h2 id='materiaMostrada'>$nombreMateria - $anio ° $division ° $especiali
             // Actualizar la cantidad máxima de notas
             $maxNotas = max($maxNotas, count($calificaciones));
         }
-
+        ?>
+        <div class="table-responsive">
+        <?php
         echo "<table id='alumnosMostrados' class='table table-striped'>";
         echo "<tr><th>Apellido</th><th>Nombre</th>";
-
+        
         // Generar dinámicamente los encabezados de las notas
         if ($maxNotas == 0) {
             echo "<th>Indicador</th>";
@@ -150,13 +152,13 @@ echo "<h2 id='materiaMostrada'>$nombreMateria - $anio ° $division ° $especiali
             }
         }
         echo "</tr>";
-
+        
         // Generar dinámicamente las filas de alumnos y sus notas
         foreach ($alumnos as $alumno) {
             echo "<tr>";
             echo "<td>" . $alumno['apellidos'] . "</td>";
             echo "<td>" . $alumno['nombres'] . "</td>";
-
+        
             // Imprimir las notas del alumno
             if ($maxNotas == 0) {
                 echo "<td>-</td>";
@@ -168,27 +170,37 @@ echo "<h2 id='materiaMostrada'>$nombreMateria - $anio ° $division ° $especiali
             echo "</tr>";
         }
         echo "</table>";
-        echo "<button id='botonOcultar' onclick='ocultarMateria()'>Ocultar</button>";
-    } else {
+        ?>
+        </div>
+        <button class='btn btn-danger botonOcultar1' onclick='ocultarMateria()'>Ocultar</button>
+        
+        <?php
+        } else {
+        ?>
+        
+        <table id='alumnosMostrados' class='table table-striped'>
+            <tr>
+                <th>Apellido</th>
+                <th>Nombre</th>
+                <th>Indicador</th>
+            </tr>
+            <tr>
+                <td> - </td>
+                <td> - </td>
+                <td> - </td>
+            </tr>
+        </table>
+        <button class='btn btn-danger botonOcultar2' onclick='ocultarMateria()'>Ocultar</button>
+        
+        <?php
+        }
+        
+        $stmt->close(); // Cerrar la consulta preparada
+        } else {
+            echo "Seleccione una materia para ver más detalles.";
+        }
 
-      echo "<table id='alumnosMostrados' class='table table-striped'>";
-      echo "<tr><th>Apellido</th><th>Nombre</th><th>Indicador</th>";
-      echo "</tr>";
-            echo "<tr>";
-            echo "<td> - </td>";
-            echo "<td> - </td>";
-            echo "<td> - </td>";
-            echo "</tr>";
-            echo "</table>";
-            echo "<button class='botonOcultar' onclick='ocultarMateria()'>Ocultar</button>";
-      
-      }
-
-    $stmt->close(); // Cerrar la consulta preparada
-} else {
-    echo "Seleccione una materia para ver mas detalles.";
-}
-
+        
 // Cerrar la conexión a la base de datos
 $conn->close();
 ?>

@@ -105,7 +105,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['materia_id'])) {
     // Mostrar la instancia actualmente seleccionada
     if (!empty($instanciaFiltro)) {
         echo "<h4>Instancia Seleccionada: $instanciaFiltro</h4>";
-    }
+    
 
     // Consulta para obtener y mostrar los alumnos inscritos en la materia seleccionada junto con sus notas
     $query = "SELECT alumno.*, 
@@ -136,7 +136,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['materia_id'])) {
 
             // Actualizar la cantidad máxima de notas
             $maxNotas = max($maxNotas, count($calificaciones));
-        }
+        }?>
+        <div class='table-responsive'>
+        <?php
         echo "<table class='table table-striped'>";
         echo "<tr><th>Legajo</th><th>Apellido</th><th>Nombre</th>";
 
@@ -170,14 +172,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['materia_id'])) {
             echo "</tr>";
         }
         echo "</table>";
+        ?>
+        </div>
+        <?php
     } else {
         echo "No se encontraron alumnos inscritos en esta materia.";
     }
 
     $stmt->close(); // Cerrar la consulta preparada
-} else {
-    
-}
+}}
 
 // Cerrar la conexión a la base de datos
 $conn->close();

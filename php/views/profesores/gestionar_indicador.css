@@ -8,8 +8,14 @@ body {
     align-items: center;
     flex-direction: column;
 }
-
-.container-materia{
+.labelForm{
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+.labelNombre{
+    margin-top: 1%;
+}
+.container-indicador{
     width: 100%;
     max-width: 1000px;
     margin: 20px auto;
@@ -21,18 +27,16 @@ body {
     flex-direction: column;
 }
 
-.titulo-materia{
+.titulo-indicador{
     text-align: center;
     margin-bottom: 20px;
 }
-.form-instancia{
-    margin-bottom: 1%;
-}
-.subtitulo-rite{
+
+.subtitulo-indicaor{
     margin-left: 0.5%;
     margin-top: 1%;
 }
-.subtitulo-rite{
+.subtitulo-indicador{
     margin-left: 0.5%;
 }
 
@@ -40,12 +44,14 @@ body {
     margin-bottom: 20px;
 }
 
-.botonOcultar1{
-    width: 10%;
+.select-materia select, .instancia-form select, .alumno-form select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
 }
-.botonOcultar2{
-    width: 10%;
-}
+
 .table-responsive {
     width: 100%;
     overflow-x: auto; /* Añadir desplazamiento horizontal si es necesario */
@@ -79,7 +85,14 @@ table th {
     margin: 0;
 }
 @media (max-width: 500px) {
-    .container-materia{
+    .container-indicador{
         box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    }
+
+    .button-responsive{
+        margin-top: 5%;
+    }
+    .button-responsive2{
+        width: 100% !important;
     }
 }

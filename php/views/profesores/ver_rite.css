@@ -68,7 +68,7 @@ table th {
     background-color: #e9ecef;
 }
 
-.form-control, .btn-primary {
+.form-control {
     width: 100%;
     padding: 10px;
     margin-top: 10px;

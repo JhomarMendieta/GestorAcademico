@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="../../../img/LogoEESTN1.png" type="image/x-icon">
-    <link rel="stylesheet" href="actualizar_rite.css">
+    <link rel="stylesheet" href="gestionar_indicador.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <title>Gestionar indicadores</title>
 </head>
@@ -37,6 +37,7 @@
     </div>
   </div>
 </nav>
+<div class="container-indicador">
 <?php
 include '../../conn.php';
 
@@ -118,22 +119,26 @@ $stmt->execute();
 $nombresNotas = $stmt->get_result();
 $stmt->close();
 ?>
+<div class="titulo-indicador">
 <h1>Gestionar indicadores</h1>
+</div>
 
-<h2>Seleccionar Materia</h2>
+<label class = "labelForm" for = "idncadorForm"> Seleccione materia</label>
 <form id="indicatorForm" method="POST" action="">
-    <select name="materia_id" required>
+    <select  class='form-select' name="materia_id" required>
         <option value="" disabled selected>Seleccione una Materia</option>
         <?php while($row = $materias->fetch_assoc()): ?>
             <option value="<?php echo $row['id']; ?>"><?php echo $row['nombre']; ?></option>
         <?php endwhile; ?>
     </select>
 
-    <label for="nombre">Nombre del Indicador:</label>
-    <input type="text" name="nombre" required>
+    <label class = "labelNombre" for="nombre">Nombre del Indicador:</label>
+    <div class="input-group">
+    <input class = "form-control" type="text" name="nombre" required>
+    </div>
 
-    <label for="instancia">Instancia:</label>
-    <select name="instancia" required>
+    <label class = "labelForm" for="instancia">Instancia:</label>
+    <select  class='form-select' name="instancia" required>
         <option value="" disabled selected>Seleccione una Instancia</option>
         <option value="MAYO">MAYO</option>
         <option value="JULIO">JULIO</option>
@@ -141,12 +146,12 @@ $stmt->close();
         <option value="NOVIEMBRE">NOVIEMBRE</option>
     </select>
 
-    <button type="submit" name="add_indicator">Agregar Indicador</button>
+    <button class="btn btn-primary mt-2 mb-2" type="submit" name="add_indicator">Agregar Indicador</button>
 </form>
 
 <h2>Filtrar indicadores por materia</h2>
 <form method="GET" action="">
-    <select name="materia_id" onchange="this.form.submit()">
+    <select  class='form-select' name="materia_id" onchange="this.form.submit()">
         <option value="">Todas las Materias</option>
         <?php 
         $materias->data_seek(0);
@@ -157,6 +162,7 @@ $stmt->close();
 </form>
 
 <h2>Indicadores</h2>
+<div class="table-responsive">
 <table class='table table-striped'>
     <thead>
         <tr>
@@ -174,11 +180,11 @@ $stmt->close();
                 <td><?php echo $row['nombre']; ?></td>
                 <td><?php echo $row['instancia']; ?></td>
                 <td><?php echo $row['nombre_materia']; ?></td>
-                <td><?php echo $row['anio']; ?></td>
-                <td><?php echo $row['division']; ?></td>
+                <td><?php echo $row['anio'] . '°';  ?></td>
+                <td><?php echo $row['division']. '°';; ?></td>
                 <td>
-                    <button onclick="showForm('form-edit-<?php echo $row['id']; ?>')">Editar</button>
-                    <button onclick="showForm('form-delete-<?php echo $row['id']; ?>')">Borrar</button>
+                    <button class="btn btn-success w-45 button-responsive2" onclick="showForm('form-edit-<?php echo $row['id']; ?>')">Editar</button>
+                    <button class="btn btn-danger button-responsive" onclick="showForm('form-delete-<?php echo $row['id']; ?>')">Borrar</button>
                 </td>
             </tr>
             <tr id="form-edit-<?php echo $row['id']; ?>" class="form-container" style="display:none;">
@@ -197,7 +203,7 @@ $stmt->close();
                             <option value="SEPTIEMBRE" <?php if($row['instancia'] == 'SEPTIEMBRE') echo 'selected'; ?>>SEPTIEMBRE</option>
                             <option value="NOVIEMBRE" <?php if($row['instancia'] == 'NOVIEMBRE') echo 'selected'; ?>>NOVIEMBRE</option>
                         </select>
-                        <button type="submit">Actualizar</button>
+                        <button class="btn btn-primary" type="submit">Actualizar</button>
                     </form>
                 </td>
             </tr>
@@ -207,15 +213,16 @@ $stmt->close();
                         <input type="hidden" name="nota_id" value="<?php echo $row['id']; ?>">
                         <input type="hidden" name="delete_indicator" value="delete">
                         <p>¿Está seguro de que desea eliminar este indicador?</p>
-                        <button type="submit">Eliminar</button>
-                        <button type="button" onclick="hideForm('form-delete-<?php echo $row['id']; ?>')">Cancelar</button>
+                        <button class="btn btn-danger" type="submit">Eliminar</button>
+                        <button class="btn btn-primary" type="button" onclick="hideForm('form-delete-<?php echo $row['id']; ?>')">Cancelar</button>
                     </form>
                 </td>
             </tr>
         <?php endwhile; ?>
     </tbody>
 </table>
-
+</div>
+</div>
 
 <script src="gestionar_indicador.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

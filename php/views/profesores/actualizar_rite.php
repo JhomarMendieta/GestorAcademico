@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="actualizar_rite.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
     <title>Actualizar RITEs</title>
 </head>
 <body>
@@ -248,8 +248,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['alumno_id']) && isset(
                             <input type="hidden" name="materia_id" value="<?php echo $materiaId; ?>">
                             <input type="hidden" name="alumno_id" value="<?php echo $alumnoId; ?>">
                             <input type="hidden" name="instancia" value="<?php echo $instancia; ?>">
-                            <button type="button" onclick="editNota(<?php echo $row['id']; ?>, '<?php echo $row['nombre']; ?>', '<?php echo $row['calificacion']; ?>', '<?php echo $row['instancia']; ?>')">Editar</button>
-                            <button type="submit" name="save" value="delete">Eliminar</button>
+                            <button class = "btn btn-primary " type="button" onclick="editNota(<?php echo $row['id']; ?>, '<?php echo $row['nombre']; ?>', '<?php echo $row['calificacion']; ?>', '<?php echo $row['instancia']; ?>')">Editar</button>
+                            <button class ="btn btn-danger " type="submit" name="save" value="delete">Eliminar</button>
                             
                         </form>
                     </td>
@@ -259,7 +259,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['alumno_id']) && isset(
     </table>
     </div>
 
-    <h3 id="formTitle">Subir Nota</h3>
+    <h3 id="formTitle">Subir Nota </h3><a href="gestionar_indicador.php">Agregue indicadores</a>
     <form id="notaForm" method="POST" action="">
         <input type="hidden" name="materia_id" value="<?php echo $materiaId; ?>">
         <input type="hidden" name="alumno_id" value="<?php echo $alumnoId; ?>">
@@ -282,7 +282,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['alumno_id']) && isset(
             <label for="instancia">Instancia</label>
             <input type="text" id="instancia" name="instancia" class="form-control" value="<?php echo $instancia; ?>" readonly>
         </div>
-        <button type="submit" name="save" value="add" id="saveButton">Agregar</button>
+        <button class = "btn btn-success mt-2" type="submit" name="save" value="add" id="saveButton">Guardar</button>
     </form>
 
     <?php
