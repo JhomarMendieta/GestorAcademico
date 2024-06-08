@@ -65,7 +65,9 @@ $conn->close();
 
 // Función para agregar las etiquetas según el promedio
 function agregarEtiqueta($promedio) {
-    if ($promedio >= 0 && $promedio < 3) {
+    if ($promedio === null) {
+        return "-";
+    } elseif ($promedio >= 0 && $promedio < 3) {
         return number_format($promedio, 2) . " (TED)";
     } elseif ($promedio >= 3 && $promedio < 4) {
         return number_format($promedio, 2) . " (TEP)";
