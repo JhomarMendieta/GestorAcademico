@@ -14,7 +14,7 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
     <a id="logo" class="navbar-brand" href="menu.php">
-        <img  src="../../../img/LogoEESTN1.png" alt="">
+        <img src="../../../img/LogoEESTN1.png" alt="">
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -31,7 +31,7 @@
           <a class="nav-link" aria-current="page" href="ver_materias.php">Ver materias</a>
         </li>
         <li class="nav-item">
-        <a class="nav-link" aria-current="page" href="materias_adeudadas.php?id_alumno=1">Ver materias adeudadas</a>
+          <a class="nav-link" aria-current="page" href="materias_adeudadas.php?id_alumno=1">Ver materias adeudadas</a>
         </li>
       </ul>
     </div>
@@ -51,12 +51,13 @@
         </div>
         <div class="opcion">
             <h1>Materias</h1>
-            <a type="button" class="btn btn-secondary" href="ver_materias.php">Ver materias</a>
-            <a type="button" class="btn btn-secondary" href="materias_adeudadas.php?id_alumno=1">Ver materias adeudadas</a>
+            <div class="materias-buttons">
+                <a type="button" class="btn btn-secondary" href="ver_materias.php">Ver materias</a>
+                <a type="button" class="btn btn-secondary" href="materias_adeudadas.php?id_alumno=1">Ver materias adeudadas</a>
+            </div>
         </div>
     </div>
 </div>
-    
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
