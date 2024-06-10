@@ -16,19 +16,17 @@ if ($ultimoSegmento == "index.php" || $ultimoSegmento == "GestorAcademico") {
 
 switch ($ultimoSegmento) {
     case '':
-        if (!isset($_SESSION['user_id'])) {
+        if (!isset($_SESSION['data_user'])) {
             header("Location: login");
-        } else
+        } else {
             require "./php/home.php";
+        }
+
         break;
     case 'login':
-        if (!isset($_SESSION['user_id'])) {
-            header("Location: login");
-        } else
-        require "./php/home.php";
+        require "./php/login.php";
         break;
     default:
         require "./php/404.php";
         break;
 }
-?>

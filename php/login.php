@@ -1,8 +1,35 @@
 <?php
-if (!empty($_POST)) {
-    session_start();
-    $_SESSION['user_id'] = "carlos";
-    header("Location: index.php");
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $name = $_POST["name"];
+    $password_user = $_POST["password"];
+
+    require "./conn.php";
+
+    // Verificar si el usuario existe en la base de datos
+    $sql = "SELECT * FROM usuario WHERE nombre_usuario = '$name'";
+    $result = mysqli_query($conn, $sql);
+
+    if (mysqli_num_rows($result) == 1) {
+        // El usuario existe, verificar la contraseña
+        $row = mysqli_fetch_assoc($result);
+        if ($row['contrasenia'] == $password_user) {
+            // Contraseña correcta, iniciar sesión
+            session_start();
+            $_SESSION['data_user'] = $row;
+            header("Location: /GestorAcademico/");
+            exit;
+        } else {
+            // Contraseña incorrecta
+            $error_message = "Contraseña incorrecta.";
+        }
+    } else {
+        // Usuario no encontrado en la base de datos
+        $error_message = "Usuario no registrado.";
+    }
+
+    mysqli_close($conn);
+
+    // header("Location: index.php");
     // $name = $_POST['name'];
     // $password = $_POST['password'];
     // $query = "SELECT id_user FROM `users` WHERE $name = users.name AND $password = users.password";
@@ -47,7 +74,7 @@ if (!empty($_POST)) {
         </div>
 
         <!-- Formulario -->
-        <form action="" id="formulario" class="formulario" method="post">
+        <form action="php/login.php" id="formulario" class="formulario" method="post">
 
             <!-- Campo del ingreso del nombre de usario -->
             <div class="usuario">
