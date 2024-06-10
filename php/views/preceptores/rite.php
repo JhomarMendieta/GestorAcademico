@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="../../../img/LogoEESTN1.png" type="image/x-icon">
-    <title>Document</title>
     <link rel="stylesheet" href="css/navStyle.css">
     <link rel="stylesheet" href="css/rite.css">
+    <title>Document</title>
 </head>
+
 <body>
-<header class="header">
+    <header class="header">
         <input type="checkbox" name="navlateral" id="navlateral">
         <nav class="navbar">
             <div class="logo">
@@ -20,10 +22,10 @@
                         <div class="linea l2"></div>
                         <div class="linea l3"></div>
                     </div>
-                    
+
                 </label>
             </div>
-            <h2>RITE</h2>
+            <h2>INICIO</h2>
             <div class="usuario">
                 <p class="tipo_usuario">Preceptor</p>
                 <div class="icon">
@@ -41,33 +43,45 @@
                 </label>
             </div>
             <div class="opciones">
-            <p class="principal">Alumnos</p>
-            <p></p>
-            <p></p>
-            <p class="principal">Profesores</p>
-            <p></p>
-            <p></p>
-            <p class="principal">Materias</p>
-            <p></p>
-            <p></p>
+                <p class="principal">Alumnos</p>
+                <p></p>
+                <p></p>
+                <p class="principal">Profesores</p>
+                <p></p>
+                <p></p>
+                <p class="principal">Materias</p>
+                <p></p>
+                <p></p>
             </div>
         </nav>
     </header>
-    <div class="opc1">
-    <h2 class="titu">Selecciona el Curso que desee ver</h2>
-    <label for="select" class="select">
-    <input type="radio" name="list" value="not_changed" id="bg" checked />
-    <input type="radio" name="list" value="not_changed" id="select">
-    <label class="bg" for="bg"></label>
-    <div class="items">
-      <input type="radio" name="list" value="first_value" id="list[0]">
-      <label for="list[0]">7°2</label>
-      <input type="radio" name="list" value="second_value" id="list[1]">
-      <label for="list[1]">7°1</label>
-      <span id="text">Cursos...</span>
-    </div>
-</label>
+    <main class="main">
+        <div class="cursos">
+    <?php
+        include "../../conn.php";
 
-<center><a class="riteing" href="#"  onclick="alert(document.querySelector('input[name=list]:checked').value)">Mostrar Curso seleccionado</a></div></center>
+        $query_all_curso = "SELECT id, anio, division, anio_lectivo FROM curso";
+        $r_query_all_curso = $conn->query($query_all_curso);
+        $query_curso = "SELECT curso.id, curso.anio, curso.division, curso.anio_lectivo, alumno_curso.id_alumno, alumno_curso.grupo FROM curso INNER JOIN alumno_curso ON curso.id = alumno_curso.id_curso;";
+        $r_query_curso = $conn->query($query_curso);
+
+        while ($row = $r_query_all_curso->fetch_assoc()){
+            ?>
+            <a href="rite.php?id_curso=<?php echo $row['id']; ?>" class="none_cursos"><?php echo $row['anio'], "° ", $row['division'], "°";?></a>
+            <?php
+        }
+        ?>
+        </div>
+        <?php
+        if (!empty($_GET['id_curso'])){
+            include "rite_materias.php";
+            if(!empty($_GET['id_materias'])){
+                
+            }
+        }
+    ?>
+    </main>
+    <script src="js/none.js"></script>
 </body>
+
 </html>

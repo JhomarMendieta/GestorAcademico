@@ -63,7 +63,7 @@
                     <p class="text_icon">Alumnos</p>
                 </div>
                 <div class="secciones">
-                    <a href="" class="opcion">Ver alumnos por curso</a>
+                    <a href="alumno_curso.php" class="opcion">Ver alumnos por curso</a>
                 </div>
             </div>
             <div class="apartado rites">
