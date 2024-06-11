@@ -29,7 +29,7 @@
           <a class="nav-link" href="ver_materia.php">Ver materias</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="gestionar_indicador.php">Gestionar indicadores</a>
+          <a class="nav-link" href="gestionar_indicadores.php">Gestionar indicadores</a>
         </li>
       </ul>
     </div>
