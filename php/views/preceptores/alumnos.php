@@ -6,7 +6,7 @@
     <title>Document</title>
     <link rel="stylesheet" href="css/display.css">
 </head>
-<body>
+<body class='<?php echo "alumnos_none"; ?>'>
     <div id="alumnos">
 
         <?php

@@ -1,11 +1,12 @@
 main.body{
     background-color: #fff;
-    width: 100%;
+    width: calc(100% - 60px);
     max-width: 1400px;
-    height: calc(100vh - 200px);
+    height: fit-content;
+    min-height: calc(100vh - 200px);
     margin: 30px auto;
     border: 2px solid #bbbbbb;
-    border-radius: 10px  ;
+    border-radius: 10px;
 }  
 .items{
     width: 100%;
