@@ -10,13 +10,13 @@
 
         <?php
             $id_curso = $_GET['id_curso'];
-            $query_materias = "SELECT materia.id, materia.nombre FROM materia WHERE id_curso = $id_curso;";
+            $query_materias = "SELECT materia.nombre FROM materia WHERE id_curso = $id_curso;";
             $r_materias = $conn->query($query_materias);
             if ($r_materias->fetch_object()){
                 $r_materias = $conn->query($query_materias);
                 while ($row_materia = $r_materias->fetch_array()){
                     ?>
-                    <a href="#"><?php echo $row_materia['nombre'];?></a>
+                    <a href="rite.php?id_curso=<?php echo $id_curso;?>>"><?php echo $row_materia['nombre'];?></a>
                     <?php
                 }
             }else{
