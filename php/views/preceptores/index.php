@@ -64,6 +64,18 @@
                 </div>
                 <div class="secciones">
                     <a href="alumno_curso.php" class="opcion">Ver alumnos por curso</a>
+                    <span class="separacion">
+                        <div class="circulo"></div>
+                        <div class="linea"></div>
+                        <div class="circulo"></div>
+                    </span>
+                    <a href="#" class="opcion">Tomar asistencia</a>
+                    <span class="separacion">
+                        <div class="circulo"></div>
+                        <div class="linea"></div>
+                        <div class="circulo"></div>
+                    </span>
+                    <a href="#" class="opcion">Ver asistencia</a>
                 </div>
             </div>
             <div class="apartado rites">
@@ -72,13 +84,7 @@
                     <p class="text_icon">R.I.T.E.</p>
                 </div>
                 <div class="secciones">
-                    <a href="rite.php" class="opcion">Ver R.I.T.E.</a>
-                    <span class="separacion">
-                        <div class="circulo"></div>
-                        <div class="linea"></div>
-                        <div class="circulo"></div>
-                    </span>
-                    <a href="cargar-rite.php" class="opcion">Cargar R.I.T.E.</a>
+                    <a href="#" class="opcion">Ver R.I.T.E.</a>
                 </div>
             </div>
             <div class="apartado materias">
