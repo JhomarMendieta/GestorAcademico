@@ -76,7 +76,7 @@
         if (!empty($_GET['id_curso'])){
             include "rite_materias.php";
             if(!empty($_GET['id_materias'])){
-                
+                include "rite_alumnos";
             }
         }
     ?>
