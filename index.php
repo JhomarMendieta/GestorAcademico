@@ -17,7 +17,7 @@ if ($ultimoSegmento == "index.php" || $ultimoSegmento == "GestorAcademico") {
 switch ($ultimoSegmento) {
     case '':
         if (!isset($_SESSION['data_user'])) {
-            header("Location: login");
+            header("Location: index.html");
         } else {
             require "./php/home.php";
         }
