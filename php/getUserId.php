@@ -5,6 +5,6 @@
             $userId = $_SESSION["id"];
 
         } else {
-            header("Location: login.php");
+            header("Location: ../index.html");
             exit();
         }
