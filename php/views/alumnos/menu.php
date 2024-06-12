@@ -34,8 +34,8 @@
           <a class="nav-link" aria-current="page" href="materias_adeudadas.php?id_alumno=1">Ver materias adeudadas</a>
         </li>
         <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="mesas.php?id_alumno=1">Gestionar mesas</a>
-                    </li>
+          <a class="nav-link" aria-current="page" href="mesas.php?id_alumno=1">Gestionar mesas</a>
+        </li>
       </ul>
     </div>
   </div>
@@ -57,6 +57,7 @@
             <div class="materias-buttons">
                 <a type="button" class="btn btn-secondary" href="ver_materias.php">Ver materias</a>
                 <a type="button" class="btn btn-secondary" href="materias_adeudadas.php?id_alumno=1">Ver materias adeudadas</a>
+                <a type="button" class="btn btn-secondary" href="mesas.php?id_alumno=1">Gestionar mesas</a>
             </div>
         </div>
     </div>

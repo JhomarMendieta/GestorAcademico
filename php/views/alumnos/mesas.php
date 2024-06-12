@@ -75,10 +75,10 @@ if ($mesas_result->num_rows > 0) {
     </nav>
 
     <div class="container">
-        <h1>Mesas de <?php echo htmlspecialchars($alumno['nombres'] . ' ' . htmlspecialchars($alumno['apellidos'])); ?></h1>
+        <h1 class="mt-5">Mesas de <?php echo htmlspecialchars($alumno['nombres'] . ' ' . htmlspecialchars($alumno['apellidos'])); ?></h1>
         
         <?php if ($mesas): ?>
-            <table class="table table-light">
+            <table class="table table-light mt-3">
                 <thead>
                     <tr class="table-secondary">
                         <th scope="col">Fecha</th>
