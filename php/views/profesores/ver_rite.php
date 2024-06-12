@@ -32,7 +32,7 @@
             <a class="nav-link" href="ver_materia.php">Ver materias</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="gestionar_indicador.php">Gestionar indicadores</a>
+            <a class="nav-link" href="gestionar_indicadores.php">Gestionar indicadores</a>
           </li>
         </ul>
       </div>
@@ -40,22 +40,11 @@
   </nav>
   <div class="container-rite">
     <?php
-    session_start();
-    include '../../conn.php';
+      include '../../protected.php';      
+      include '../../conn.php';
+      include '../../getUserId.php';
 
-    $session_id = $_SESSION["data_user"]["id"];
-    $sql = "SELECT usuario.id FROM usuario INNER JOIN profesores ON profesores.id_usuario = usuario.id WHERE '$session_id' = usuario.id;";
 
-    $result = mysqli_query($conn, $sql);
-
-    if (mysqli_num_rows($result) == 1) {
-      $userId = $session_id;
-    } else {
-      // Usuario no encontrado en la base de datos
-      $error_message = "Usuario no registrado.";
-    }
-
-    // Obtener el id del profesor basado en el id del usuario
     $query = "SELECT numLegajo FROM profesores WHERE id_usuario = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("i", $userId);
