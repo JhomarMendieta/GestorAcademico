@@ -33,6 +33,9 @@
         <li class="nav-item">
         <a class="nav-link" aria-current="page" href="materias_adeudadas.php?id_alumno=1">Ver materias adeudadas</a>
         </li>
+        <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="mesas.php?id_alumno=1">Gestionar mesas</a>
+                    </li>
       </ul>
     </div>
   </div>
@@ -43,7 +46,7 @@ y en id pasar el id del alumno a ver-->
 
 
 <div class="container1">
-  <h6>*Las notas se promedian teniendo en cuenta los indicadores de JULIO para el primer cuatrimestre y de NOVIEMBRE para el segundo, ya que las instancias de MAYO y SEPTIEMBRE son simplemente avances.</h6>
+<h6>*Las notas se promedian teniendo en cuenta los indicadores de JULIO para el primer cuatrimestre y de NOVIEMBRE y SEPTIEMBRE para el segundo, ya que la instancia de MAYO es simplemente un avance.</h6>
 <?php 
 
 include ('rite_get.php');

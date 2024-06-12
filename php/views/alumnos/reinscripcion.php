@@ -31,6 +31,9 @@
                     <li class="nav-item">
                     <a class="nav-link" aria-current="page" href="materias_adeudadas.php?id_alumno=1">Ver materias adeudadas</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="mesas.php?id_alumno=1">Gestionar mesas</a>
+                    </li>
                 </ul>
             </div>
         </div>

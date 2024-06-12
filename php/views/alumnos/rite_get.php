@@ -102,6 +102,8 @@ while ($row = $notas_result->fetch_assoc()) {
                         
                         $sum_julio = 0;
                         $count_julio = 0;
+                        $sum_septiembre = 0;
+                        $count_septiembre = 0;
                         $sum_noviembre = 0;
                         $count_noviembre = 0;
 
@@ -110,6 +112,9 @@ while ($row = $notas_result->fetch_assoc()) {
                             if ($nota['instancia'] == 'JULIO') {
                                 $sum_julio += $nota['calificacion'];
                                 $count_julio++;
+                            } elseif ($nota['instancia'] == 'SEPTIEMBRE') {
+                                $sum_septiembre += $nota['calificacion'];
+                                $count_septiembre++;
                             } elseif ($nota['instancia'] == 'NOVIEMBRE') {
                                 $sum_noviembre += $nota['calificacion'];
                                 $count_noviembre++;
@@ -117,10 +122,13 @@ while ($row = $notas_result->fetch_assoc()) {
                         }
 
                         $promedio_julio = $count_julio > 0 ? $sum_julio / $count_julio : 0;
-                        $promedio_noviembre = $count_noviembre > 0 ? $sum_noviembre / $count_noviembre : 0;
+                        $promedio_segundo_cuatrimestre = 0;
+                        if ($count_septiembre + $count_noviembre > 0) {
+                            $promedio_segundo_cuatrimestre = ($sum_septiembre + $sum_noviembre) / ($count_septiembre + $count_noviembre);
+                        }
 
                         $etiqueta_julio = '';
-                        $etiqueta_noviembre = '';
+                        $etiqueta_segundo_cuatrimestre = '';
 
                         if ($promedio_julio >= 0 && $promedio_julio < 3) {
                             $etiqueta_julio = 'TED';
@@ -130,18 +138,18 @@ while ($row = $notas_result->fetch_assoc()) {
                             $etiqueta_julio = 'TEA';
                         }
 
-                        if ($promedio_noviembre >= 0 && $promedio_noviembre < 3) {
-                            $etiqueta_noviembre = 'TED';
-                        } elseif ($promedio_noviembre >= 3 && $promedio_noviembre < 4) {
-                            $etiqueta_noviembre = 'TEP';
-                        } elseif ($promedio_noviembre >= 4 && $promedio_noviembre <= 5) {
-                            $etiqueta_noviembre = 'TEA';
+                        if ($promedio_segundo_cuatrimestre >= 0 && $promedio_segundo_cuatrimestre < 3) {
+                            $etiqueta_segundo_cuatrimestre = 'TED';
+                        } elseif ($promedio_segundo_cuatrimestre >= 3 && $promedio_segundo_cuatrimestre < 4) {
+                            $etiqueta_segundo_cuatrimestre = 'TEP';
+                        } elseif ($promedio_segundo_cuatrimestre >= 4 && $promedio_segundo_cuatrimestre <= 5) {
+                            $etiqueta_segundo_cuatrimestre = 'TEA';
                         }
 
                         echo "</tbody>";
                         echo "</table>";
                         echo "<h6>Promedio 1er cuatrimestre (JULIO): " . htmlspecialchars(number_format($promedio_julio, 2)) . " - " . htmlspecialchars($etiqueta_julio) . " (PRELIMINAR)</h6>";
-                        echo "<h6>Promedio 2do cuatrimestre (NOVIEMBRE): " . htmlspecialchars(number_format($promedio_noviembre, 2)) . " - " . htmlspecialchars($etiqueta_noviembre) . " (PRELIMINAR)</h6>";
+                        echo "<h6>Promedio 2do cuatrimestre (SEPTIEMBRE + NOVIEMBRE): " . htmlspecialchars(number_format($promedio_segundo_cuatrimestre, 2)) . " - " . htmlspecialchars($etiqueta_segundo_cuatrimestre) . " (PRELIMINAR)</h6>";
                         echo "</div></div>";
                     }
                 }
