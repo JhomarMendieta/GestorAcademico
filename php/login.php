@@ -35,10 +35,10 @@ session_start();
                 header("Location: views/profesores/menu.php");
                 break;
             case "alumno":
-                header("Location: php/views/alumnos/menu.php");
+                header("Location: views/alumnos/menu.php");
                 break;
             case "preceptor":
-                header("Location: php/views/preceptores/menu.php");
+                header("Location: views/preceptores/menu.php");
                 break;
             case "master":
                 header("Location: master.php"); 
