@@ -40,7 +40,6 @@
   </nav>
   <div class="container-rite">
     <?php
-      include '../../protected.php';      
       include '../../conn.php';
       include '../../getUserId.php';
 
