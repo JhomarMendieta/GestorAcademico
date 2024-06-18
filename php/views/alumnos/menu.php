@@ -25,16 +25,16 @@
           <a class="nav-link" aria-current="page" href="reinscripcion.php">Solicitud de reinscripción</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="rite.php?id=1">Ver RITE</a>
+          <a class="nav-link" aria-current="page" href="rite.php">Ver RITE</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" aria-current="page" href="ver_materias.php">Ver materias</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="materias_adeudadas.php?id_alumno=1">Ver materias adeudadas</a>
+          <a class="nav-link" aria-current="page" href="materias_adeudadas.php">Ver materias adeudadas</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="mesas.php?id_alumno=1">Gestionar mesas</a>
+          <a class="nav-link" aria-current="page" href="mesas.php">Gestionar mesas</a>
         </li>
       </ul>
     </div>
@@ -50,14 +50,14 @@
         </div>
         <div class="opcion">
             <h1>R.I.T.E</h1>
-            <a type="button" class="btn btn-secondary" href="rite.php?id=1">Ver RITE</a>
+            <a type="button" class="btn btn-secondary" href="rite.php">Ver RITE</a>
         </div>
         <div class="opcion">
             <h1>Materias</h1>
             <div class="materias-buttons">
                 <a type="button" class="btn btn-secondary" href="ver_materias.php">Ver materias</a>
-                <a type="button" class="btn btn-secondary" href="materias_adeudadas.php?id_alumno=1">Ver materias adeudadas</a>
-                <a type="button" class="btn btn-secondary" href="mesas.php?id_alumno=1">Gestionar mesas</a>
+                <a type="button" class="btn btn-secondary" href="materias_adeudadas.php">Ver materias adeudadas</a>
+                <a type="button" class="btn btn-secondary" href="mesas.php">Gestionar mesas</a>
             </div>
         </div>
     </div>
