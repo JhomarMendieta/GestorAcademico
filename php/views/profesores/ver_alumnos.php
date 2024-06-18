@@ -41,144 +41,115 @@
     </div>
   </nav>
   <div class="container-alumnos">
-    <?php
-    // Incluir el archivo de conexión a la base de datos 
-    include '../../conn.php';
-    include '../../getUserId.php';
+  <?php
+// Incluir el archivo de conexión a la base de datos 
+include '../../conn.php';
+include '../../getUserId.php';
 
+// Obtener el id del profesor basado en el id del usuario
+$query = "SELECT numLegajo FROM profesores WHERE id_usuario = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $userId);
+$stmt->execute();
+$stmt->bind_result($profesorId);
+$stmt->fetch();
+$stmt->close();
 
-    // Obtener el id del profesor basado en el id del usuario
-    $query = "SELECT numLegajo FROM profesores WHERE id_usuario = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("i", $userId);
-    $stmt->execute();
-    $stmt->bind_result($profesorId);
-    $stmt->fetch();
-    $stmt->close();
+// Obtener las materias que enseña el profesor
+$query = "SELECT materia.id, materia.nombre FROM profesor_materia
+          INNER JOIN materia ON profesor_materia.id_materia = materia.id
+          WHERE profesor_materia.id_profesor = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $profesorId);
+$stmt->execute();
+$result = $stmt->get_result();
+?>
+<div class="titulo-alumnos">
+  <h1>Ver alumnos</h1>
+</div>
+<form id="materiaForm" method="POST" action="">
+  <select class='form-select' name="materia_id" required onchange="this.form.submit()">
+    <option value="" disabled selected>Seleccione una Materia</option>
+    <?php while ($row = $result->fetch_assoc()) : ?>
+      <option value="<?php echo $row['id']; ?>"><?php echo $row['nombre']; ?></option>
+    <?php endwhile; ?>
+  </select>
+</form>
 
-    // Obtener las materias que enseña el profesor
-    $query = "SELECT materia.id, materia.nombre FROM profesor_materia
-              INNER JOIN materia ON profesor_materia.id_materia = materia.id
-              WHERE profesor_materia.id_profesor = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("i", $profesorId);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    ?>
-    <div class="titulo-alumnos">
-      <h1>Ver alumnos</h1>
-    </div>
-    <form id="materiaForm" method="POST" action="">
-      <select class='form-select' name="materia_id" required onchange="this.form.submit()">
-        <option value="" disabled selected>Seleccione una Materia</option>
-        <?php while ($row = $result->fetch_assoc()) : ?>
-          <option value="<?php echo $row['id']; ?>"><?php echo $row['nombre']; ?></option>
-        <?php endwhile; ?>
-      </select>
-    </form>
-    <script>
-      function submitForm() {
-        document.getElementById("materiaForm").submit();
-      }
-    </script>
+<script>
+  function submitForm() {
+    document.getElementById("materiaForm").submit();
+  }
+</script>
 
-    <!-- -------------------------------------------------------------------------------------------------------------------------------------- -->
-    <?php
+<?php
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['materia_id'])) {
+  $materiaId = $_POST['materia_id'];
 
+  // Consulta para obtener el nombre de la materia
+  $queryMateria = "SELECT nombre FROM materia WHERE id = ?";
+  $stmtMateria = $conn->prepare($queryMateria);
+  $stmtMateria->bind_param("i", $materiaId);
+  $stmtMateria->execute();
+  $stmtMateria->bind_result($nombreMateria);
+  $stmtMateria->fetch();
+  $stmtMateria->close();
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['materia_id'])) {
-      $materiaId = $_POST['materia_id'];
+  echo "<div class='subtitulo-alumno'>";
+  echo "<h5> Materia seleccionada: $nombreMateria</h5>";
+  echo "</div>";
 
-      // Consulta para obtener el nombre de la materia
-      $queryMateria = "SELECT nombre FROM materia WHERE id = ?";
-      $stmtMateria = $conn->prepare($queryMateria);
-      $stmtMateria->bind_param("i", $materiaId);
-      $stmtMateria->execute();
-      $stmtMateria->bind_result($nombreMateria);
-      $stmtMateria->fetch();
-      $stmtMateria->close();
+  // Consulta para obtener y mostrar los alumnos inscritos en la materia seleccionada junto con sus promedios de notas
+  $query = "SELECT alumno.id, alumno.legajo, alumno.apellidos, alumno.nombres,
+                   AVG(CASE WHEN nota.instancia = 'MAYO' THEN nota.calificacion END) AS promedio_mayo,
+                   AVG(CASE WHEN nota.instancia = 'JULIO' THEN nota.calificacion END) AS promedio_julio,
+                   AVG(CASE WHEN nota.instancia = 'SEPTIEMBRE' THEN nota.calificacion END) AS promedio_septiembre,
+                   AVG(CASE WHEN nota.instancia = 'NOVIEMBRE' THEN nota.calificacion END) AS promedio_noviembre
+            FROM alumno
+            INNER JOIN alumno_curso ON alumno.id = alumno_curso.id_alumno
+            INNER JOIN curso ON alumno_curso.id_curso = curso.id
+            INNER JOIN materia ON curso.id = materia.id_curso
+            LEFT JOIN nota ON alumno.id = nota.id_alumno AND materia.id = nota.id_materia
+            WHERE materia.id = ?
+            GROUP BY alumno.id
+            ORDER BY alumno.apellidos ASC, alumno.nombres ASC";
+  $stmt = $conn->prepare($query);
+  $stmt->bind_param("i", $materiaId);
+  $stmt->execute();
+  $result = $stmt->get_result();
 
-      echo "<div class='subtitulo-alumno'>";
-      echo "<h5> Materia seleccionada: $nombreMateria</h5>";
-      echo "</div>";
+  // Verificar si se encontraron resultados
+  if ($result->num_rows > 0) {
+    echo "<div class='subtitulo-nombre'>";
+    echo "<h2>Alumnos</h2>";
+    echo "</div>";
+    echo "<div class='subtitulo-alumno'>";
+    echo "<h6> *Muestra los promedios de cada instancia.</h6>";
+    echo "</div>";
+    echo "<div class='table-responsive'>";
+    echo "<table class='table table-striped'>";
+    echo "<tr><th>Apellido</th><th>Nombre</th><th>Mayo</th><th>Julio</th><th>Septiembre</th><th>Noviembre</th></tr>";
 
-      // Consulta para obtener y mostrar los alumnos inscritos en la materia seleccionada junto con sus notas
-      $query = "SELECT alumno.*, GROUP_CONCAT(nota.calificacion ORDER BY nota.id) AS calificaciones
-              FROM alumno
-              INNER JOIN alumno_curso ON alumno.id = alumno_curso.id_alumno
-              INNER JOIN curso ON alumno_curso.id_curso = curso.id
-              INNER JOIN materia ON curso.id = materia.id_curso
-              LEFT JOIN nota ON alumno.id = nota.id_alumno AND materia.id = nota.id_materia
-              WHERE materia.id = ?
-              GROUP BY alumno.id";
-      $stmt = $conn->prepare($query);
-      $stmt->bind_param("i", $materiaId);
-      $stmt->execute();
-      $result = $stmt->get_result();
-
-      // Verificar si se encontraron resultados
-      if ($result->num_rows > 0) {
-        // Inicializar variables para rastrear la cantidad máxima de notas
-        $maxNotas = 0;
-        $alumnos = [];
-
-        while ($row = $result->fetch_assoc()) {
-          $calificaciones = array_filter(explode(",", $row['calificaciones']));
-          $row['calificaciones'] = $calificaciones;
-          $alumnos[] = $row;
-
-          // Actualizar la cantidad máxima de notas
-          $maxNotas = max($maxNotas, count($calificaciones));
-        }
-        echo "<div class='subtitulo-nombre'>";
-        echo "<h2>Alumnos</h2>";
-        echo "</div>";
-        echo "<div class='table-responsive'>";
-        echo "<table class='table table-striped'>";
-        echo "<tr><th>Legajo</th><th>Apellido</th><th>Nombre</th>";
-
-        // Generar dinámicamente los encabezados de las notas
-        if ($maxNotas == 0) {
-          echo "<th>Indicador</th>";
-        } else {
-          for ($i = 1; $i <= $maxNotas; $i++) {
-            echo "<th>Indicador $i</th>";
-          }
-        }
-        echo "</tr>";
-
-        // Generar dinámicamente las filas de alumnos y sus notas
-        foreach ($alumnos as $alumno) {
-          echo "<tr>";
-          echo "<td>" . $alumno['legajo'] . "</td>";
-          echo "<td>" . $alumno['apellidos'] . "</td>";
-          echo "<td>" . $alumno['nombres'] . "</td>";
-
-          // Imprimir las notas del alumno
-          if ($maxNotas == 0) {
-            echo "<td>-</td>";
-          } else {
-            for ($i = 0; $i < $maxNotas; $i++) {
-              echo "<td>" . (isset($alumno['calificaciones'][$i]) ? $alumno['calificaciones'][$i] : "-") . "</td>";
-            }
-          }
-          echo "</tr>";
-        }
-        echo "</table>";
-        echo "</div>";
-      } else {
-        echo "No se encontraron alumnos inscritos en esta materia.";
-      }
-
-      $stmt->close(); // Cerrar la consulta preparada
-    } else {
+    // Generar dinámicamente las filas de alumnos y sus promedios de notas
+    while ($row = $result->fetch_assoc()) {
+      echo "<tr>";
+      echo "<td>" . $row['apellidos'] . "</td>";
+      echo "<td>" . $row['nombres'] . "</td>";
+      echo "<td>" . (is_null($row['promedio_mayo']) ? "-" : number_format($row['promedio_mayo'], 2)) . "</td>";
+      echo "<td>" . (is_null($row['promedio_julio']) ? "-" : number_format($row['promedio_julio'], 2)) . "</td>";
+      echo "<td>" . (is_null($row['promedio_septiembre']) ? "-" : number_format($row['promedio_septiembre'], 2)) . "</td>";
+      echo "<td>" . (is_null($row['promedio_noviembre']) ? "-" : number_format($row['promedio_noviembre'], 2)) . "</td>";
+      echo "</tr>";
     }
+    echo "</table>";
+    echo "</div>";
+  } else {
+    echo "No se encontraron alumnos inscritos en esta materia.";
+  }
 
-    // Cerrar la conexión a la base de datos
-    $conn->close();
-    ?>
-  </div>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-</body>
+  $stmt->close(); // Cerrar la consulta preparada
+}
 
-</html>
+// Cerrar la conexión a la base de datos
+$conn->close();
+?>
