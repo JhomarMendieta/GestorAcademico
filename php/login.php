@@ -38,7 +38,7 @@ session_start();
                 header("Location: views/alumnos/menu.php");
                 break;
             case "preceptor":
-                header("Location: views/preceptores/menu.php");
+                header("Location: views/preceptores");
                 break;
             case "master":
                 header("Location: master.php"); 

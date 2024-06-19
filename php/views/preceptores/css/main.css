@@ -1,12 +1,11 @@
 main.body{
     background-color: #fff;
-    width: calc(100% - 60px);
+    width: 100%;
     max-width: 1400px;
-    height: fit-content;
-    min-height: calc(100vh - 200px);
+    height: calc(100vh - 200px);
     margin: 30px auto;
     border: 2px solid #bbbbbb;
-    border-radius: 10px;
+    border-radius: 10px  ;
 }  
 .items{
     width: 100%;
@@ -67,6 +66,6 @@ main.body{
     background-color: #9c9c9c;
 }
 .secciones .opcion:active{
-    box-shadow: 0 1px 5px #000;
+    box-shadow: 0 0 0;
     transform: translate(2px,2px);
 }

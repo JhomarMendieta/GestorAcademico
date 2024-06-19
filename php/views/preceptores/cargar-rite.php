@@ -8,31 +8,9 @@
     <link rel="stylesheet" href="css/navStyle.css">
 </head>
 <body>
-<header class="header">
-          <nav class="navbar" id="navlateral">
-            <div class="logo">
-                <img src="../../../img/LogoEESTN1.png" alt="Logo de la EEST 1">
-                <label for="navlateral">
-                    <div class="lienas">
-                        <div class="linea l1"></div>
-                        <div class="linea l2"></div>
-                        <div class="linea l3"></div>
-                    </div>
-                    
-                </label>
-            </div>
-            <h2>R.I.T.E</h2>
-            <div class="usuario">
-                <p class="tipo_usuario">PRECEPTOR</p>
-                <div class="icon">
-                    <i class="fa-solid fa-user"></i>
-                </div>
-            </div>
-        </nav>
-        <nav class="navlateral" id="navlateral">
-
-        </nav>
-    </header>
+<?php
+    include("menu.php");
+?>
     <h1>Cargar RITE</h1>
 </body>
 </html>
