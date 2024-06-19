@@ -121,79 +121,82 @@
             </form>
         </div>
         <?php
-        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['materia_id'])) {
-            $materiaId = $_POST['materia_id'];
-            $instancia = isset($_POST['instancia']) ? $_POST['instancia'] : '';
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['materia_id'])) {
+    $materiaId = $_POST['materia_id'];
+    $instancia = isset($_POST['instancia']) ? $_POST['instancia'] : '';
 
-            $query = "SELECT alumno.id, alumno.nombres, alumno.apellidos FROM alumno
+    $query = "SELECT alumno.id, alumno.nombres, alumno.apellidos FROM alumno
               INNER JOIN alumno_curso ON alumno.id = alumno_curso.id_alumno
               INNER JOIN curso ON alumno_curso.id_curso = curso.id
               INNER JOIN materia ON curso.id = materia.id_curso
-              WHERE materia.id = ?";
-            $stmt = $conn->prepare($query);
-            $stmt->bind_param("i", $materiaId);
-            $stmt->execute();
-            $result = $stmt->get_result();
+              WHERE materia.id = ?
+              ORDER BY alumno.apellidos ASC, alumno.nombres ASC";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $materiaId);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-            $queryMateria = "SELECT nombre FROM materia WHERE id = ?";
-            $stmtMateria = $conn->prepare($queryMateria);
-            $stmtMateria->bind_param("i", $materiaId);
-            $stmtMateria->execute();
-            $stmtMateria->bind_result($nombreMateria);
-            $stmtMateria->fetch();
-            $stmtMateria->close();
-            echo "<div class = 'instancia-form'>";
-            echo "<p>Materia: {$nombreMateria}</p>";
-            echo "<form id='instanciaForm' method='POST' action=''>";
-            echo "<input type='hidden' name='materia_id' value='{$materiaId}'>";
-            echo "<select name='instancia' class='form-select' required onchange='this.form.submit()'>";
-            echo "<option value='' disabled selected>Seleccione una Instancia</option>";
-            echo "<option value='MAYO'" . ($instancia == 'MAYO' ? ' selected' : '') . ">MAYO</option>";
-            echo "<option value='JULIO'" . ($instancia == 'JULIO' ? ' selected' : '') . ">JULIO</option>";
-            echo "<option value='SEPTIEMBRE'" . ($instancia == 'SEPTIEMBRE' ? ' selected' : '') . ">SEPTIEMBRE</option>";
-            echo "<option value='NOVIEMBRE'" . ($instancia == 'NOVIEMBRE' ? ' selected' : '') . ">NOVIEMBRE</option>";
-            echo "</select>";
-            echo "</form>";
-        }
+    $queryMateria = "SELECT nombre FROM materia WHERE id = ?";
+    $stmtMateria = $conn->prepare($queryMateria);
+    $stmtMateria->bind_param("i", $materiaId);
+    $stmtMateria->execute();
+    $stmtMateria->bind_result($nombreMateria);
+    $stmtMateria->fetch();
+    $stmtMateria->close();
+
+    echo "<div class = 'instancia-form'>";
+    echo "<p>Materia: {$nombreMateria}</p>";
+    echo "<form id='instanciaForm' method='POST' action=''>";
+    echo "<input type='hidden' name='materia_id' value='{$materiaId}'>";
+    echo "<select name='instancia' class='form-select' required onchange='this.form.submit()'>";
+    echo "<option value='' disabled selected>Seleccione una Instancia</option>";
+    echo "<option value='MAYO'" . ($instancia == 'MAYO' ? ' selected' : '') . ">MAYO</option>";
+    echo "<option value='JULIO'" . ($instancia == 'JULIO' ? ' selected' : '') . ">JULIO</option>";
+    echo "<option value='SEPTIEMBRE'" . ($instancia == 'SEPTIEMBRE' ? ' selected' : '') . ">SEPTIEMBRE</option>";
+    echo "<option value='NOVIEMBRE'" . ($instancia == 'NOVIEMBRE' ? ' selected' : '') . ">NOVIEMBRE</option>";
+    echo "</select>";
+    echo "</form>";
+}
         ?>
 
         <?php
-        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['instancia']) && isset($_POST['materia_id'])) {
-            $materiaId = $_POST['materia_id'];
-            $instancia = $_POST['instancia'];
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['instancia']) && isset($_POST['materia_id'])) {
+    $materiaId = $_POST['materia_id'];
+    $instancia = $_POST['instancia'];
 
-            $query = "SELECT alumno.id, alumno.nombres, alumno.apellidos FROM alumno
+    $query = "SELECT alumno.id, alumno.nombres, alumno.apellidos FROM alumno
               INNER JOIN alumno_curso ON alumno.id = alumno_curso.id_alumno
               INNER JOIN curso ON alumno_curso.id_curso = curso.id
               INNER JOIN materia ON curso.id = materia.id_curso
-              WHERE materia.id = ?";
-            $stmt = $conn->prepare($query);
-            $stmt->bind_param("i", $materiaId);
-            $stmt->execute();
-            $result = $stmt->get_result();
+              WHERE materia.id = ?
+              ORDER BY alumno.apellidos ASC, alumno.nombres ASC";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $materiaId);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-            $queryMateria = "SELECT nombre FROM materia WHERE id = ?";
-            $stmtMateria = $conn->prepare($queryMateria);
-            $stmtMateria->bind_param("i", $materiaId);
-            $stmtMateria->execute();
-            $stmtMateria->bind_result($nombreMateria);
-            $stmtMateria->fetch();
-            $stmtMateria->close();
+    $queryMateria = "SELECT nombre FROM materia WHERE id = ?";
+    $stmtMateria = $conn->prepare($queryMateria);
+    $stmtMateria->bind_param("i", $materiaId);
+    $stmtMateria->execute();
+    $stmtMateria->bind_result($nombreMateria);
+    $stmtMateria->fetch();
+    $stmtMateria->close();
 
-            echo "<p>Materia {$nombreMateria} - Instancia {$instancia}</p>";
-            echo "<form id='alumnoForm' method='POST' action=''>";
-            echo "<input type='hidden' name='materia_id' value='{$materiaId}'>";
-            echo "<input type='hidden' name='instancia' value='{$instancia}'>";
-            echo "<select name='alumno_id' class='form-select' required onchange='this.form.submit()'>";
-            echo "<option value='' disabled selected>Seleccione un Alumno</option>";
+    echo "<p>Materia {$nombreMateria} - Instancia {$instancia}</p>";
+    echo "<form id='alumnoForm' method='POST' action=''>";
+    echo "<input type='hidden' name='materia_id' value='{$materiaId}'>";
+    echo "<input type='hidden' name='instancia' value='{$instancia}'>";
+    echo "<select name='alumno_id' class='form-select' required onchange='this.form.submit()'>";
+    echo "<option value='' disabled selected>Seleccione un Alumno</option>";
 
-            while ($row = $result->fetch_assoc()) {
-                echo "<option value='{$row['id']}'>{$row['apellidos']} {$row['nombres']}</option>";
-            }
-            echo "</select>";
-            echo "</form>";
-            echo "</div>";
-        }
+    while ($row = $result->fetch_assoc()) {
+        echo "<option value='{$row['id']}'>{$row['apellidos']} {$row['nombres']}</option>";
+    }
+    echo "</select>";
+    echo "</form>";
+    echo "</div>";
+}
         ?>
 
         <?php
