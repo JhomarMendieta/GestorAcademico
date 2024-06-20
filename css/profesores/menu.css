@@ -45,10 +45,12 @@ body {
     background-color: #007bff;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease;
+    transition: transform 0.3s ease !important; 
 }
 
-
+.btn:hover {
+    transform: scale(1.1); 
+}
 
 .titulo-menu{
     margin-bottom: 1%;
