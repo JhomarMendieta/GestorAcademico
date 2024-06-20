@@ -17,3 +17,8 @@ body {
 table {
     min-width: 100%; /* Asegura que la tabla tenga al menos el ancho del contenedor */
 }
+
+.navbar {
+    min-height: 7vh;
+    border-bottom: 1px grey solid;
+}

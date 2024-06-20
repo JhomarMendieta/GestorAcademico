@@ -1,11 +1,29 @@
 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notas de <?php echo htmlspecialchars($alumno['nombres']); ?> <?php echo htmlspecialchars($alumno['apellidos']); ?></title>
+    <link rel="stylesheet" href="rite.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<body>
+    
+<!-- navbar -->
+
+<?php
+include 'navbar_alumnos.php';
+include 'autenticacion_alumno.php';
+?>
+
 <?php
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 include_once('../../conn.php');
 
-include('../../getUserId.php');
 
 // Consulta para obtener el id_alumno correspondiente al id_usuario
 $alumno_sql = "SELECT id FROM alumno WHERE id_usuario = ?";
@@ -69,52 +87,6 @@ while ($row = $notas_result->fetch_assoc()) {
     ];
 }
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notas de <?php echo htmlspecialchars($alumno['nombres']); ?> <?php echo htmlspecialchars($alumno['apellidos']); ?></title>
-    <link rel="stylesheet" href="rite.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-</head>
-<body>
-    
-<!-- navbar -->
-
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
-  <div class="container-fluid">
-    <a id="logo" class="navbar-brand" href="menu.php">
-        <img  src="../../../img/LogoEESTN1.png" alt="">
-    </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="reinscripcion.php">Solicitud de reinscripción</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="rite.php">Ver RITE</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="ver_materias.php">Ver materias</a>
-        </li>
-        <li class="nav-item">
-        <a class="nav-link" aria-current="page" href="materias_adeudadas.php">Ver materias adeudadas</a>
-        </li>
-        <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="mesas.php">Gestionar mesas</a>
-                    </li>
-      </ul>
-    </div>
-  </div>
-</nav>
-<!-- !!!!!!!!!!!!!!!!!!!!!!!! -->
-<!-- ACCEDER A localhost/gestoracademico/php/views/alumnos/RITE.PHP?id=1
-y en id pasar el id del alumno a ver-->
 
 
 <div class="container1">

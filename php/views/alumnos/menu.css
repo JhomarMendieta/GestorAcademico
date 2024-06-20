@@ -7,9 +7,7 @@ body {
 
 div.opciones {
     display: flex;
-    flex-direction: row;
     justify-content: center;
-    align-items: stretch;
     gap: 25px;
 }
 
@@ -17,8 +15,7 @@ div.opcion {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
-    height: auto; /* Ajusta esta altura según sea necesario */
+    height: auto;
     gap: 10px;
 }
 
@@ -54,4 +51,15 @@ h1 {
     flex-direction: column;
     align-items: center;
     gap: 10px;
+}
+
+.btn {
+    width: 200px; 
+    text-align: center;
+    transition: transform 0.3s ease; 
+}
+
+
+.btn:hover {
+    transform: scale(1.1); 
 }

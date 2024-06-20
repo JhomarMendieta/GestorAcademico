@@ -2,5 +2,5 @@
 <?php
 include "../../auth.php";
 
-verificarAcceso(['alumno', 'master']); // Solo profesores y master pueden acceder
+verificarAcceso(['secretario', 'master']); // Solo profesores y master pueden acceder
 ?>

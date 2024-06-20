@@ -32,6 +32,7 @@ form div {
 
 .navbar {
     min-height: 7vh;
+    border-bottom: 1px grey solid;
 }
 
 @media (max-width: 1000px) {

@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,46 +13,17 @@
 
 <!-- navbar -->
 
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
-  <div class="container-fluid">
-    <a id="logo" class="navbar-brand" href="menu.php">
-        <img src="../../../img/LogoEESTN1.png" alt="">
-    </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="reinscripcion.php">Solicitud de reinscripción</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="rite.php">Ver RITE</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="ver_materias.php">Ver materias</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="materias_adeudadas.php">Ver materias adeudadas</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="mesas.php">Gestionar mesas</a>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
 
+<?php
+include 'navbar_alumnos.php';
+include 'autenticacion_alumno.php';
+?>
 <!-- funcionalidad -->
 <div class="container">
     <div class="opciones">
         <div class="opcion">
             <h1>Alumnos</h1>
             <a type="button" class="btn btn-secondary" href="reinscripcion.php">Solicitud de reinscripción</a>
-        </div>
-        <div class="opcion">
-            <h1>R.I.T.E</h1>
-            <a type="button" class="btn btn-secondary" href="rite.php">Ver RITE</a>
         </div>
         <div class="opcion">
             <h1>Materias</h1>
@@ -60,6 +33,11 @@
                 <a type="button" class="btn btn-secondary" href="mesas.php">Gestionar mesas</a>
             </div>
         </div>
+        <div class="opcion">
+            <h1>R.I.T.E</h1>
+            <a type="button" class="btn btn-secondary" href="rite.php">Ver RITE</a>
+        </div>
+        
     </div>
 </div>
 
