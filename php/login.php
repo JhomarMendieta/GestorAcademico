@@ -3,7 +3,7 @@
 session_start();
 
 // Verificar si se enviaron los datos del formulario
-
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     include "./conn.php";
 
     // Obtener los datos del formulario
@@ -23,12 +23,8 @@ session_start();
         $_SESSION["nombre_usuario"] = $row["nombre_usuario"];
         $_SESSION["mail"] = $row["mail"];
         $_SESSION["rol"] = $row["rol"];
+        $_SESSION["logged_in"] = true;
 
-
-        // Establecer que el usuario ha iniciado sesión
-         $_SESSION["logged_in"] = true;
-
-         
         // Redireccionar según el rol del usuario
         switch ($_SESSION["rol"]) {
             case "profesor":
@@ -41,7 +37,7 @@ session_start();
                 header("Location: views/preceptores");
                 break;
             case "master":
-                header("Location: master.php"); 
+                header("Location: master.php");
                 break;
             default:
                 echo "Rol no válido";
@@ -51,3 +47,4 @@ session_start();
     }
 
     $conn->close();
+}

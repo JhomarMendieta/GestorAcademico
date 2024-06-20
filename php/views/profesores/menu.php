@@ -11,6 +11,7 @@
 <body>
 <?php 
 include "navbar_profesores.php";
+include 'autenticacion_profesor.php';
 ?>
 <div class="titulo-menu">
     <h1>Menú</h1>

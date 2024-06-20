@@ -14,6 +14,7 @@
 <?php
 include '../../conn.php';
 include './navbar_profesores.php';
+include 'autenticacion_profesor.php';
 ?>  
 <div class="container-alumnos">
   <?php

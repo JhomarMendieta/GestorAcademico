@@ -12,6 +12,7 @@
 <?php 
 include "navbar_profesores.php";
 include '../../conn.php';
+include 'autenticacion_profesor.php';
 ?>
 <div class="container-rite">
   <?php
