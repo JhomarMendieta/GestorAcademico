@@ -76,3 +76,50 @@ body{
     border-radius: 10px;
     margin-top: 20px;
 }
+@media (max-width: 600px) {
+    .logo{
+        align-items: center !important;
+    }
+    body{
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100%;
+    }
+    .contenedor_formulario {
+        width: 95%;
+        padding: 50px 0px;
+    }
+
+    .formulario {
+        width: 90%;
+        padding: 10px 0;
+    }
+
+    .contenedor_logo img {
+        width: 120px;
+    }
+
+    .contenedor_formulario .contenedor_logo p {
+        font-size: 1.5rem;
+    }
+
+    .contrasena{
+        margin-top: 0;
+        padding: 0 !important;
+    }
+
+    .formulario .usuario input,
+    .formulario .contrasena input {
+        height: 40px;
+        font-size: 1rem;
+    }
+
+    .formulario .enviar input {
+        padding: 4px;
+        font-size: 1rem;
+    }
+
+    .formulario .linea {
+        width: calc(100% - 50px);
+    }
+}
