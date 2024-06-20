@@ -1,6 +1,9 @@
 <?php
 $current_page = basename($_SERVER['PHP_SELF']);
 ?>
+<head>
+  <link rel="stylesheet" href="../../../css/profesores/navbar_profesores.css">
+</head>
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">

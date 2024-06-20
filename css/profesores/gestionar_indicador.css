@@ -79,15 +79,6 @@ table th {
     border-radius: 4px;
 }
 
-.navbar {
-    margin-bottom: 20px;
-    width: 100%;
-    margin: 0;
-}
-
-#logo img {
-    height: 6vh;
-}
 
 @media (max-width: 500px) {
     .container-indicador{
