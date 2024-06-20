@@ -39,9 +39,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             case "master":
                 header("Location: master.php");
                 break;
-            case "secretario":
-                header("Location: views/secretaria/menu.php");
-                break;
             default:
                 echo "Rol no válido";
         }
