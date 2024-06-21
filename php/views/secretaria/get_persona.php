@@ -1,7 +1,7 @@
 <?php
 // esto lo que hace es basicamente buscar a la persona segun el tipo que hayas elegido en asignar curso. no hay que tocar nada.
 include "../../conn.php";
-
+include 'autenticacion_secretaria.php';
 $type = $_GET['type'];
 $persons = [];
 

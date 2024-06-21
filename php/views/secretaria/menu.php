@@ -38,6 +38,11 @@ include 'autenticacion_secretaria.php';
             <a type="button" class="btn btn-secondary" href="rite.php">Agregar cursos</a>
             <a type="button" class="btn btn-secondary" href="ver_cursos.php">Ver cursos</a>
         </div>
+        <div class="opcion">
+            <h1>Usuarios</h1>
+            <a type="button" class="btn btn-secondary" href="registrar_usuarios.php">Registrar usuarios</a>
+            <a type="button" class="btn btn-secondary" href="asignar_usuarios.php">Asignar usuarios</a>
+        </div>
         
     </div>
 </div>

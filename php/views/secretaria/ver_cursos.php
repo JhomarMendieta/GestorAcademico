@@ -17,25 +17,26 @@ include_once ('../../conn.php');
 ?>
 
 <!-- funcionalidad -->
+<h1>Cursos Disponibles</h1>
 <div class="container">
-    <h1>Cursos Disponibles</h1>
+
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Nombre del Curso</th>
-                <th>Descripción</th>
+                <th>Año</th>
+                <th>Division</th>
+                <th>Año lectivo</th>
             </tr>
         </thead>
         <tbody>
             <?php
-            $sql = "SELECT id, nombre_curso, descripcion FROM cursos"; // Ajusta el nombre de la tabla y las columnas según tu base de datos
+            $sql = "SELECT anio, division, anio_lectivo FROM curso"; // Ajusta el nombre de la tabla y las columnas según tu base de datos
             $result = $conn->query($sql);
 
             if ($result->num_rows > 0) {
                 // Mostrar los datos de cada fila
                 while($row = $result->fetch_assoc()) {
-                    echo "<tr><td>" . $row["id"]. "</td><td>" . $row["nombre_curso"]. "</td><td>" . $row["descripcion"]. "</td></tr>";
+                    echo "<tr><td>" . $row["anio"]. "</td><td>" . $row["division"]. "</td><td>" . $row["anio_lectivo"]. "</td></tr>";
                 }
             } else {
                 echo "<tr><td colspan='3'>No hay cursos disponibles</td></tr>";
