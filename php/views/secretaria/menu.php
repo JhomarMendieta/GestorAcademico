@@ -35,7 +35,7 @@ include 'autenticacion_secretaria.php';
         </div>
         <div class="opcion">
             <h1>Cursos</h1>
-            <a type="button" class="btn btn-secondary" href="rite.php">Agregar cursos</a>
+            <a type="button" class="btn btn-secondary" href="agregar_cursos.php">Agregar cursos</a>
             <a type="button" class="btn btn-secondary" href="ver_cursos.php">Ver cursos</a>
         </div>
         <div class="opcion">

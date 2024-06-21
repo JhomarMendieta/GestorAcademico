@@ -99,7 +99,7 @@
             <h1>Gestionar indicadores</h1>
         </div>
 
-        <label class="labelForm" for="idncadorForm">Seleccione materia</label>
+        <label class="labelForm" for="idncadorForm"> Seleccione materia</label>
         <form id="indicatorForm" method="POST" action="">
             <select class='form-select' name="materia_id" required>
                 <option value="" disabled selected>Seleccione una Materia</option>
@@ -156,13 +156,41 @@
                             <td><?php echo $row['nombre']; ?></td>
                             <td><?php echo $row['instancia']; ?></td>
                             <td><?php echo $row['nombre_materia']; ?></td>
-                            <td><?php echo $row['anio'] . '°'; ?></td>
-                            <td><?php echo $row['division'] . '°'; ?></td>
+                            <td><?php echo $row['anio'] . '°';  ?></td>
+                            <td><?php echo $row['division'] . '°';; ?></td>
                             <td>
-                                <button class="btn btn-success button-responsive" data-bs-toggle="modal" data-bs-target="#editModal" data-id="<?php echo $row['id']; ?>" data-nombre="<?php echo $row['nombre']; ?>" data-instancia="<?php echo $row['instancia']; ?>">Editar</button>
-                                <form method="POST" action="" style="display:inline;">
+                                <button class="btn btn-success w-45 button-responsive2" onclick="showForm('form-edit-<?php echo $row['id']; ?>')">Editar</button>
+                                <button class="btn btn-danger button-responsive" onclick="showForm('form-delete-<?php echo $row['id']; ?>')">Borrar</button>
+                            </td>
+                        </tr>
+                        <tr id="form-edit-<?php echo $row['id']; ?>" class="form-container" style="display:none;">
+                            <td colspan="6">
+                                <form method="POST" action="">
                                     <input type="hidden" name="nota_id" value="<?php echo $row['id']; ?>">
-                                    <button class="btn btn-danger button-responsive" type="submit" name="delete_indicator">Borrar</button>
+                                    <input type="hidden" name="materia_id" value='<?php echo $row['id_materia']; ?>'>
+                                    <input type="hidden" name="edit_indicator" value="edit">
+                                    <label for="nombre">Nombre:</label>
+                                    <input type="text" name="nombre" value="<?php echo $row['nombre']; ?>" required>
+                                    <label for="instancia">Instancia:</label>
+                                    <select name="instancia" required>
+                                        <option value="" disabled selected>Seleccione una Instancia</option>
+                                        <option value="MAYO" <?php if ($row['instancia'] == 'MAYO') echo 'selected'; ?>>MAYO</option>
+                                        <option value="JULIO" <?php if ($row['instancia'] == 'JULIO') echo 'selected'; ?>>JULIO</option>
+                                        <option value="SEPTIEMBRE" <?php if ($row['instancia'] == 'SEPTIEMBRE') echo 'selected'; ?>>SEPTIEMBRE</option>
+                                        <option value="NOVIEMBRE" <?php if ($row['instancia'] == 'NOVIEMBRE') echo 'selected'; ?>>NOVIEMBRE</option>
+                                    </select>
+                                    <button class="btn btn-primary" type="submit">Actualizar</button>
+                                </form>
+                            </td>
+                        </tr>
+                        <tr id="form-delete-<?php echo $row['id']; ?>" class="form-container" style="display:none;">
+                            <td colspan="6">
+                                <form method="POST" action="">
+                                    <input type="hidden" name="nota_id" value="<?php echo $row['id']; ?>">
+                                    <input type="hidden" name="delete_indicator" value="delete">
+                                    <p>¿Está seguro de que desea eliminar este indicador?</p>
+                                    <button class="btn btn-danger" type="submit">Eliminar</button>
+                                    <button class="btn btn-primary" type="button" onclick="hideForm('form-delete-<?php echo $row['id']; ?>')">Cancelar</button>
                                 </form>
                             </td>
                         </tr>
@@ -170,38 +198,6 @@
                 </tbody>
             </table>
         </div>
-
-        <!-- Modal para editar indicador -->
-        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="editModalLabel">Editar Indicador</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="editForm" method="POST" action="">
-                            <input type="hidden" name="nota_id" id="editNotaId">
-                            <div class="mb-3">
-                                <label for="editNombre" class="form-label">Nombre del Indicador</label>
-                                <input type="text" class="form-control" id="editNombre" name="nombre" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="editInstancia" class="form-label">Instancia</label>
-                                <select class="form-select" id="editInstancia" name="instancia" required>
-                                    <option value="MAYO">MAYO</option>
-                                    <option value="JULIO">JULIO</option>
-                                    <option value="SEPTIEMBRE">SEPTIEMBRE</option>
-                                    <option value="NOVIEMBRE">NOVIEMBRE</option>
-                                </select>
-                            </div>
-                            <button type="submit" class="btn btn-primary" name="edit_indicator">Guardar cambios</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </div>
 
     <script src="../../../js/profesores/gestionar_indicador.js"></script>
