@@ -16,17 +16,21 @@ document.getElementById('person_type').addEventListener('change', function() {
                 if (data.message) {
                     // Mostrar mensaje de no hay personas disponibles usando Bootstrap alert
                     var alertDiv = document.createElement('div');
-                    alertDiv.classList.add('alert', 'alert-warning');
+                    alertDiv.classList.add('alert', 'alert-warning', 'mt-2');
                     alertDiv.textContent = data.message;
                     personSelect.parentNode.insertBefore(alertDiv, personSelect.nextSibling);
+
+                    // Deshabilitar el select de personas
+                    personSelect.disabled = true;
                 } else {
+                    // Habilitar el select de personas si hay datos
+                    personSelect.disabled = false;
                     data.forEach(person => {
                         var option = document.createElement('option');
                         option.value = person.id;
                         option.textContent = person.name;
                         personSelect.appendChild(option);
                     });
-                    $('#person_id').selectpicker('refresh');
                 }
             });
     }

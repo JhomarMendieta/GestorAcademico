@@ -1,7 +1,7 @@
 <?php
 // esto lo que hace es basicamente buscar a la persona segun el tipo que hayas elegido en asignar curso. no hay que tocar nada.
 include "../../conn.php";
-include 'autenticacion_secretaria.php';
+
 $type = $_GET['type'];
 $persons = [];
 
@@ -19,14 +19,12 @@ switch ($type) {
         echo json_encode([]);
         exit();
 }
-
 $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $persons[] = $row;
     }
 }
-
 $conn->close();
 if (empty($persons)) {
     echo json_encode(["message" => "No hay personas disponibles para asignar usuario"]);
