@@ -4,49 +4,76 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="./ver_cursos.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="./menu.css">
 </head>
 <body>
 
-<!-- navbar -->
 <?php
-include 'navbar_secretaria.php';
+include "./navbar_secretaria.php";
 include 'autenticacion_secretaria.php';
-include_once ('../../conn.php');
 ?>
+<div class="container-cursos">
+  <?php
 
-<!-- funcionalidad -->
-<h1>Cursos Disponibles</h1>
-<div class="container">
+  // Consulta para obtener los años lectivos disponibles
+  $sql = "SELECT DISTINCT anio_lectivo FROM curso ORDER BY anio_lectivo DESC";
+  $resultAnioLectivo = $conn->query($sql);
+  ?>
+  <div class="titulo-cursos">
+    <h1>Ver cursos</h1>
+  </div>
+  <form id="anioLectivoForm" method="POST" action="">
+    <select class='form-select' name="anio_lectivo" required onchange="this.form.submit()">
+      <option value="" disabled selected>Seleccione un Año Lectivo</option>
+      <?php while ($row = $resultAnioLectivo->fetch_assoc()) : ?>
+        <option value="<?php echo $row['anio_lectivo']; ?>"><?php echo $row['anio_lectivo']; ?></option>
+      <?php endwhile; ?>
+    </select>
+  </form>
 
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Año</th>
-                <th>Division</th>
-                <th>Año lectivo</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            $sql = "SELECT anio, division, anio_lectivo FROM curso"; // Ajusta el nombre de la tabla y las columnas según tu base de datos
-            $result = $conn->query($sql);
+  <?php
+  if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['anio_lectivo'])) {
+    $anioLectivoSeleccionado = $_POST['anio_lectivo'];
 
-            if ($result->num_rows > 0) {
-                // Mostrar los datos de cada fila
-                while($row = $result->fetch_assoc()) {
-                    echo "<tr><td>" . $row["anio"]. "</td><td>" . $row["division"]. "</td><td>" . $row["anio_lectivo"]. "</td></tr>";
-                }
-            } else {
-                echo "<tr><td colspan='3'>No hay cursos disponibles</td></tr>";
-            }
-            $conn->close();
-            ?>
-        </tbody>
-    </table>
+    // Consulta para obtener los cursos del año lectivo seleccionado
+    $queryCursos = "SELECT id, anio, division, anio_lectivo FROM curso WHERE anio_lectivo = ?";
+    $stmtCursos = $conn->prepare($queryCursos);
+    $stmtCursos->bind_param("i", $anioLectivoSeleccionado);
+    $stmtCursos->execute();
+    $resultCursos = $stmtCursos->get_result();
+
+    // Verificar si se encontraron resultados
+    if ($resultCursos->num_rows > 0) {
+      echo "<div class='subtitulo-nombre'>";
+      echo "<h5>Cursos del Año Lectivo $anioLectivoSeleccionado</h5>";
+      echo "</div>";
+      echo "<div class='table-responsive'>";
+      echo "<table class='table table-striped'>";
+      echo "<tr><th>Año</th><th>División</th><th>Año Lectivo</th></tr>";
+
+      // Generar dinámicamente las filas de cursos
+      while ($row = $resultCursos->fetch_assoc()) {
+        echo "<tr>";
+        echo "<td>" . $row['anio'] . "</td>";
+        echo "<td>" . $row['division'] . "</td>";
+        echo "<td>" . $row['anio_lectivo'] . "</td>";
+        echo "</tr>";
+      }
+      echo "</table>";
+      echo "</div>";
+    } else {
+      echo "No se encontraron cursos para este año lectivo.";
+    }
+
+    $stmtCursos->close();
+  }
+
+  // Cerrar la conexión a la base de datos
+  $conn->close();
+  ?>
 </div>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>

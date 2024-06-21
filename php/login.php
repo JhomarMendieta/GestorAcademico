@@ -36,6 +36,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             case "preceptor":
                 header("Location: views/preceptores");
                 break;
+            case "secretario":
+                header("Location: views/secretaria/menu.php");
+                break;
             case "master":
                 header("Location: master.php");
                 break;

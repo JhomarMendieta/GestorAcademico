@@ -9,7 +9,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 <body>
-
 <?php
 include "./navbar_secretaria.php";
 include "../../conn.php";
@@ -40,9 +39,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
 }
-// Consultar los usuarios
-$sql_users = "SELECT id, nombre_usuario FROM usuario";
+
+// Consultar los usuarios que no han sido asignados y excluir 'master' y 'secretario'
+$sql_users = "SELECT id, nombre_usuario FROM usuario WHERE rol NOT IN ('master', 'secretario') AND id NOT IN (
+    SELECT id_usuario FROM alumno WHERE id_usuario IS NOT NULL
+    UNION
+    SELECT id_usuario FROM preceptores WHERE id_usuario IS NOT NULL
+    UNION
+    SELECT id_usuario FROM profesores WHERE id_usuario IS NOT NULL
+)";
 $result_users = $conn->query($sql_users);
+$users_available = $result_users->num_rows > 0;
 // Cerrar la conexión después de ejecutar todas las consultas
 $conn->close();
 ?>
@@ -50,27 +57,33 @@ $conn->close();
     <div class="titulo-asignar">
         <h1>Asignar Usuarios</h1>
     </div>
-    <form method="POST" action="asignar_usuarios.php">
-        <label for="user_id">Usuario:</label>
-        <select id="user_id" name="user_id" required class="form-control">
-            <option value="" disabled selected>Seleccione un usuario</option>
-            <?php while($row = $result_users->fetch_assoc()) { ?>
-                <option value="<?php echo $row['id']; ?>"><?php echo $row['nombre_usuario']; ?></option>
-            <?php } ?>
-        </select>
-        <label for="person_type">Tipo de Persona:</label>
-        <select id="person_type" name="person_type" required class="form-control">
-            <option value="">Seleccione un tipo</option>
-            <option value="alumno">Alumno</option>
-            <option value="preceptor">Preceptor</option>
-            <option value="profesor">Profesor</option>
-        </select>
-        <label for="person_id">Persona:</label>
-        <select id="person_id" name="person_id" required class="form-control mb-2" disabled>
-            <option value="" disabled selected>Seleccione una persona</option>
-        </select>
-        <button type="submit" class="btn btn-primary mt-2">Asignar</button>
-    </form>
+    <?php if (!$users_available) { ?>
+        <div class="alert alert-warning" role="alert">
+            Todos los usuarios ya han sido asignados.
+        </div>
+    <?php } else { ?>
+        <form method="POST" action="asignar_usuarios.php">
+            <label for="user_id">Usuario:</label>
+            <select id="user_id" name="user_id" required class="form-control">
+                <option value="" disabled selected>Seleccione un usuario</option>
+                <?php while($row = $result_users->fetch_assoc()) { ?>
+                    <option value="<?php echo $row['id']; ?>"><?php echo $row['nombre_usuario']; ?></option>
+                <?php } ?>
+            </select>
+            <label for="person_type">Tipo de Persona:</label>
+            <select id="person_type" name="person_type" required class="form-control">
+                <option value="">Seleccione un tipo</option>
+                <option value="alumno">Alumno</option>
+                <option value="preceptor">Preceptor</option>
+                <option value="profesor">Profesor</option>
+            </select>
+            <label for="person_id">Persona:</label>
+            <select id="person_id" name="person_id" required class="form-control mb-2" disabled>
+                <option value="" disabled selected>Seleccione una persona</option>
+            </select>
+            <button type="submit" class="btn btn-primary mt-2">Asignar</button>
+        </form>
+    <?php } ?>
 </div>
 <script src="asignar_usuarios.js"></script>
 </body>
