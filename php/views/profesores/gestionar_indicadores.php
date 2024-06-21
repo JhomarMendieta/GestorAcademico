@@ -159,10 +159,10 @@
                             <td><?php echo $row['anio'] . '°'; ?></td>
                             <td><?php echo $row['division'] . '°'; ?></td>
                             <td>
-                                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editModal" data-id="<?php echo $row['id']; ?>" data-nombre="<?php echo $row['nombre']; ?>" data-instancia="<?php echo $row['instancia']; ?>">Editar</button>
+                                <button class="btn btn-success button-responsive" data-bs-toggle="modal" data-bs-target="#editModal" data-id="<?php echo $row['id']; ?>" data-nombre="<?php echo $row['nombre']; ?>" data-instancia="<?php echo $row['instancia']; ?>">Editar</button>
                                 <form method="POST" action="" style="display:inline;">
                                     <input type="hidden" name="nota_id" value="<?php echo $row['id']; ?>">
-                                    <button class="btn btn-danger" type="submit" name="delete_indicator">Borrar</button>
+                                    <button class="btn btn-danger button-responsive" type="submit" name="delete_indicator">Borrar</button>
                                 </form>
                             </td>
                         </tr>
