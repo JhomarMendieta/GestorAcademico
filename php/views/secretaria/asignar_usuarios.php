@@ -50,6 +50,25 @@ $sql_users = "SELECT id, nombre_usuario FROM usuario WHERE rol NOT IN ('master',
 )";
 $result_users = $conn->query($sql_users);
 $users_available = $result_users->num_rows > 0;
+
+// Consultar personas sin usuario asignado
+$tables = [
+    "alumno" => "SELECT id, CONCAT(nombres, ' ', apellidos) AS name FROM alumno WHERE id_usuario IS NULL ORDER BY nombres, apellidos",
+    "preceptor" => "SELECT id, CONCAT(nombre, ' ', apellido) AS name FROM preceptores WHERE id_usuario IS NULL ORDER BY nombre, apellido",
+    "profesor" => "SELECT numLegajo AS id, CONCAT(prof_nombre, ' ', prof_apellido) AS name FROM profesores WHERE id_usuario IS NULL ORDER BY prof_nombre, prof_apellido"
+];
+
+$persons = [];
+foreach ($tables as $type => $query) {
+    $result = $conn->query($query);
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $row['type'] = $type;
+            $persons[] = $row;
+        }
+    }
+}
+
 // Cerrar la conexión después de ejecutar todas las consultas
 $conn->close();
 ?>
@@ -57,11 +76,7 @@ $conn->close();
     <div class="titulo-asignar">
         <h1>Asignar Usuarios</h1>
     </div>
-    <?php if (!$users_available) { ?>
-        <div class="alert alert-warning" role="alert">
-            Todos los usuarios ya han sido asignados.
-        </div>
-    <?php } else { ?>
+    <?php if ($users_available && !empty($persons)) { ?>
         <form method="POST" action="asignar_usuarios.php">
             <label for="user_id">Usuario:</label>
             <select id="user_id" name="user_id" required class="form-control">
@@ -84,7 +99,40 @@ $conn->close();
             <button type="submit" class="btn btn-primary mt-2">Asignar</button>
         </form>
     <?php } ?>
+    <?php if (!$users_available) { ?>
+        <div class="alert alert-warning mt-2" role="alert">
+            Todos los usuarios ya han sido asignados, registre un nuevo usuario.
+        </div>
+    <?php } ?>
+    <div id="personTable" class="mt-2">
+        <?php if (!empty($persons)) { ?>
+            <h3>Personas sin usuario:</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Nombre</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($persons as $person) { ?>
+                        <tr>
+                            <td><?php echo ucfirst($person['type']); ?></td>
+                            <td><?php echo $person['name']; ?></td>
+                        </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+        <?php } else { ?>
+            <div class="alert alert-info" role="alert">
+                No hay personas sin usuario asignado.
+            </div>
+        <?php } ?>
+    </div>
+
 </div>
 <script src="asignar_usuarios.js"></script>
+<script>
+</script>
 </body>
 </html>
