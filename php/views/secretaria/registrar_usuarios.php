@@ -1,3 +1,7 @@
+<?php 
+include './navbar_secretaria.php';
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,7 +29,6 @@
 <body>
 
 <?php
-include "./navbar_secretaria.php";
 include 'autenticacion_secretaria.php';
 
 // Inicializar variables para los mensajes

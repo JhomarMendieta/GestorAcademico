@@ -1,3 +1,6 @@
+<?php 
+include './navbar_secretaria.php';
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -18,7 +21,7 @@
 <body>
 <?php
 include '../../conn.php';
-include './navbar_secretaria.php';
+
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 

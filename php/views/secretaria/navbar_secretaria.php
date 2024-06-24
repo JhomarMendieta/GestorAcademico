@@ -3,7 +3,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
 ?>
 <head>
   <link rel="stylesheet" href="./navbar_secretaria.css">
-
 </head>
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -16,39 +15,54 @@ $current_page = basename($_SERVER['PHP_SELF']);
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link <?php echo $current_page == 'agregar_alumnos.php' ? 'active' : ''; ?>" aria-current="page" href="agregar_alumnos.php">Agregar alumnos</a>
+        <!-- Dropdown para Alumnos -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle <?php echo in_array($current_page, ['agregar_alumnos.php', 'ver_alumnos.php']) ? 'active' : ''; ?>" href="#" id="alumnosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Alumnos
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="alumnosDropdown">
+            <li><a class="dropdown-item <?php echo $current_page == 'agregar_alumnos.php' ? 'active' : ''; ?>" href="agregar_alumnos.php">Agregar alumnos</a></li>
+            <li><a class="dropdown-item <?php echo $current_page == 'ver_alumnos.php' ? 'active' : ''; ?>" href="gestionar_alumnos.php">Gestionar alumnos</a></li>
+          </ul>
         </li>
-        <li class="nav-item">
-          <a class="nav-link <?php echo $current_page == 'agregar_cursos.php' ? 'active' : ''; ?>" href="agregar_cursos.php">Agregar cursos</a>
+        <!-- Dropdown para Cursos -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle <?php echo in_array($current_page, ['agregar_cursos.php', 'ver_cursos.php']) ? 'active' : ''; ?>" href="#" id="cursosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Cursos
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="cursosDropdown">
+            <li><a class="dropdown-item <?php echo $current_page == 'agregar_cursos.php' ? 'active' : ''; ?>" href="agregar_cursos.php">Agregar cursos</a></li>
+            <li><a class="dropdown-item <?php echo $current_page == 'ver_cursos.php' ? 'active' : ''; ?>" href="ver_cursos.php">Ver cursos</a></li>
+          </ul>
         </li>
-        <li class="nav-item">
-          <a class="nav-link <?php echo $current_page == 'agregar_materias.php' ? 'active' : ''; ?>" href="agregar_materias.php">Agregar materias</a>
+        <!-- Dropdown para Materias -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle <?php echo in_array($current_page, ['agregar_materias.php', 'ver_materias.php']) ? 'active' : ''; ?>" href="#" id="materiasDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Materias
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="materiasDropdown">
+            <li><a class="dropdown-item <?php echo $current_page == 'agregar_materias.php' ? 'active' : ''; ?>" href="agregar_materias.php">Agregar materias</a></li>
+            <li><a class="dropdown-item <?php echo $current_page == 'ver_materias.php' ? 'active' : ''; ?>" href="ver_materias.php">Ver materias</a></li>
+          </ul>
         </li>
-        <li class="nav-item">
-          <a class="nav-link <?php echo $current_page == 'ver_alumnos.php' ? 'active' : ''; ?>" href="ver_alumnos.php">Ver alumnos</a>
+        <!-- Dropdown para Usuarios -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle <?php echo in_array($current_page, ['registrar_usuarios.php', 'asignar_usuarios.php']) ? 'active' : ''; ?>" href="#" id="usuariosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Usuarios
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="usuariosDropdown">
+            <li><a class="dropdown-item <?php echo $current_page == 'registrar_usuarios.php' ? 'active' : ''; ?>" href="registrar_usuarios.php">Registrar usuarios</a></li>
+            <li><a class="dropdown-item <?php echo $current_page == 'asignar_usuarios.php' ? 'active' : ''; ?>" href="asignar_usuarios.php">Asignar usuarios</a></li>
+          </ul>
         </li>
-        <li class="nav-item">
-          <a class="nav-link <?php echo $current_page == 'ver_cursos.php' ? 'active' : ''; ?>" href="ver_cursos.php">Ver cursos</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link <?php echo $current_page == 'ver_materias.php' ? 'active' : ''; ?>" href="ver_materias.php">Ver materias</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link <?php echo $current_page == 'registrar_usuarios.php' ? 'active' : ''; ?>" href="registrar_usuarios.php">Registrar usuarios</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link <?php echo $current_page == 'asignar_usuarios.php' ? 'active' : ''; ?>" href="asignar_usuarios.php">Asignar usuarios</a>
-        </li>
-        
-        
       </ul>
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <?php 
-            include "../../conn.php";
+            <?php
             include "../../getUserId.php";
+            include "../../conn.php";
+
             echo $userName;
             ?> 
           </a>
