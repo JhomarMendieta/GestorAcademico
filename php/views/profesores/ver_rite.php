@@ -7,33 +7,26 @@
   <link rel="stylesheet" href="../../../css/profesores/ver_rite.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <link rel="shortcut icon" href="../../../img/LogoEESTN1.png" type="image/x-icon">
+  <script src="../../../js/profesores/ver_rite.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous" defer></script>
   <title>Ver RITEs</title>
 </head>
-<?php 
-include "navbar_profesores.php";
+<?php
+include "./components/navbar_profesores.php";
 include '../../conn.php';
 include 'autenticacion_profesor.php';
 ?>
 <div class="container-rite">
   <?php
 
-  $query = "SELECT numLegajo FROM profesores WHERE id_usuario = ?";
+  // Obtener las materias que enseña el profesor
+  $query = "SELECT materia.id, materia.nombre FROM profesor_materia INNER JOIN materia ON profesor_materia.id_materia = materia.id WHERE profesor_materia.id_profesor = (SELECT numLegajo FROM profesores WHERE id_usuario = ?);";
   $stmt = $conn->prepare($query);
   $stmt->bind_param("i", $userId);
   $stmt->execute();
-  $stmt->bind_result($profesorId);
-  $stmt->fetch();
-  $stmt->close();
-
-  // Obtener las materias que enseña el profesor
-  $query = "SELECT materia.id, materia.nombre FROM profesor_materia
-            INNER JOIN materia ON profesor_materia.id_materia = materia.id
-            WHERE profesor_materia.id_profesor = ?";
-  $stmt = $conn->prepare($query);
-  $stmt->bind_param("i", $profesorId);
-  $stmt->execute();
   $result = $stmt->get_result();
   ?>
+
   <div class="titulo-rite">
     <h1>Ver RITEs</h1>
   </div>
@@ -63,19 +56,18 @@ include 'autenticacion_profesor.php';
     echo "<h4>$nombreMateria</h4>";
 
     // Mostrar selector de instancia
-    echo "<form method='POST' action=''>";
-    echo "<input type='hidden' name='materia_id' value='$materiaId'>";
-    echo "<div class= 'form-instancia'>";
-    echo "<select class='form-select' name='instancia' onchange='this.form.submit()'>";
-    echo "<option value='' disabled selected>Seleccione una Instancia</option>";
+    echo /*html*/ "<form method='POST' action=''>
+    <input type='hidden' name='materia_id' value='$materiaId'>
+    <div class= 'form-instancia'>
+    <select class='form-select' name='instancia' onchange='this.form.submit()'>
+    <option value='' disabled selected>Seleccione una Instancia</option>";
     $instancias = ["MAYO", "JULIO", "SEPTIEMBRE", "NOVIEMBRE"];
+
     foreach ($instancias as $instancia) {
       $selected = ($instanciaFiltro == $instancia) ? "selected" : "";
       echo "<option value='$instancia' $selected>$instancia</option>";
     }
-    echo "</select>";
-    echo "</div>";
-    echo "</form>";
+    echo "</select></div></form>";
 
     // Mostrar la instancia actualmente seleccionada
     if (!empty($instanciaFiltro)) {
@@ -114,8 +106,7 @@ include 'autenticacion_profesor.php';
         } ?>
         <div class='table-responsive'>
           <?php
-          echo "<table class='table table-striped'>";
-          echo "<tr><th>Apellido</th><th>Nombre</th>";
+          echo "<table class='table table-striped'><tr><th>Apellido</th><th>Nombre</th>";
 
           // Generar dinámicamente los encabezados de las notas
           if ($maxNotas == 0) {
@@ -129,9 +120,7 @@ include 'autenticacion_profesor.php';
 
           // Generar dinámicamente las filas de alumnos y sus notas
           foreach ($alumnos as $alumno) {
-            echo "<tr>";
-            echo "<td>" . $alumno['apellidos'] . "</td>";
-            echo "<td>" . $alumno['nombres'] . "</td>";
+            echo "<tr><td>" . $alumno['apellidos'] . "</td><td>" . $alumno['nombres'] . "</td>";
 
             // Imprimir las notas del alumno
             if ($maxNotas == 0) {
@@ -142,8 +131,7 @@ include 'autenticacion_profesor.php';
               }
             }
             // Mostrar guiones si no hay promedio calculado
-            echo "<td>" . (is_null($alumno['promedio']) ? "-" : number_format($alumno['promedio'], 2)) . "</td>";
-            echo "</tr>";
+            echo "<td>" . (is_null($alumno['promedio']) ? "-" : number_format($alumno['promedio'], 2)) . "</td></tr>";
           }
           echo "</table>";
           ?>
@@ -161,8 +149,6 @@ include 'autenticacion_profesor.php';
   $conn->close();
   ?>
 </div>
-<script src="../../../js/profesores/ver_rite.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 
 </html>

@@ -7,34 +7,27 @@
     <link rel="stylesheet" href="../../../css/profesores/ver_materia.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="shortcut icon" href="../../../img/LogoEESTN1.png" type="image/x-icon">
+    <script src="../../../js/profesores/ver_materia.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous" defer></script>
     <title>Ver materia</title>
 </head>
 
 <body>
-<?php 
-include "navbar_profesores.php";
-include '../../conn.php';
-include 'autenticacion_profesor.php';
-?>
+    <?php
+    include "./components/navbar_profesores.php";
+    include '../../conn.php';
+    include 'autenticacion_profesor.php';
+    ?>
     <div class="container-materia">
         <?php
         // Obtener el id del profesor basado en el id del usuario
-        $query = "SELECT numLegajo FROM profesores WHERE id_usuario = ?";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("i", $userId);
-        $stmt->execute();
-        $stmt->bind_result($profesorId);
-        $stmt->fetch();
-        $stmt->close();
-
-        // Obtener las materias que enseña el profesor junto con el nombre del curso
         $query = "SELECT materia.id, materia.nombre, curso.division, curso.anio, curso.especialidad 
           FROM profesor_materia
           INNER JOIN materia ON profesor_materia.id_materia = materia.id
           INNER JOIN curso ON materia.id_curso = curso.id
-          WHERE profesor_materia.id_profesor = ?";
+          WHERE profesor_materia.id_profesor = (SELECT numLegajo FROM profesores WHERE id_usuario = ?)";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("i", $profesorId);
+        $stmt->bind_param("i", $userId);
         $stmt->execute();
         $result = $stmt->get_result();
         ?>
@@ -100,20 +93,13 @@ include 'autenticacion_profesor.php';
 
             // Verificar si se encontraron resultados
             if ($result->num_rows > 0) {
-                echo "<div class='table-responsive'>";
-                echo "<table id='alumnosMostrados' class='table table-striped'>";
-                echo "<thead><tr><th>Apellido</th><th>Nombre</th></tr></thead><tbody>";
+                echo "<div class='table-responsive'><table id='alumnosMostrados' class='table table-striped'><thead><tr><th>Apellido</th><th>Nombre</th></tr></thead><tbody>";
 
                 while ($row = $result->fetch_assoc()) {
-                    echo "<tr>";
-                    echo "<td>" . $row['apellidos'] . "</td>";
-                    echo "<td>" . $row['nombres'] . "</td>";
-                    echo "</tr>";
+                    echo "<tr><td>" . $row['apellidos'] . "</td><td>" . $row['nombres'] . "</td></tr>";
                 }
 
-                echo "</tbody></table>";
-                echo "</div>";
-                echo "<button class='btn btn-danger botonOcultar1' onclick='ocultarMateria()'>Ocultar</button>";
+                echo "</tbody></table></div><button class='btn btn-danger botonOcultar1' onclick='ocultarMateria()'>Ocultar</button>";
             } else {
                 echo "No se encontraron alumnos inscritos en esta materia.";
             }
@@ -126,8 +112,6 @@ include 'autenticacion_profesor.php';
         $conn->close();
         ?>
     </div>
-    <script src="../../../js/profesores/ver_materia.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 
 </html>

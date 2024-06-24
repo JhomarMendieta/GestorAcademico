@@ -16,10 +16,29 @@ if ($ultimoSegmento == "index.php" || $ultimoSegmento == "GestorAcademico") {
 
 switch ($ultimoSegmento) {
     case '':
-        if (!isset($_SESSION['data_user'])) {
+        if (!isset($_SESSION['logged_in'])) {
             header("Location: index.html");
         } else {
-            require "./php/home.php";
+            // Redireccionar según el rol del usuario
+            switch ($_SESSION["rol"]) {
+                case "profesor":
+                    header("Location: php/views/profesores/menu.php");
+                    break;
+                case "alumno":
+                    header("Location: php/views/alumnos/menu.php");
+                    break;
+                case "preceptor":
+                    header("Location: php/views/preceptores");
+                    break;
+                case "secretario":
+                    header("Location: php/views/secretaria/menu.php");
+                    break;
+                case "master":
+                    header("Location: php/master.php");
+                    break;
+                default:
+                    echo "Rol no válido";
+            }
         }
 
         break;

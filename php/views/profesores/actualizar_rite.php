@@ -6,13 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../../css/profesores/actualizar_rite.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
+    <script src="../../../js/profesores/actualizar_rite.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous" defer></script>
     <title>Actualizar RITEs</title>
 </head>
 
 <body>
-    <?php 
-    include "navbar_profesores.php";
+    <?php
+    include "./components/navbar_profesores.php";
     include '../../conn.php';
     include 'autenticacion_profesor.php';
     ?>
@@ -91,82 +92,80 @@
             </form>
         </div>
         <?php
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['materia_id'])) {
-    $materiaId = $_POST['materia_id'];
-    $instancia = isset($_POST['instancia']) ? $_POST['instancia'] : '';
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['materia_id'])) {
+            $materiaId = $_POST['materia_id'];
+            $instancia = isset($_POST['instancia']) ? $_POST['instancia'] : '';
 
-    $query = "SELECT alumno.id, alumno.nombres, alumno.apellidos FROM alumno
+            $query = "SELECT alumno.id, alumno.nombres, alumno.apellidos FROM alumno
               INNER JOIN alumno_curso ON alumno.id = alumno_curso.id_alumno
               INNER JOIN curso ON alumno_curso.id_curso = curso.id
               INNER JOIN materia ON curso.id = materia.id_curso
               WHERE materia.id = ?
               ORDER BY alumno.apellidos ASC, alumno.nombres ASC";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("i", $materiaId);
-    $stmt->execute();
-    $result = $stmt->get_result();
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param("i", $materiaId);
+            $stmt->execute();
+            $result = $stmt->get_result();
 
-    $queryMateria = "SELECT nombre FROM materia WHERE id = ?";
-    $stmtMateria = $conn->prepare($queryMateria);
-    $stmtMateria->bind_param("i", $materiaId);
-    $stmtMateria->execute();
-    $stmtMateria->bind_result($nombreMateria);
-    $stmtMateria->fetch();
-    $stmtMateria->close();
+            $queryMateria = "SELECT nombre FROM materia WHERE id = ?";
+            $stmtMateria = $conn->prepare($queryMateria);
+            $stmtMateria->bind_param("i", $materiaId);
+            $stmtMateria->execute();
+            $stmtMateria->bind_result($nombreMateria);
+            $stmtMateria->fetch();
+            $stmtMateria->close();
 
-    echo "<div class = 'instancia-form'>";
-    echo "<p>Materia: {$nombreMateria}</p>";
-    echo "<form id='instanciaForm' method='POST' action=''>";
-    echo "<input type='hidden' name='materia_id' value='{$materiaId}'>";
-    echo "<select name='instancia' class='form-select' required onchange='this.form.submit()'>";
-    echo "<option value='' disabled selected>Seleccione una Instancia</option>";
-    echo "<option value='MAYO'" . ($instancia == 'MAYO' ? ' selected' : '') . ">MAYO</option>";
-    echo "<option value='JULIO'" . ($instancia == 'JULIO' ? ' selected' : '') . ">JULIO</option>";
-    echo "<option value='SEPTIEMBRE'" . ($instancia == 'SEPTIEMBRE' ? ' selected' : '') . ">SEPTIEMBRE</option>";
-    echo "<option value='NOVIEMBRE'" . ($instancia == 'NOVIEMBRE' ? ' selected' : '') . ">NOVIEMBRE</option>";
-    echo "</select>";
-    echo "</form>";
-}
+            echo /*html*/ "<div class = 'instancia-form'>
+            <p>Materia: {$nombreMateria}</p>
+            <form id='instanciaForm' method='POST' action=''>
+                <input type='hidden' name='materia_id' value='{$materiaId}'>
+                <select name='instancia' class='form-select' required onchange='this.form.submit()'>
+                    <option value='' disabled selected>Seleccione una Instancia</option>
+                    <option value='MAYO'" . ($instancia == 'MAYO' ? ' selected' : '') . ">MAYO</option>
+                    <option value='JULIO'" . ($instancia == 'JULIO' ? ' selected' : '') . ">JULIO</option>
+                    <option value='SEPTIEMBRE'" . ($instancia == 'SEPTIEMBRE' ? ' selected' : '') . ">SEPTIEMBRE</option>
+                    <option value='NOVIEMBRE'" . ($instancia == 'NOVIEMBRE' ? ' selected' : '') . ">NOVIEMBRE</option>
+                </select>
+            </form>";
+        }
         ?>
 
         <?php
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['instancia']) && isset($_POST['materia_id'])) {
-    $materiaId = $_POST['materia_id'];
-    $instancia = $_POST['instancia'];
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['instancia']) && isset($_POST['materia_id'])) {
+            $materiaId = $_POST['materia_id'];
+            $instancia = $_POST['instancia'];
 
-    $query = "SELECT alumno.id, alumno.nombres, alumno.apellidos FROM alumno
+            $query = "SELECT alumno.id, alumno.nombres, alumno.apellidos FROM alumno
               INNER JOIN alumno_curso ON alumno.id = alumno_curso.id_alumno
               INNER JOIN curso ON alumno_curso.id_curso = curso.id
               INNER JOIN materia ON curso.id = materia.id_curso
               WHERE materia.id = ?
               ORDER BY alumno.apellidos ASC, alumno.nombres ASC";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("i", $materiaId);
-    $stmt->execute();
-    $result = $stmt->get_result();
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param("i", $materiaId);
+            $stmt->execute();
+            $result = $stmt->get_result();
 
-    $queryMateria = "SELECT nombre FROM materia WHERE id = ?";
-    $stmtMateria = $conn->prepare($queryMateria);
-    $stmtMateria->bind_param("i", $materiaId);
-    $stmtMateria->execute();
-    $stmtMateria->bind_result($nombreMateria);
-    $stmtMateria->fetch();
-    $stmtMateria->close();
+            $queryMateria = "SELECT nombre FROM materia WHERE id = ?";
+            $stmtMateria = $conn->prepare($queryMateria);
+            $stmtMateria->bind_param("i", $materiaId);
+            $stmtMateria->execute();
+            $stmtMateria->bind_result($nombreMateria);
+            $stmtMateria->fetch();
+            $stmtMateria->close();
 
-    echo "<p>Materia {$nombreMateria} - Instancia {$instancia}</p>";
-    echo "<form id='alumnoForm' method='POST' action=''>";
-    echo "<input type='hidden' name='materia_id' value='{$materiaId}'>";
-    echo "<input type='hidden' name='instancia' value='{$instancia}'>";
-    echo "<select name='alumno_id' class='form-select' required onchange='this.form.submit()'>";
-    echo "<option value='' disabled selected>Seleccione un Alumno</option>";
+            echo /*html*/ "<p>Materia {$nombreMateria} - Instancia {$instancia}</p>
+            <form id='alumnoForm' method='POST' action=''>
+                <input type='hidden' name='materia_id' value='{$materiaId}'>
+                <input type='hidden' name='instancia' value='{$instancia}'>
+                <select name='alumno_id' class='form-select' required onchange='this.form.submit()'>
+                    <option value='' disabled selected>Seleccione un Alumno</option>";
 
-    while ($row = $result->fetch_assoc()) {
-        echo "<option value='{$row['id']}'>{$row['apellidos']} {$row['nombres']}</option>";
-    }
-    echo "</select>";
-    echo "</form>";
-    echo "</div>";
-}
+            while ($row = $result->fetch_assoc()) {
+                echo "<option value='{$row['id']}'>{$row['apellidos']} {$row['nombres']}</option>";
+            }
+            echo /*html*/ "</select></form></div>";
+        }
         ?>
 
         <?php
@@ -265,8 +264,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['instancia']) && isset(
 
         ?>
     </div>
-    <script src="../../../js/profesores/actualizar_rite.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 
 </html>
