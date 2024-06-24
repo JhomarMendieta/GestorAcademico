@@ -39,13 +39,6 @@
         <?php endwhile; ?>
       </select>
     </form>
-
-    <script>
-      function submitForm() {
-        document.getElementById("materiaForm").submit();
-      }
-    </script>
-
     <?php
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['materia_id'])) {
       $materiaId = $_POST['materia_id'];
