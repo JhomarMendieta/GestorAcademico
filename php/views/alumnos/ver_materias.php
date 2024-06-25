@@ -11,25 +11,35 @@
 
 <!-- PHP para obtener los datos de la base de datos -->
 <?php
+include 'navbar_alumnos.php';
+include 'autenticacion_alumno.php';
+include_once ('../../conn.php');
 
+$id_usuario = $_SESSION["id"];
 
-$servername = 'localhost';
-$dbname = 'proyecto_academicas';
-$username = 'root';
-$password = '';
+// Consulta para obtener el id_alumno correspondiente al id_usuario
+$alumno_sql = "SELECT id FROM alumno WHERE id_usuario = ?";
+$alumno_stmt = $conn->prepare($alumno_sql);
+$alumno_stmt->bind_param("i", $id_usuario);
+$alumno_stmt->execute();
+$alumno_stmt->bind_result($id_alumno);
+$alumno_stmt->fetch();
+$alumno_stmt->close();
 
-// Crear conexión
-$conn = new mysqli($servername, $username, $password, $dbname);
+// Consulta para obtener el anio y division del curso del alumno
+$curso_sql = "SELECT c.anio, c.division 
+              FROM curso c
+              JOIN alumno_curso ac ON c.id = ac.id_curso
+              JOIN alumno a ON ac.id_alumno = a.id
+              WHERE a.id_usuario = ?";
+$curso_stmt = $conn->prepare($curso_sql);
+$curso_stmt->bind_param("i", $id_usuario);
+$curso_stmt->execute();
+$curso_stmt->bind_result($anio, $division);
+$curso_stmt->fetch();
+$curso_stmt->close();
 
-// Verificar conexión
-if ($conn->connect_error) {
-    die("Conexión fallida: " . $conn->connect_error);
-}
-
-// Obtener el id_curso basado en la división y año
-$division = 1;
-$anio = 1;
-
+// Obtener el id_curso basado en la division y año
 $sqlCurso = "SELECT id FROM curso WHERE division = ? AND anio = ?";
 $stmtCurso = $conn->prepare($sqlCurso);
 
@@ -71,12 +81,11 @@ $stmtCurso->close();
 $conn->close();
 ?>
 
-<!-- navbar -->
-<?php
-include 'navbar_alumnos.php';
-include 'autenticacion_alumno.php';
-?>
 <h1>Ver Materias</h1>
+
+<!-- Campos ocultos para enviar anio y division -->
+<input type="hidden" id="anio" value="<?php echo htmlspecialchars($anio); ?>">
+<input type="hidden" id="division" value="<?php echo htmlspecialchars($division); ?>">
 
 <!-- Barra de búsqueda -->
 <div class="container mt-3">
@@ -116,6 +125,9 @@ include 'autenticacion_alumno.php';
 $(document).ready(function() {
     $('#search').on('input', function() {
         var search = $(this).val();
+        var anio = $('#anio').val();
+        var division = $('#division').val();
+
         if (search.trim() === '') {
             $('#search-results').empty();
             return;
@@ -124,7 +136,7 @@ $(document).ready(function() {
         $.ajax({
             url: 'buscar_materias.php',
             type: 'GET',
-            data: { search: search },
+            data: { search: search, anio: anio, division: division },
             success: function(data) {
                 $('#search-results').html(data);
             }
