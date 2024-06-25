@@ -16,6 +16,7 @@
     ini_set('display_errors', 1);
     error_reporting(E_ALL);
     ?>
+<div class="container-gestionar-alumnos">
     <div class="container mt-4">
         <!-- Aquí va el formulario de búsqueda -->
         <div class="container mt-4">
@@ -31,11 +32,12 @@
                     <div class="col-md-4">
                         <input type="text" name="dni" class="form-control" placeholder="Buscar por DNI">
                     </div>
-                </div>
+
                 <div class="row mt-3">
-                    <div class="col-md-12 text-center">
+                    <div class="col-md-12 d-flex justify-content-end">
                         <button type="submit" class="btn btn-primary">Buscar</button>
                     </div>
+                </div>
                 </div>
             </form>
             <hr>
@@ -98,6 +100,7 @@
                 </table>
             </div>
         </div>
+    </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ENjdO4Dr2bkBIFxQpeoH7y3HazeAqv7pcpM1wB0mDlB0lr47LNvI6JZG6QADxhM5"

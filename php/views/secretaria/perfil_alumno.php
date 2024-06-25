@@ -7,6 +7,7 @@ include './navbar_secretaria.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil del Alumno</title>
+    <link rel="stylesheet" href="perfil_alumno.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
@@ -52,9 +53,11 @@ function archivoSubido($campo) {
 }
 
 ?>
-    <div class="container mt-5">
-        <h2>Perfil del Alumno</h2>
-        <table id="tabla-alumno"  class="table table-bordered">
+    <div class="container-perfil-alumno">
+        <div class="titulo-perfil-alumno">
+        <h2>Perfil del alumno <?php echo htmlspecialchars($alumno['nombres']) . " " . htmlspecialchars($alumno['apellidos']); ?> </h2>
+        </div>
+        <table id="tabla-alumno"  class="table table-striped">
             <tr>
                 <th>DNI</th>
                 <td><?php echo htmlspecialchars($alumno['dni']); ?></td>
@@ -79,7 +82,7 @@ function archivoSubido($campo) {
                 <th>Sexo</th>
                 <td><?php echo htmlspecialchars($alumno['sexo']); ?></td>
             </tr>
-            <tr>
+            <tr>    
                 <th>Año de Entrada</th>
                 <td><?php echo htmlspecialchars($alumno['anio_entrada']); ?></td>
             </tr>
@@ -218,7 +221,7 @@ function archivoSubido($campo) {
                     <label for="fotocopia_dni">Fotocopia de DNI</label>
                     <input type="file" class="form-control" id="fotocopia_dni" name="fotocopia_dni">
                 </div>
-                <button type="submit" class="btn btn-primary">Guardar</button>
+                <button type="submit" class="btn btn-primary mt-2">Guardar</button>
             </form>
         </div>
     </div>

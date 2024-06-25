@@ -155,9 +155,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-
-<div class="container mt-4">
+<div class="container-agregar-alumnos">
+<div class="container mt-4"
+><div class="titulo-agregar-alumnos">
     <h1>Agregar Alumno</h1>
+</div>
     <form method="POST" action="agregar_alumnos.php" enctype="multipart/form-data">
         <div class="mb-3">
             <label for="dni" class="form-label">DNI</label>
@@ -265,6 +267,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
         <button type="submit" class="btn btn-primary">Agregar Alumno</button>
     </form>
+</div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoH7y3HazeAqv7pcpM1wB0mDlB0lr47LNvI6JZG6QADxhM5" crossorigin="anonymous"></script>
 </body>

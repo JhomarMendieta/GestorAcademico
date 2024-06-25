@@ -21,6 +21,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $division = $_POST['division'];
     $especialidad = ($anio >= 4) ? $_POST['especialidad'] : NULL;
 
+    // Modificar la especialidad si el año es menor que 3
+    if ($anio < 3) {
+        $especialidad = "NA";
+    }
+
     // Insertar el curso en la base de datos
     $sql = "INSERT INTO curso (anio_lectivo, anio, division, especialidad) VALUES (?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
@@ -36,8 +41,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-<div class="container mt-4">
+<div class="container-agregar-curso">
+    <div class="titulo-agregar-curso">
     <h1>Agregar Curso</h1>
+    </div>
     <form method="POST" action="agregar_cursos.php">
         <div class="mb-3">
             <label for="anio_lectivo" class="form-label">Año Lectivo</label>
