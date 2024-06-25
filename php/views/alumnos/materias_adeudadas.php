@@ -41,6 +41,103 @@ $alumno_stmt->fetch();
 $alumno_stmt->close();
 
 
+// Consulta para obtener las condiciones actuales
+$conditions_sql = "
+    SELECT 
+        m.id AS id_materia,
+        CASE 
+            WHEN AVG(CASE WHEN n.instancia = 'JULIO' THEN n.calificacion ELSE NULL END) < 3 THEN 'TED'
+            WHEN AVG(CASE WHEN n.instancia = 'JULIO' THEN n.calificacion ELSE NULL END) < 4 THEN 'TEP'
+            WHEN AVG(CASE WHEN n.instancia = 'JULIO' THEN n.calificacion ELSE NULL END) >= 4 THEN 'TEA'
+        END AS condicion_julio,
+        CASE 
+            WHEN AVG(CASE WHEN n.instancia IN ('SEPTIEMBRE', 'NOVIEMBRE') THEN n.calificacion ELSE NULL END) < 3 THEN 'TED'
+            WHEN AVG(CASE WHEN n.instancia IN ('SEPTIEMBRE', 'NOVIEMBRE') THEN n.calificacion ELSE NULL END) < 4 THEN 'TEP'
+            WHEN AVG(CASE WHEN n.instancia IN ('SEPTIEMBRE', 'NOVIEMBRE') THEN n.calificacion ELSE NULL END) >= 4 THEN 'TEA'
+        END AS condicion_septiembre_noviembre
+    FROM 
+        alumno a
+    JOIN 
+        alumno_curso ac ON a.id = ac.id_alumno
+    JOIN 
+        curso c ON ac.id_curso = c.id
+    JOIN 
+        materia m ON m.id_curso = c.id
+    JOIN 
+        nota n ON n.id_alumno = a.id AND n.id_materia = m.id
+    WHERE 
+        a.id = ?
+    GROUP BY 
+        a.id, m.id
+";
+
+$conditions_stmt = $conn->prepare($conditions_sql);
+$conditions_stmt->bind_param("i", $id_alumno);
+$conditions_stmt->execute();
+$conditions_result = $conditions_stmt->get_result();
+
+if ($conditions_result) {
+    while ($row = $conditions_result->fetch_assoc()) {
+        $id_materia = $row['id_materia'];
+        $condicion_julio = $row['condicion_julio'];
+        $condicion_septiembre_noviembre = $row['condicion_septiembre_noviembre'];
+
+        // Determinar la condición final más baja
+        $condicion_final = $condicion_julio;
+        if ($condicion_septiembre_noviembre == 'TED' || ($condicion_septiembre_noviembre == 'TEP' && $condicion_final != 'TED') || ($condicion_septiembre_noviembre == 'TEA' && $condicion_final == 'TEA')) {
+            $condicion_final = $condicion_septiembre_noviembre;
+        }
+
+        // Verificar si hay calificación en mesa que cambie la condición a TEA
+        $mesa_sql = "
+            SELECT 
+                am.calificacion 
+            FROM 
+                mesa m
+            JOIN 
+                alumno_mesa am ON m.id = am.id_mesa
+            JOIN
+                materia_mesa mm ON m.id = mm.id_mesa
+            WHERE 
+                am.id_alumno = ? 
+                AND mm.id_materia = ? 
+                AND am.calificacion >= 4
+        ";
+        $mesa_stmt = $conn->prepare($mesa_sql);
+        $mesa_stmt->bind_param("ii", $id_alumno, $id_materia);
+        $mesa_stmt->execute();
+        $mesa_result = $mesa_stmt->get_result();
+        if ($mesa_result && $mesa_result->num_rows > 0) {
+            $condicion_final = 'TEA';
+        }
+        $mesa_stmt->close();
+
+        // Comprobar si ya existe una entrada en la tabla 'condicion'
+        $check_sql = "SELECT * FROM condicion WHERE id_alumno = ? AND id_materia = ?";
+        $check_stmt = $conn->prepare($check_sql);
+        $check_stmt->bind_param("ii", $id_alumno, $id_materia);
+        $check_stmt->execute();
+        $check_result = $check_stmt->get_result();
+
+        if ($check_result && $check_result->num_rows > 0) {
+            // Si existe, actualizar la condición
+            $update_sql = "UPDATE condicion SET condicion = ? WHERE id_alumno = ? AND id_materia = ?";
+            $update_stmt = $conn->prepare($update_sql);
+            $update_stmt->bind_param("sii", $condicion_final, $id_alumno, $id_materia);
+            $update_stmt->execute();
+            $update_stmt->close();
+        } else {
+            // Si no existe, insertar una nueva entrada
+            $insert_sql = "INSERT INTO condicion (id_alumno, id_materia, condicion) VALUES (?, ?, ?)";
+            $insert_stmt = $conn->prepare($insert_sql);
+            $insert_stmt->bind_param("iis", $id_alumno, $id_materia, $condicion_final);
+            $insert_stmt->execute();
+            $insert_stmt->close();
+        }
+        $check_stmt->close();
+    }
+    $conditions_stmt->close();
+}
 
 // Consulta SQL para obtener las materias con condiciones TED o TEP desde la tabla 'condicion'
 $sql = "
