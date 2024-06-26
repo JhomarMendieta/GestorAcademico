@@ -28,7 +28,7 @@ if ($id) {
     }
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
     $id = $_POST['id'];
     $nombre = $_POST['nombre'];
     $apellido = $_POST['apellido'];
@@ -77,6 +77,54 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         ];
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['assign'])) {
+    $id_preceptor = $_POST['id_preceptor'];
+    $id_curso = $_POST['id_curso'];
+
+    $sql = "INSERT INTO preceptor_curso (id_preceptor, id_curso) VALUES ('$id_preceptor', '$id_curso')";
+
+    if ($conn->query($sql) === TRUE) {
+        echo "<div class='alert alert-success'>Curso asignado exitosamente</div>";
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete'])) {
+    $id_preceptor = $_POST['id_preceptor'];
+    $id_curso = $_POST['id_curso'];
+
+    $sql = "DELETE FROM preceptor_curso WHERE id_preceptor='$id_preceptor' AND id_curso='$id_curso'";
+
+    if ($conn->query($sql) === TRUE) {
+        echo "<div class='alert alert-success'>Curso eliminado exitosamente</div>";
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+}
+
+$cursos = [];
+$sql = "SELECT * FROM curso";
+$result = $conn->query($sql);
+if ($result->num_rows > 0) {
+    while($row = $result->fetch_assoc()) {
+        $cursos[] = $row;
+    }
+}
+
+$preceptorCursos = [];
+if ($id) {
+    $sql = "SELECT c.* FROM curso c
+            JOIN preceptor_curso pc ON c.id = pc.id_curso
+            WHERE pc.id_preceptor='$id'";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $preceptorCursos[] = $row;
+        }
     }
 }
 
@@ -189,11 +237,81 @@ $conn->close();
                 <label for="antiguedad" class="form-label">Antigüedad</label>
                 <input type="text" class="form-control" id="antiguedad" name="antiguedad" value="<?php echo $preceptor['antiguedad']; ?>" required>
             </div>
-            <button type="submit" class="btn btn-primary">Guardar</button>
+            <button type="submit" name="update" class="btn btn-primary">Guardar</button>
         </form>
+
+        <h3>Asignar Curso</h3>
+        <form action="" method="post">
+            <input type="hidden" name="id_preceptor" value="<?php echo $preceptor['id']; ?>">
+            <div class="mb-3">
+                <label for="anio_lectivo" class="form-label">Año Lectivo</label>
+                <select class="form-select" id="anio_lectivo" name="anio_lectivo" onchange="filterCoursesByYear(this.value)" required>
+                    <option value="">Seleccione un año lectivo</option>
+                    <?php
+                    $anioLectivoList = array_unique(array_column($cursos, 'anio_lectivo'));
+                    foreach ($anioLectivoList as $anio_lectivo): ?>
+                        <option value="<?php echo $anio_lectivo; ?>"><?php echo $anio_lectivo; ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="id_curso" class="form-label">Curso</label>
+                <select class="form-select" id="id_curso" name="id_curso" required>
+                    <option value="">Seleccione un curso</option>
+                </select>
+            </div>
+            <button type="submit" name="assign" class="btn btn-primary">Asignar Curso</button>
+        </form>
+
+        <h3>Cursos Asignados</h3>
+        <?php if (count($preceptorCursos) > 0): ?>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Año</th>
+                        <th>División</th>
+                        <th>Año Lectivo</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($preceptorCursos as $curso): ?>
+                        <tr>
+                            <td><?php echo $curso['anio']; ?></td>
+                            <td><?php echo $curso['division']; ?></td>
+                            <td><?php echo $curso['anio_lectivo']; ?></td>
+                            <td>
+                                <form action="" method="post" style="display:inline;">
+                                    <input type="hidden" name="id_preceptor" value="<?php echo $preceptor['id']; ?>">
+                                    <input type="hidden" name="id_curso" value="<?php echo $curso['id']; ?>">
+                                    <button type="submit" name="delete" class="btn btn-danger">Eliminar</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php else: ?>
+            <p>No hay cursos asignados.</p>
+        <?php endif; ?>
     <?php endif; ?>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeo5sa1GsBCF9yJp4gyU06G1YLgKpZ1a6wr9kkF706LIKDeQ" crossorigin="anonymous"></script>
+<script>
+function filterCoursesByYear(anio_lectivo) {
+    var cursos = <?php echo json_encode($cursos); ?>;
+    var cursoSelect = document.getElementById('id_curso');
+    cursoSelect.innerHTML = '<option value="">Seleccione un curso</option>';
+    cursos.forEach(function(curso) {
+        if (curso.anio_lectivo === anio_lectivo) {
+            var option = document.createElement('option');
+            option.value = curso.id;
+            option.text = curso.anio + ' - ' + curso.division + ' (' + curso.anio_lectivo + ')';
+            cursoSelect.add(option);
+        }
+    });
+}
+</script>
 </body>
 </html>
