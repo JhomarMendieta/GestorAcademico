@@ -43,6 +43,11 @@ include 'autenticacion_secretaria.php';
             <a type="button" class="btn btn-secondary" href="registrar_usuarios.php">Registrar usuarios</a>
             <a type="button" class="btn btn-secondary" href="asignar_usuarios.php">Asignar usuarios</a>
         </div>
+        <div class="opcion">
+            <h1>Preceptores</h1>
+            <a type="button" class="btn btn-secondary" href="agregar_preceptor.php">Registrar preceptores</a>
+            <a type="button" class="btn btn-secondary" href="gestionar_preceptor.php">Gestionar preceptores</a>
+        </div>
         
     </div>
 </div>
