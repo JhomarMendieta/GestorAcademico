@@ -35,8 +35,8 @@ $current_page = basename($_SERVER['PHP_SELF']);
             Mesas
           </a>
           <ul class="dropdown-menu" aria-labelledby="materiasDropdown">
-            <li><a class="dropdown-item <?php echo $current_page == 'calificar_mesa.php' ? 'active' : ''; ?>" href="calificar_mesa.php">Agregar materias</a></li>
-            <li><a class="dropdown-item <?php echo $current_page == 'crear_mesa.php' ? 'active' : ''; ?>" href="crear_mesa.php">Ver materias</a></li>
+            <li><a class="dropdown-item <?php echo $current_page == 'calificar_mesa.php' ? 'active' : ''; ?>" href="calificar_mesa.php">Calificar mesas</a></li>
+            <li><a class="dropdown-item <?php echo $current_page == 'crear_mesa.php' ? 'active' : ''; ?>" href="crear_mesa.php">Crear mesa</a></li>
           </ul>
         </li>
       </ul>
