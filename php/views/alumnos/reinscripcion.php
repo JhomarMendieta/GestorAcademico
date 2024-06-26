@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -40,9 +38,52 @@ include 'autenticacion_alumno.php';
                     </select>
                 </div>
                 <div>
+                    <label>Provincia:</label>
+                    <div class="radio">
+                        <input  type="radio" id="buenosaires" name="provincia" value="buenosaires">
+                        <label for="buenosaires">Buenos Aires</label>
+                    </div>
+                    <div class="radio">
+                        <input type="radio" id="otra" name="provincia" value="otra">
+                        <label for="otra">Otra Provincia</label>
+                    </div>
+                </div>
+                <div>
+                    <label for="distrito">Distrito:</label>
+                    <input type="text" id="distrito" name="distrito">
+                </div>
+                <div>
+                    <label for="localidad">Localidad:</label>
+                    <input type="text" id="localidad" name="localidad">
+                </div>
+                <div class="espacio">
+                    <label for="domicilio">Domicilio</label>
+                </div>
+                <div class="domicilio">
+                    <label for="direccion">Direccion</label>
+                    <input type="text" id="direccion" name="direccion">
+                </div>
+                <div class="numero">
+                    <label for="numero">Numero</label>
+                    <input type="text" id="numero" name="numero">
+                </div>
+                <div class="departamento">
+                    <label for="departamento">Departamento</label>
+                    <input type="text" id="departamento" name="departamento">
+                </div>
+                <div>
+                    <label for="otros_datos">Otros Datos</label>
+                </div>
+                <div class="hermanos">
+                    <label for="hermanos">Hermanos/as:</label>
+                    <input type="text" id="hermanos" name="hermanos">
+                </div>
+                <div>
                     <label for="archivos">PDF reinscripción:</label>
                     <input type="file" id="archivos" name="archivos" required>
                 </div>
+                <br>
+                <br>
             </div>
             <div id="col2">
                 <div>
@@ -97,7 +138,43 @@ include 'autenticacion_alumno.php';
                         </div>
                     </div>
                 </div>
+                <div>
+                    <label for="lugar_nacimiento">Lugar de nacimiento:</label>
+                    <select id="lugar_nacimiento" name="lugar_nacimiento">
+                        <option value="argentina">Argentina</option>
+                        <option value="extranjero">Extranjero</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="nacionalidad">Nacionalidad:</label>
+                    <input type="text" id="nacionalidad" name="nacionalidad">
+                </div>
+                <br>
+                <br>
+                <br>
+                <div class="espacio"></div>
+                <div class="localidad">
+                    <label for="localidad">Localidad</label>
+                    <input type="text" id="localidad" name="localidad">
+                </div>
+                <div class="cod_postal">
+                    <label for="cod_postal">Codigo postal</label>
+                    <input type="text" id="cod_postal" name="cod_postal">
+                </div>
+                <div class="tel_fijo">
+                    <label for="tel_fijo">Telefono Fijo</label>
+                    <input type="text" id="tel_fijo" name="tel_fijo">
+                </div>
+                <br>
+                <br>
+                <div class="cantidad_hermanos">
+                    <label for="cantidad_hermanos">Cantidad que asisten a esta escuela:</label>
+                    <input type="text" id="cantidad_hermanos" name="cantidad_hermanos">
+                </div>
+                <div class="espacio"></div>
                 <button type="submit" class="btn btn-primary">Enviar</button>
+                <br>
+                <br>
             </div>
         </form>
     </div>

@@ -21,6 +21,19 @@ $documento_extranjero = isset($_POST['documento_extranjero']) && $_POST['documen
 $tipo_documento = $conn->real_escape_string($_POST['tipo_documento'] ?? '');
 $numero_documento = $conn->real_escape_string($_POST['numero_documento'] ?? '');
 
+$provincia = $conn->real_escape_string($_POST['provincia'] ?? '');
+$distrito = $conn->real_escape_string($_POST['distrito'] ?? '');
+$localidad = $conn->real_escape_string($_POST['localidad'] ?? '');
+
+$direccion = $conn->real_escape_string($_POST['direccion'] ?? '');
+$numero = $conn->real_escape_string($_POST['numero'] ?? '');
+$departamento = $conn->real_escape_string($_POST['departamento'] ?? '');
+$cod_postal = $conn->real_escape_string($_POST['cod_postal'] ?? '');
+$tel_fijo = $conn->real_escape_string($_POST['tel_fijo'] ?? '');
+
+$hermanos = $conn->real_escape_string($_POST['hermanos'] ?? '');
+$cantidad_hermanos = $conn->real_escape_string($_POST['cantidad_hermanos'] ?? '');
+
 // Subir el archivo PDF
 $target_dir = "uploads/";
 if (!is_dir($target_dir)) {
@@ -53,8 +66,8 @@ if ($result_alumno->num_rows > 0) {
     $id_alumno = $row_alumno['id'];
 
     // Insertar datos en la tabla reinscripcion
-    $sql_reinscripcion = "INSERT INTO reinscripcion (id_alumno, nombre, apellido, nacimiento, posee_pre_identificacion, posee_dni_arg, dni, cuil, posee_doc_ext, tipo_doc_ext, nro_doc_ext, archivo)
-    VALUES ($id_alumno, '$nombre', '$apellido', '$nacimiento', $cpi, '$dni_argentino', '$dni', '$cuil', $documento_extranjero, '$tipo_documento', '$numero_documento', '$target_file')";
+    $sql_reinscripcion = "INSERT INTO reinscripcion (id_alumno, nombre, apellido, nacimiento, posee_pre_identificacion, posee_dni_arg, dni, cuil, posee_doc_ext, tipo_doc_ext, nro_doc_ext, provincia, distrito, localidad, direccion, numero, departamento, hermanos, cod_postal, tel_fijo, cantidad_hermanos, archivo)
+    VALUES ('$id_alumno','$nombre', '$apellido', '$nacimiento', $cpi, '$dni_argentino', '$dni', '$cuil', $documento_extranjero, '$tipo_documento', '$numero_documento', '$provincia', '$distrito', '$localidad', '$direccion', '$numero', '$departamento', '$hermanos', '$cod_postal', '$tel_fijo', '$cantidad_hermanos', '$target_file')";
 
     if ($conn->query($sql_reinscripcion) === TRUE) {
         echo "Datos insertados correctamente.";

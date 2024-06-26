@@ -83,7 +83,7 @@
         </div>
         <div class='table-responsive'>
         <table class='table table-striped'>
-        <tr><th>Apellido</th><th>Nombre</th><th>Mayo</th><th>Julio</th><th>Septiembre</th><th>Noviembre</th></tr>";
+        <tr><th>Apellido</th><th>Nombre</th><th>Mayo</th><th>Julio</th><th>Septiembre</th><th>Noviembre</th><th>Acciones</th></tr>";
 
         // Generar dinámicamente las filas de alumnos y sus promedios de notas
         while ($row = $result->fetch_assoc()) {
@@ -95,6 +95,7 @@
           <td>" . (is_null($row['promedio_julio']) ? "-" : number_format($row['promedio_julio'], 2)) . "</td>
           <td>" . (is_null($row['promedio_septiembre']) ? "-" : number_format($row['promedio_septiembre'], 2)) . "</td>
           <td>" . (is_null($row['promedio_noviembre']) ? "-" : number_format($row['promedio_noviembre'], 2)) . "</td>
+          <td> <button>Recalcular condicion</button></td>
           </tr>";
         }
         echo "</table></div>";
