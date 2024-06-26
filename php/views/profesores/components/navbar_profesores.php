@@ -30,6 +30,15 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <li class="nav-item">
           <a class="nav-link <?php echo $current_page == 'gestionar_indicadores.php' ? 'active' : ''; ?>" href="gestionar_indicadores.php">Gestionar indicadores</a>
         </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle <?php echo in_array($current_page, ['calificar_mesa.php', 'crear_mesa.php']) ? 'active' : ''; ?>" href="#" id="materiasDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Mesas
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="materiasDropdown">
+            <li><a class="dropdown-item <?php echo $current_page == 'calificar_mesa.php' ? 'active' : ''; ?>" href="calificar_mesa.php">Agregar materias</a></li>
+            <li><a class="dropdown-item <?php echo $current_page == 'crear_mesa.php' ? 'active' : ''; ?>" href="crear_mesa.php">Ver materias</a></li>
+          </ul>
+        </li>
       </ul>
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
         <li class="nav-item dropdown">
