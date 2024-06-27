@@ -30,6 +30,7 @@ if ($id) {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
     $id = $_POST['id'];
+    $dni = $_POST['dni'];
     $nombre = $_POST['nombre'];
     $apellido = $_POST['apellido'];
     $nacionalidad = $_POST['nacionalidad'];
@@ -44,6 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
     $antiguedad = $_POST['antiguedad'];
 
     $sql = "UPDATE preceptores SET 
+        dni='$dni',
         nombre='$nombre', 
         apellido='$apellido', 
         nacionalidad='$nacionalidad', 
@@ -135,6 +137,10 @@ $conn->close();
     <h2>Perfil del Preceptor</h2>
     <?php if ($preceptor): ?>
         <table class="table table-bordered">
+        <tr>
+                <th>DNI</th>
+                <td><?php echo $preceptor['dni']; ?></td>
+            </tr>
             <tr>
                 <th>Nombre</th>
                 <td><?php echo $preceptor['nombre']; ?></td>
@@ -189,6 +195,10 @@ $conn->close();
 
         <form id="editForm" action="" method="post" style="display:none;">
             <input type="hidden" name="id" value="<?php echo $preceptor['id']; ?>">
+            <div class="mb-3">
+                <label for="dni" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="dni" name="dni" value="<?php echo $preceptor['dni']; ?>" required>
+            </div>
             <div class="mb-3">
                 <label for="nombre" class="form-label">Nombre</label>
                 <input type="text" class="form-control" id="nombre" name="nombre" value="<?php echo $preceptor['nombre']; ?>" required>

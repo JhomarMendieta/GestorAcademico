@@ -20,11 +20,14 @@ error_reporting(E_ALL);
     <h2>Gestionar Preceptor</h2>
     <form action="" method="get" class="mb-3">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <input type="text" class="form-control" name="nombre" placeholder="Buscar por Nombre">
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <input type="text" class="form-control" name="apellido" placeholder="Buscar por Apellido">
+            </div>
+            <div class="col-md-3">
+                <input type="text" class="form-control" name="dni" placeholder="Buscar por DNI">
             </div>
         </div>
         <button type="submit" class="btn btn-primary mt-3">Buscar</button>
@@ -34,27 +37,43 @@ error_reporting(E_ALL);
     if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $nombre = $_GET['nombre'] ?? '';
         $apellido = $_GET['apellido'] ?? '';
+        $dni = $_GET['dni'] ?? '';
 
-        $sql = "SELECT * FROM preceptores WHERE 
-                (nombre LIKE '%$nombre%' AND '$nombre' != '') OR 
-                (apellido LIKE '%$apellido%' AND '$apellido' != '')";
+        $sql = "SELECT * FROM preceptores WHERE 1=1";
+
+        if ($nombre != '') {
+            $sql .= " AND nombre LIKE '%$nombre%'";
+        }
+
+        if ($apellido != '') {
+            $sql .= " AND apellido LIKE '%$apellido%'";
+        }
+
+        if ($dni != '') {
+            $sql .= " AND dni LIKE '%$dni%'";
+        }
+
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
             echo "<table class='table table-striped'>";
-            echo "<thead><tr><th>Nombre</th><th>Apellido</th><th>Acción</th></tr></thead>";
+            echo "<thead><tr><th>DNI</th><th>Nombre</th><th>Apellido</th><th>Acciones</th></tr></thead>";
             echo "<tbody>";
-            while ($row = $result->fetch_assoc()) {
+            while($row = $result->fetch_assoc()) {
                 echo "<tr>";
-                echo "<td>{$row['nombre']}</td>";
-                echo "<td>{$row['apellido']}</td>";
-                echo "<td><a href='perfil_preceptor.php?id={$row['id']}' class='btn btn-info'>Ver Perfil</a></td>";
+                echo "<td>" . $row["dni"] . "</td>";
+                echo "<td>" . $row["nombre"] . "</td>";
+                echo "<td>" . $row["apellido"] . "</td>";
+                echo "<td><a href='perfil_preceptor.php?id=" . $row["id"] . "' class='btn btn-info'>Ver</a></td>";
                 echo "</tr>";
             }
-            echo "</tbody></table>";
+            echo "</tbody>";
+            echo "</table>";
         } else {
-            echo "<div class='alert alert-warning'>No se encontraron preceptores.</div>";
+            echo "<div class='alert alert-warning'>No se encontraron preceptores</div>";
         }
+
+        $conn->close();
     }
     ?>
 </div>

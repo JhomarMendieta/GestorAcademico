@@ -1,6 +1,4 @@
-<?php 
-include './navbar_secretaria.php';
-?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -9,18 +7,13 @@ include './navbar_secretaria.php';
     <title>Perfil del Alumno</title>
     <link rel="stylesheet" href="perfil_alumno.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script>
-        function mostrarFormulario() {
-            document.getElementById('formulario-actualizar').style.display = 'block';
-            document.getElementById('boton-editar').style.display = 'none';
-        }
-    </script>
+    
 </head>
 <body>
 <?php
+
+include './navbar_secretaria.php';
+// include 'autenticacion_secretaria.php';
 include '../../conn.php';
 
 ini_set('display_errors', 1);
@@ -46,10 +39,46 @@ if (!$alumno) {
     exit();
 }
 
+// Obtener cursos
+$sql = "SELECT * FROM curso";
+$cursos_result = $conn->query($sql);
+$cursos = $cursos_result->fetch_all(MYSQLI_ASSOC);
+
+// Obtener cursos asignados al alumno
+$sql = "SELECT c.*, ac.grupo FROM curso c 
+        JOIN alumno_curso ac ON c.id = ac.id_curso 
+        WHERE ac.id_alumno = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $id);
+$stmt->execute();
+$result = $stmt->get_result();
+$alumnoCursos = $result->fetch_all(MYSQLI_ASSOC);
+
 // Función para verificar si un archivo ha sido subido
 function archivoSubido($campo) {
     global $alumno;
     return ($alumno[$campo] !== 'PATH') ? 'Ver archivo' : 'Todavía no se subió.';
+}
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    if (isset($_POST['assign'])) {
+        $id_curso = $_POST['id_curso'];
+        $grupo = $_POST['grupo'];
+        $sql = "INSERT INTO alumno_curso (id_alumno, id_curso, grupo) VALUES (?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("iis", $id, $id_curso, $grupo);
+        $stmt->execute();
+        header("Location: perfil_alumno.php?id=$id");
+        exit();
+    } elseif (isset($_POST['delete'])) {
+        $id_curso = $_POST['id_curso'];
+        $sql = "DELETE FROM alumno_curso WHERE id_alumno = ? AND id_curso = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ii", $id, $id_curso);
+        $stmt->execute();
+        header("Location: perfil_alumno.php?id=$id");
+        exit();
+    }
 }
 
 ?>
@@ -155,11 +184,10 @@ function archivoSubido($campo) {
                 </td>
             </tr>
         </table>
-
         <button id="boton-editar" class="btn btn-primary" onclick="mostrarFormulario()">Editar</button>
 
-        <div id="formulario-actualizar" style="display: none;">
-            <h3>Actualizar Datos del Alumno</h3>
+        <div id="formulario-actualizar" style="display:none;">
+            <h3>Actualizar Alumno</h3>
             <form action="actualizar_alumno.php" method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="id" value="<?php echo htmlspecialchars($alumno['id']); ?>">
                 <div class="form-group">
@@ -224,13 +252,106 @@ function archivoSubido($campo) {
                 <button type="submit" class="btn btn-primary mt-2">Guardar</button>
             </form>
         </div>
+        
+        <div class="asignar-curso">
+            <h3>Asignar Curso al Alumno</h3>
+            <form method="POST" action="">
+    <div class="form-group">
+        <label for="anio_lectivo">Año Lectivo</label>
+        <select class="form-control" id="anio_lectivo" name="anio_lectivo" onchange="filterCoursesByYear(this.value)" required>
+            <option value="">Seleccione un año lectivo</option>
+            <?php
+            $anioLectivos = array_unique(array_column($cursos, 'anio_lectivo'));
+            foreach ($anioLectivos as $anio) {
+                echo "<option value=\"$anio\">$anio</option>";
+            }
+            ?>
+        </select>
     </div>
+    <div class="form-group">
+        <label for="id_curso">Curso</label>
+        <select class="form-control" id="id_curso" name="id_curso" required>
+            <option value="">Seleccione un curso</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="grupo">Grupo</label>
+        <select class="form-control" id="grupo" name="grupo" required>
+            <option value="">Seleccione un grupo</option>
+            <option value="a">A</option>
+            <option value="b">B</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-success" name="assign">Asignar Curso</button>
+</form>
+
+
+        </div>
+
+        <div class="cursos-asignados mt-4">
+            <h3>Cursos Asignados</h3>
+            <?php if (count($alumnoCursos) > 0): ?>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Año</th>
+                            <th>División</th>
+                            <th>Año Lectivo</th>
+                            <th>Grupo</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($alumnoCursos as $curso): ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($curso['anio']); ?></td>
+                                <td><?php echo htmlspecialchars($curso['division']); ?></td>
+                                <td><?php echo htmlspecialchars($curso['anio_lectivo']); ?></td>
+                                <td><?php echo htmlspecialchars($curso['grupo']); ?></td>
+                                <td>
+                                    <form method="POST" action="" style="display:inline;">
+                                        <input type="hidden" name="id_curso" value="<?php echo $curso['id']; ?>">
+                                        <button type="submit" class="btn btn-danger" name="delete">Eliminar</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            <?php else: ?>
+                <p>No hay cursos asignados.</p>
+            <?php endif; ?>
+        </div>
+    </div>
+
+
+
+    <!-- PASE ESTO DEL HEAD A ACA -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         function mostrarFormulario() {
-    document.getElementById('formulario-actualizar').style.display = 'block';
-    document.getElementById('boton-editar').style.display = 'none';
-    document.getElementById('tabla-alumno').style.display = 'none';
-}
+            document.getElementById('formulario-actualizar').style.display = 'block';
+            document.getElementById('boton-editar').style.display = 'none';
+        }
+
+        function filterCoursesByYear(anio_lectivo) {
+            var cursos = <?php echo json_encode($cursos); ?>;
+            var cursoSelect = document.getElementById('id_curso');
+            cursoSelect.innerHTML = '<option value="">Seleccione un curso</option>';
+            cursos.forEach(function(curso) {
+                if (curso.anio_lectivo == anio_lectivo) {
+                    var option = document.createElement('option');
+                    option.value = curso.id;
+                    option.text = curso.anio + ' - ' + curso.division + ' (' + curso.anio_lectivo + ')';
+                    cursoSelect.add(option);
+                }
+            });
+        }
     </script>
+
+
+
 </body>
 </html>

@@ -61,8 +61,7 @@
                         <?php
                         $sql = "SELECT alumno.id, alumno.apellidos, alumno.nombres, alumno.dni 
                                 FROM alumno 
-                                LEFT JOIN alumno_curso ON alumno.id = alumno_curso.id_alumno 
-                                LEFT JOIN curso ON alumno_curso.id_curso = curso.id 
+                                 
                                 WHERE 1=1";
                         if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $apellido = $_POST['apellido'] ?? '';

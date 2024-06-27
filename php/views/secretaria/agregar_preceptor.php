@@ -16,6 +16,7 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $dni = $_POST['dni'];
     $nombre = $_POST['nombre'];
     $apellido = $_POST['apellido'];
     $nacionalidad = $_POST['nacionalidad'];
@@ -29,10 +30,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $titulo_que_posee = $_POST['titulo_que_posee'];
     $antiguedad = $_POST['antiguedad'];
 
-    // Validar y limpiar los datos antes de insertarlos en la base de datos
-
-    $sql = "INSERT INTO preceptores (nombre, apellido, nacionalidad, num_tel, num_cel, domicilio, fecha_nacimiento, fecha_ingreso, mail_institucional, mail_personal, titulo_que_posee, antiguedad)
-    VALUES ('$nombre', '$apellido', '$nacionalidad', '$num_tel', '$num_cel', '$domicilio', '$fecha_nacimiento', '$fecha_ingreso', '$mail_institucional', '$mail_personal', '$titulo_que_posee', '$antiguedad')";
+    $sql = "INSERT INTO preceptores (dni, nombre, apellido, nacionalidad, num_tel, num_cel, domicilio, fecha_nacimiento, fecha_ingreso, mail_institucional, mail_personal, titulo_que_posee, antiguedad)
+    VALUES ('$dni', '$nombre', '$apellido', '$nacionalidad', '$num_tel', '$num_cel', '$domicilio', '$fecha_nacimiento', '$fecha_ingreso', '$mail_institucional', '$mail_personal', '$titulo_que_posee', '$antiguedad')";
 
     if ($conn->query($sql) === TRUE) {
         echo "<div class='alert alert-success'>Nuevo preceptor agregado exitosamente</div>";
@@ -47,6 +46,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <div class="container">
     <h2>Agregar Preceptor</h2>
     <form action="" method="post">
+        <div class="mb-3">
+            <label for="dni" class="form-label">DNI</label>
+            <input type="text" class="form-control" id="dni" name="dni" required>
+        </div>
         <div class="mb-3">
             <label for="nombre" class="form-label">Nombre</label>
             <input type="text" class="form-control" id="nombre" name="nombre" required>
