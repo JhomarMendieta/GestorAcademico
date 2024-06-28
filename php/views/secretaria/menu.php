@@ -21,10 +21,20 @@ include 'autenticacion_secretaria.php';
 <!-- funcionalidad -->
 <div class="container">
     <div class="opciones">
+    <div class="opcion">
+            <h1>Profesores</h1>
+            <a type="button" class="btn btn-secondary" href="agregar_profesores.php">Registrar profesores</a>
+            <a type="button" class="btn btn-secondary" href="gestionar_profesores.php">Gestionar profesores</a>
+        </div>
         <div class="opcion">
             <h1>Alumnos</h1>
             <a type="button" class="btn btn-secondary" href="agregar_alumnos.php">Agregar alumnos</a>
             <a type="button" class="btn btn-secondary" href="gestionar_alumnos.php">Gestionar alumnos</a>
+        </div>
+        <div class="opcion">
+            <h1>Preceptores</h1>
+            <a type="button" class="btn btn-secondary" href="agregar_preceptor.php">Registrar preceptores</a>
+            <a type="button" class="btn btn-secondary" href="gestionar_preceptor.php">Gestionar preceptores</a>
         </div>
         <div class="opcion">
             <h1>Materias</h1>
@@ -42,11 +52,6 @@ include 'autenticacion_secretaria.php';
             <h1>Usuarios</h1>
             <a type="button" class="btn btn-secondary" href="registrar_usuarios.php">Registrar usuarios</a>
             <a type="button" class="btn btn-secondary" href="asignar_usuarios.php">Asignar usuarios</a>
-        </div>
-        <div class="opcion">
-            <h1>Preceptores</h1>
-            <a type="button" class="btn btn-secondary" href="agregar_preceptor.php">Registrar preceptores</a>
-            <a type="button" class="btn btn-secondary" href="gestionar_preceptor.php">Gestionar preceptores</a>
         </div>
         
     </div>

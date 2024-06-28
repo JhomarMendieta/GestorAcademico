@@ -1,5 +1,6 @@
 <?php
-$current_page = basename($_SERVER['PHP_SELF']);
+include "../../getUserId.php";
+include "../../conn.php";
 ?>
 <head>
   <link rel="stylesheet" href="./navbar_secretaria.css">
@@ -23,6 +24,26 @@ $current_page = basename($_SERVER['PHP_SELF']);
           <ul class="dropdown-menu" aria-labelledby="alumnosDropdown">
             <li><a class="dropdown-item <?php echo $current_page == 'agregar_alumnos.php' ? 'active' : ''; ?>" href="agregar_alumnos.php">Agregar alumnos</a></li>
             <li><a class="dropdown-item <?php echo $current_page == 'ver_alumnos.php' ? 'active' : ''; ?>" href="gestionar_alumnos.php">Gestionar alumnos</a></li>
+          </ul>
+        </li>
+        <!-- Dropdown para Preceptores -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle <?php echo in_array($current_page, ['agregar_preceptor.php', 'gestionar_preceptor.php']) ? 'active' : ''; ?>" href="#" id="preceptoresDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Preceptores
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="preceptoresDropdown">
+            <li><a class="dropdown-item <?php echo $current_page == 'agregar_preceptor.php' ? 'active' : ''; ?>" href="agregar_preceptor.php">Agregar preceptores</a></li>
+            <li><a class="dropdown-item <?php echo $current_page == 'gestionar_preceptor.php' ? 'active' : ''; ?>" href="gestionar_preceptor.php">Gestionar preceptores</a></li>
+          </ul>
+        </li>
+        <!-- Dropdown para Profesores -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle <?php echo in_array($current_page, ['agregar_profesores.php', 'gestionar_profesores.php']) ? 'active' : ''; ?>" href="#" id="profesoresDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Profesores
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="profesoresDropdown">
+            <li><a class="dropdown-item <?php echo $current_page == 'agregar_profesor.php' ? 'active' : ''; ?>" href="agregar_profesores.php">Agregar profesores</a></li>
+            <li><a class="dropdown-item <?php echo $current_page == 'gestionar_profesores.php' ? 'active' : ''; ?>" href="gestionar_profesores.php">Gestionar profesores</a></li>
           </ul>
         </li>
         <!-- Dropdown para Cursos -->
@@ -60,8 +81,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <?php
-            include "../../getUserId.php";
-            include "../../conn.php";
 
             echo $userName;
             ?> 

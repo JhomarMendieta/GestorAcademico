@@ -1,3 +1,7 @@
+<?php 
+include './navbar_secretaria.php';
+include 'autenticacion_secretaria.php';
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -9,8 +13,6 @@
 </head>
 <body>
 <?php
-include "./navbar_secretaria.php";
-include 'autenticacion_secretaria.php';
 include '../../conn.php'; 
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
