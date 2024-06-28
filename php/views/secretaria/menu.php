@@ -25,6 +25,7 @@ include 'autenticacion_secretaria.php';
             <h1>Profesores</h1>
             <a type="button" class="btn btn-secondary" href="agregar_profesores.php">Registrar profesores</a>
             <a type="button" class="btn btn-secondary" href="gestionar_profesores.php">Gestionar profesores</a>
+            <a type="button" class="btn btn-secondary" href="asignar_materias.php">Asignar materias</a>
         </div>
         <div class="opcion">
             <h1>Alumnos</h1>

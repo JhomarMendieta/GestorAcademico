@@ -23,12 +23,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['calificar'])) {
     $alumnoId = $_POST['alumno_id'];
     $calificacion = $_POST['calificacion'];
 
+    // Actualizar la calificación en la tabla alumno_mesa
     $query = "UPDATE alumno_mesa SET calificacion = ? WHERE id_mesa = ? AND id_alumno = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("dii", $calificacion, $mesaId, $alumnoId);
 
     if ($stmt->execute()) {
         echo "<div class='alert alert-success'>Calificación actualizada con éxito.</div>";
+
+        // Si la calificación es mayor o igual a 4, actualizar la condición a 'TEA'
+        if ($calificacion >= 4) {
+            $query = "UPDATE condicion SET condicion = 'TEA' WHERE id_alumno = ? AND id_materia = (SELECT id_materia FROM alumno_mesa WHERE id_mesa = ? AND id_alumno = ?)";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param("iii", $alumnoId, $mesaId, $alumnoId);
+
+            if (!$stmt->execute()) {
+                echo "<div class='alert alert-danger'>Error al actualizar la condición: " . $stmt->error . "</div>";
+            }
+        }
     } else {
         echo "<div class='alert alert-danger'>Error al actualizar la calificación: " . $stmt->error . "</div>";
     }
@@ -88,11 +100,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['mesa_id'])) {
     <link rel="stylesheet" href="../../../css/profesores/calificar_mesa.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous" defer></script>
-    <title>Crear mesas de examenes</title>
+    <title>Calificar Mesa de Examen</title>
 </head>
 <body>
-<div class="container-mesa"><div class="titulo-mesa">
-    <h1>Calificar Mesa de Examen</h1></div>
+<div class="container-mesa">
+    <div class="titulo-mesa">
+        <h1>Calificar Mesa de Examen</h1>
+    </div>
     <form id="calificarMesaForm" method="POST" action="">
         <div class="form-group">
             <label for="materia_id">Seleccione una Materia:</label>
