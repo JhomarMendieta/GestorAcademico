@@ -114,7 +114,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_param($types, ...array_values($fields_non_null));
 
         if ($stmt->execute()) {
-            echo "<div class='alert alert-success'>Alumno agregado exitosamente</div>";
+            // Obtener el id del alumno insertado
+            $id_alumno = $stmt->insert_id;
+            
+            // Crear el nombre de usuario y hashear la contraseña
+            $nombre_usuario = strtolower($nombres). '.' .strtolower($apellidos);
+            $contrasenia_hash = password_hash($dni, PASSWORD_DEFAULT);
+            $rol = 'alumno';
+
+            // Insertar el usuario
+            $sql_usuario = "INSERT INTO usuario (nombre_usuario, mail, contrasenia, rol) VALUES (?, NULL, ?, ?)";
+            $stmt_usuario = $conn->prepare($sql_usuario);
+            $stmt_usuario->bind_param("sss", $nombre_usuario, $contrasenia_hash, $rol);
+            
+            if ($stmt_usuario->execute()) {
+                $id_usuario = $stmt_usuario->insert_id;
+                // Actualizar la tabla alumno con el id_usuario
+                $sql_update_alumno = "UPDATE alumno SET id_usuario = ? WHERE id = ?";
+                $stmt_update = $conn->prepare($sql_update_alumno);
+                $stmt_update->bind_param("ii", $id_usuario, $id_alumno);
+                $stmt_update->execute();
+                echo "<div class='alert alert-success'>Alumno y usuario agregados exitosamente</div>";
+            } else {
+                echo "<div class='alert alert-danger'>Error al agregar el usuario: " . $stmt_usuario->error . "</div>";
+            }
+            $stmt_usuario->close();
         } else {
             echo "<div class='alert alert-danger'>Error al agregar el alumno: " . $stmt->error . "</div>";
         }
@@ -142,7 +166,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmt_update = $conn->prepare($sql_update_alumno);
                 $stmt_update->bind_param("ii", $id_responsable, $dni);
                 $stmt_update->execute();
-                $stmt_update->close();
                 echo "<div class='alert alert-success'>Responsable agregado exitosamente</div>";
             } else {
                 echo "<div class='alert alert-danger'>Error al agregar el responsable: " . $stmt_resp->error . "</div>";
@@ -150,12 +173,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $stmt_resp->close();
         }
+
+        $conn->close();
     }
 
     $stmt_check->close();
-    $conn->close();
 }
 ?>
+
 
 <div class="container-agregar-alumnos">
 <div class="container mt-4"

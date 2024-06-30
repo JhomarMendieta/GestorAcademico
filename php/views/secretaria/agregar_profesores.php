@@ -7,8 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="agregar_profesores.css">
 </head>
-<body>
-<?php
+<body><?php
 include "./navbar_secretaria.php";
 include 'autenticacion_secretaria.php';
 include '../../conn.php'; 
@@ -41,6 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $edad = $_POST['edad'];
         $mail = $_POST['mail'];
         $titulo = $_POST['titulo'];
+
         $fields = [
             'dni' => $dni,
             'numLegajo' => $numLegajo,
@@ -67,7 +67,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_param($types, ...array_values($fields_non_null));
 
         if ($stmt->execute()) {
-            echo "<div class='alert alert-success'>Profesor agregado exitosamente</div>";
+            // Obtener el ID del último profesor insertado
+            $last_id_prof = $conn->insert_id;
+
+            // Crear el usuario asociado
+            $username = strtolower($prof_nombre) . '.' . strtolower($prof_apellido);
+            $hashed_password = password_hash($dni, PASSWORD_DEFAULT);  // Hash de la contraseña
+
+            $user_sql = "INSERT INTO usuario (nombre_usuario, mail, contrasenia, rol) VALUES (?, ?, ?, 'profesor')";
+            $stmt_user = $conn->prepare($user_sql);
+            $stmt_user->bind_param("sss", $username, $mail, $hashed_password);
+
+            if ($stmt_user->execute()) {
+                // Obtener el ID del último usuario insertado
+                $last_id_user = $conn->insert_id;
+
+                // Actualizar el registro del profesor con el id_usuario correspondiente
+                $update_sql = "UPDATE profesores SET id_usuario = ? WHERE numLegajo = ?";
+                $stmt_update = $conn->prepare($update_sql);
+                $stmt_update->bind_param("ii", $last_id_user, $numLegajo);
+                $stmt_update->execute();
+
+                echo "<div class='alert alert-success'>Profesor agregado exitosamente</div>";
+            } else {
+                echo "<div class='alert alert-danger'>Error al crear el usuario: " . $stmt_user->error . "</div>";
+            }
+
+            $stmt_user->close();
         } else {
             echo "<div class='alert alert-danger'>Error al agregar el profesor: " . $stmt->error . "</div>";
         }

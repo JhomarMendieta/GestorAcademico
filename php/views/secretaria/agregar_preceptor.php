@@ -11,7 +11,7 @@
 <?php
 include "./navbar_secretaria.php";
 include 'autenticacion_secretaria.php';
-include '../../conn.php'; 
+include '../../conn.php';
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
@@ -30,19 +30,50 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $titulo_que_posee = $_POST['titulo_que_posee'];
     $antiguedad = $_POST['antiguedad'];
 
-    $sql = "INSERT INTO preceptores (dni, nombre, apellido, nacionalidad, num_tel, num_cel, domicilio, fecha_nacimiento, fecha_ingreso, mail_institucional, mail_personal, titulo_que_posee, antiguedad)
-    VALUES ('$dni', '$nombre', '$apellido', '$nacionalidad', '$num_tel', '$num_cel', '$domicilio', '$fecha_nacimiento', '$fecha_ingreso', '$mail_institucional', '$mail_personal', '$titulo_que_posee', '$antiguedad')";
+    // Crear nombre de usuario
+    $nombreUsuario = strtolower($nombre) . '.' . strtolower($apellido);
+    $contrasenia = password_hash($dni, PASSWORD_DEFAULT);
+    $rol = 'preceptor';
 
-    if ($conn->query($sql) === TRUE) {
-        echo "<div class='alert alert-success'>Nuevo preceptor agregado exitosamente</div>";
+    // Verificar si el DNI ya está registrado en la tabla de preceptores
+    $check_dni_sql = "SELECT dni FROM preceptores WHERE dni = ?";
+    $stmt_check = $conn->prepare($check_dni_sql);
+    $stmt_check->bind_param("i", $dni);
+    $stmt_check->execute();
+    $stmt_check->store_result();
+
+    if ($stmt_check->num_rows > 0) {
+        echo "<div class='alert alert-danger'>El DNI ya está registrado.</div>";
     } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
-    }
+        // Insertar usuario en la tabla de usuarios
+        $sql_usuario = "INSERT INTO usuario (nombre_usuario, mail, contrasenia, rol) VALUES (?, ?, ?, ?)";
+        $stmt_usuario = $conn->prepare($sql_usuario);
+        $stmt_usuario->bind_param("ssss", $nombreUsuario, $mail_institucional, $contrasenia, $rol);
 
+        if ($stmt_usuario->execute()) {
+            // Obtener el id del usuario insertado
+            $id_usuario = $stmt_usuario->insert_id;
+
+            // Insertar datos del preceptor en la tabla de preceptores
+            $sql_preceptor = "INSERT INTO preceptores (nombre, apellido, dni, nacionalidad, num_tel, num_cel, domicilio, fecha_nacimiento, fecha_ingreso, mail_institucional, mail_personal, titulo_que_posee, antiguedad, id_usuario) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $stmt_preceptor = $conn->prepare($sql_preceptor);
+            $stmt_preceptor->bind_param("sssssssssssssi", $nombre, $apellido, $dni, $nacionalidad, $num_tel, $num_cel, $domicilio, $fecha_nacimiento, $fecha_ingreso, $mail_institucional, $mail_personal, $titulo_que_posee, $antiguedad, $id_usuario);
+
+            if ($stmt_preceptor->execute()) {
+                echo "<div class='alert alert-success'>Preceptor agregado exitosamente</div>";
+            } else {
+                echo "<div class='alert alert-danger'>Error al agregar el preceptor: " . $stmt_preceptor->error . "</div>";
+            }
+            $stmt_preceptor->close();
+        } else {
+            echo "<div class='alert alert-danger'>Error al agregar el usuario: " . $stmt_usuario->error . "</div>";
+        }
+        $stmt_usuario->close();
+    }
+    $stmt_check->close();
     $conn->close();
 }
 ?>
-
 <div class="container">
     <h2>Agregar Preceptor</h2>
     <form action="" method="post">

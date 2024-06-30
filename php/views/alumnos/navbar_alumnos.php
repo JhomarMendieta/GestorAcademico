@@ -39,6 +39,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
           </a>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
             <li><a class="dropdown-item" href="../../logout.php">Cerrar sesión</a></li>
+            <li><a class="dropdown-item" href="./change_password.php">Gestionar datos</a></li>
           </ul>
         </li>
       </ul>

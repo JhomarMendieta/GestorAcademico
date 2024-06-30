@@ -81,12 +81,12 @@ include "../../conn.php";
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <?php
-
             echo $userName;
             ?> 
           </a>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
             <li><a class="dropdown-item" href="../../logout.php">Cerrar sesión</a></li>
+            <li><a class="dropdown-item" href="./change_password.php">Gestionar datos</a></li>
           </ul>
         </li>
       </ul>
