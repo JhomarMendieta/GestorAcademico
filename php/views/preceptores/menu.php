@@ -33,11 +33,11 @@ include "../../conn.php";
         </li>
         <!-- Dropdown para Materias -->
         <li class="nav-item">
-          <a class="nav-link <?php echo $current_page == 'rite.php' ? 'active' : ''; ?>" aria-current="page" href="alumno_curso.php">Ver RITE</a>
+          <a class="nav-link <?php echo $current_page == 'rite.php' ? 'active' : ''; ?>" aria-current="page" href="rite.php">Ver RITE</a>
         </li>
         <!-- Dropdown para Usuarios -->
         <li class="nav-item">
-          <a class="nav-link <?php echo $current_page == 'materias.php' ? 'active' : ''; ?>" aria-current="page" href="alumno_curso.php">Ver materias</a>
+          <a class="nav-link <?php echo $current_page == 'materias.php' ? 'active' : ''; ?>" aria-current="page" href="materias.php">Ver materias</a>
         </li>
       </ul>
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">

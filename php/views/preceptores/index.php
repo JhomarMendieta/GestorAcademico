@@ -38,7 +38,7 @@
           <p class="text_icon">R.I.T.E.</p>
         </div>
         <div class="secciones">
-          <a href="#" class="opcion">Ver R.I.T.E.</a>
+          <a href="rite.php" class="opcion">Ver R.I.T.E.</a>
         </div>
       </div>
       <div class="apartado materias">
