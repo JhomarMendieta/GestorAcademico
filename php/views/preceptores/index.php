@@ -29,7 +29,7 @@
           <p class="text_icon">Asistencias</p>
         </div>
         <div class="secciones">
-          <a href="#" class="opcion">Tomar asistencia</a>
+          <a href="tomarAsistencia.php" class="opcion">Tomar asistencia</a>
           <a href="#" class="opcion">Ver asistencia</a>
         </div>
       </div>
@@ -38,7 +38,7 @@
           <p class="text_icon">R.I.T.E.</p>
         </div>
         <div class="secciones">
-          <a href="curso.php" class="opcion">Ver R.I.T.E.</a>
+          <a href="#" class="opcion">Ver R.I.T.E.</a>
         </div>
       </div>
       <div class="apartado materias">
