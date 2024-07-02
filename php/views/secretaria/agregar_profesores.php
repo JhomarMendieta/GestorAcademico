@@ -71,7 +71,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $last_id_prof = $conn->insert_id;
 
             // Crear el usuario asociado
-            $username = strtolower($prof_nombre) . '.' . strtolower($prof_apellido);
+            $nombres_array = explode(' ', trim($prof_nombre));
+            $apellidos_array = explode(' ', trim($prof_apellido));
+            $primer_nombre = strtolower($nombres_array[0]);
+            $primer_apellido = strtolower($apellidos_array[0]);
+            $user_date = date('d', strtotime($fecha_nacimiento));
+            $username = $primer_nombre . '.' . $primer_apellido . '.' . $user_date;
             $hashed_password = password_hash($dni, PASSWORD_DEFAULT);  // Hash de la contraseña
 
             $user_sql = "INSERT INTO usuario (nombre_usuario, mail, contrasenia, rol) VALUES (?, ?, ?, 'profesor')";

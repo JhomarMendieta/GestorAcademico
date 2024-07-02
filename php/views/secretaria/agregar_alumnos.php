@@ -118,7 +118,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $id_alumno = $stmt->insert_id;
             
             // Crear el nombre de usuario y hashear la contraseña
-            $nombre_usuario = strtolower($nombres). '.' .strtolower($apellidos);
+            $nombres_array = explode(' ', trim($nombres));
+            $apellidos_array = explode(' ', trim($apellidos));
+            $primer_nombre = strtolower($nombres_array[0]);
+            $primer_apellido = strtolower($apellidos_array[0]);
+            $user_date = date('d', strtotime($nacimiento));
+            $nombre_usuario = $primer_nombre . '.' . $primer_apellido . '.' . $user_date;
+
+            // Verificar si el nombre de usuario ya está registrado
+            $check_username_sql = "SELECT nombre_usuario FROM usuario WHERE nombre_usuario = ?";
+            $stmt_check_username = $conn->prepare($check_username_sql);
+            $stmt_check_username->bind_param("s", $nombre_usuario);
+            $stmt_check_username->execute();
+            $stmt_check_username->store_result();
+
+            if ($stmt_check_username->num_rows > 0) {
+                // Agregar el año de nacimiento al nombre de usuario si ya existe
+                $user_year = date('Y', strtotime($nacimiento));
+                $nombre_usuario = $primer_nombre . '.' . $primer_apellido . '.' . $user_date . '.' . $user_year;
+            }
+
             $contrasenia_hash = password_hash($dni, PASSWORD_DEFAULT);
             $rol = 'alumno';
 
@@ -126,7 +145,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $sql_usuario = "INSERT INTO usuario (nombre_usuario, mail, contrasenia, rol) VALUES (?, NULL, ?, ?)";
             $stmt_usuario = $conn->prepare($sql_usuario);
             $stmt_usuario->bind_param("sss", $nombre_usuario, $contrasenia_hash, $rol);
-            
+
             if ($stmt_usuario->execute()) {
                 $id_usuario = $stmt_usuario->insert_id;
                 // Actualizar la tabla alumno con el id_usuario

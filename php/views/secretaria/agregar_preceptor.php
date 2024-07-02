@@ -31,9 +31,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $antiguedad = $_POST['antiguedad'];
 
     // Crear nombre de usuario
-    $nombreUsuario = strtolower($nombre) . '.' . strtolower($apellido);
-    $contrasenia = password_hash($dni, PASSWORD_DEFAULT);
-    $rol = 'preceptor';
+    $nombres_array = explode(' ', trim($nombre));
+    $apellidos_array = explode(' ', trim($apellido));
+    $primer_nombre = strtolower($nombres_array[0]);
+    $primer_apellido = strtolower($apellidos_array[0]);
+    $user_date = date('d', strtotime($fecha_nacimiento));
+    $nombreUsuario = $primer_nombre . '.' . $primer_apellido . '.' . $user_date;
 
     // Verificar si el DNI ya está registrado en la tabla de preceptores
     $check_dni_sql = "SELECT dni FROM preceptores WHERE dni = ?";
@@ -45,6 +48,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($stmt_check->num_rows > 0) {
         echo "<div class='alert alert-danger'>El DNI ya está registrado.</div>";
     } else {
+        // Verificar si el nombre de usuario ya está registrado
+        $check_username_sql = "SELECT nombre_usuario FROM usuario WHERE nombre_usuario = ?";
+        $stmt_check_username = $conn->prepare($check_username_sql);
+        $stmt_check_username->bind_param("s", $nombreUsuario);
+        $stmt_check_username->execute();
+        $stmt_check_username->store_result();
+
+        if ($stmt_check_username->num_rows > 0) {
+            // Si el nombre de usuario ya está registrado, agregar el año
+            $user_year = date('Y', strtotime($fecha_nacimiento));
+            $nombreUsuario .= '.' . $user_year;
+        }
+        $stmt_check_username->close();
+
+        $contrasenia = password_hash($dni, PASSWORD_DEFAULT);
+        $rol = 'preceptor';
+
         // Insertar usuario en la tabla de usuarios
         $sql_usuario = "INSERT INTO usuario (nombre_usuario, mail, contrasenia, rol) VALUES (?, ?, ?, ?)";
         $stmt_usuario = $conn->prepare($sql_usuario);
