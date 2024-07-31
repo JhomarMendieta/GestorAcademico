@@ -43,7 +43,6 @@ body.alumnos_none .cursos{
     gap: 20px;
 }
 .cursos a{
-    background-color: #686868;
     width: 240px;
     height: 80px;
     text-decoration: none;
@@ -53,9 +52,6 @@ body.alumnos_none .cursos{
     border-radius: 5px;
     display: grid;
     place-items: center;
-}
-.cursos a:hover{
-    background-color: #8b8b8b;
 }
 
 

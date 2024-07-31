@@ -26,7 +26,7 @@
 
         while ($row = $r_query_all_curso->fetch_assoc()){
             ?>
-            <a href="rite.php?id_curso=<?php echo $row['id']; ?>" class="none_cursos"><?php echo $row['anio'], "° ", $row['division'], "°";?></a>
+            <a href="rite.php?id_curso=<?php echo $row['id']; ?>" class="none_cursos btn btn-secondary"><?php echo $row['anio'], "° ", $row['division'], "°";?></a>
             <?php
         }
         ?>

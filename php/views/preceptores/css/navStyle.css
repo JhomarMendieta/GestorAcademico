@@ -66,11 +66,10 @@ h1 {
 }
 
 .btn {
-    width: 200px; 
+    /* width: 200px;  */
     text-align: center;
-    transition: transform 0.3s ease; 
+    transition: all .3s ease; 
 }
-
 
 .btn:hover {
     transform: scale(1.1); 

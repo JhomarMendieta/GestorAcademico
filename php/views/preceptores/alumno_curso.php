@@ -26,7 +26,7 @@
 
         while ($row = $r_query_all_curso->fetch_assoc()){
             ?>
-            <a href="alumno_curso.php?anio=<?php echo $row['id']; ?>"><?php echo $row['anio'], "° ", $row['division'], "°";?></a>
+            <a href="alumno_curso.php?anio=<?php echo $row['id']; ?>" class="btn btn-secondary"><?php echo $row['anio'], "° ", $row['division'], "°";?></a>
             <?php
         }
         ?>

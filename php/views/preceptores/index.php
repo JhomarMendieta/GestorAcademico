@@ -6,8 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="shortcut icon" href="../../../img/LogoEESTN1.png" type="image/x-icon">
   <title>Document</title>
-  <link rel="stylesheet" href="css/navStyle.css">
   <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/navStyle.css">
 </head>
 
 <body>
@@ -21,7 +21,7 @@
           <p class="text_icon">Alumnos</p>
         </div>
         <div class="secciones">
-          <a href="alumno_curso.php" class="opcion">Ver alumnos por curso</a>
+          <a href="alumno_curso.php" class="btn btn-secondary">Ver alumnos por curso</a>
         </div>
       </div>
       <div class="apartado alumnos">
@@ -29,8 +29,8 @@
           <p class="text_icon">Asistencias</p>
         </div>
         <div class="secciones">
-          <a href="tomarAsistencia.php" class="opcion">Tomar asistencia</a>
-          <a href="#" class="opcion">Ver asistencia</a>
+          <a href="tomarAsistencia.php" class="btn btn-secondary">Tomar asistencia</a>
+          <a href="#" class="btn btn-secondary">Ver asistencia</a>
         </div>
       </div>
       <div class="apartado rites">
@@ -38,7 +38,7 @@
           <p class="text_icon">R.I.T.E.</p>
         </div>
         <div class="secciones">
-          <a href="rite.php" class="opcion">Ver R.I.T.E.</a>
+          <a href="rite.php" class="btn btn-secondary">Ver R.I.T.E.</a>
         </div>
       </div>
       <div class="apartado materias">
@@ -46,7 +46,7 @@
           <p class="text_icon">Materias</p>
         </div>
         <div class="secciones">
-          <a href="materias.php" class="opcion">Ver materias</a>
+          <a href="materias.php" class="btn btn-secondary">Ver materias</a>
         </div>
       </div>
     </div>
@@ -54,6 +54,7 @@
 
 
   <script src="https://kit.fontawesome.com/d5f1649c82.js" crossorigin="anonymous"></script>
+
 </body>
 
 </html>
