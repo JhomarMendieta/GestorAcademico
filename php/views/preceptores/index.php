@@ -29,8 +29,8 @@
           <p class="text_icon">Asistencias</p>
         </div>
         <div class="secciones">
-          <a href="tomarAsistencia.php" class="btn btn-secondary">Tomar asistencia</a>
-          <a href="#" class="btn btn-secondary">Ver asistencia</a>
+          <a href="asistencia_curso.php" class="btn btn-secondary">Tomar asistencia</a>
+          <a href="fecha_registro.php" class="btn btn-secondary">Ver asistencia</a>
         </div>
       </div>
       <div class="apartado rites">

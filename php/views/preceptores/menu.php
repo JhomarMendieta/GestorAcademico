@@ -7,7 +7,7 @@ include "../../conn.php";
 </head>
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
-    <a id="logo" class="navbar-brand" href="menu.php">
+    <a id="logo" class="navbar-brand" href="index.php">
       <img src="../../../img/LogoEESTN1.png" alt="Logo" style="height: 40px;">
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,8 +25,8 @@ include "../../conn.php";
             Asistencias
           </a>
           <ul class="dropdown-menu" aria-labelledby="cursosDropdown">
-            <li><a class="dropdown-item <?php echo $current_page == 'tomarAsistencia.php' ? 'active' : ''; ?>" href="tomarAsistencia.php">Tomar asistencia</a></li>
-            <li><a class="dropdown-item <?php echo $current_page == '#' ? 'active' : ''; ?>" href="#">Ver asistencia</a></li>
+            <li><a class="dropdown-item <?php echo $current_page == 'asistencia_curso.php' ? 'active' : ''; ?>" href="asistencia_curso.php">Tomar asistencia</a></li>
+            <li><a class="dropdown-item <?php echo $current_page == 'fecha_registro.php' ? 'active' : ''; ?>" href="fecha_registro.php">Ver asistencia</a></li>
           </ul>
         </li>
         <!-- Dropdown para Materias -->
