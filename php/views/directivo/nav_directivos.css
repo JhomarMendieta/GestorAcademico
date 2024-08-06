@@ -1,0 +1,11 @@
+
+#logo img {
+    height: 6vh !important;
+}
+.navbar {
+    margin-bottom: 20px;
+    width: 100%;
+    margin: 0;
+    margin-bottom: 3%;
+    border-bottom: 1px grey solid;
+}

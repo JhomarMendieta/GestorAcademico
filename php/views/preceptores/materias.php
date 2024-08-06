@@ -29,13 +29,14 @@ if ($conn->connect_error) {
 $division = 1;
 $anio = 1;
 
-$sqlCurso = "SELECT id FROM curso";
+$sqlCurso = "SELECT id FROM curso WHERE division = ? AND anio = ?";
 $stmtCurso = $conn->prepare($sqlCurso);
 
 if (!$stmtCurso) {
     die("Error en la preparación de la consulta: " . $conn->error);
 }
 
+$stmtCurso->bind_param("ii", $division, $anio);
 $stmtCurso->execute();
 $resultCurso = $stmtCurso->get_result();
 
@@ -44,14 +45,14 @@ if ($resultCurso->num_rows > 0) {
     $id_curso = $curso['id'];
 
     // Obtener las materias que corresponden al id_curso
-    $sqlMaterias = "SELECT nombre FROM materia";
+    $sqlMaterias = "SELECT nombre FROM materia WHERE id_curso = ?";
     $stmtMaterias = $conn->prepare($sqlMaterias);
 
     if (!$stmtMaterias) {
         die("Error en la preparación de la consulta: " . $conn->error);
     }
 
-    // $stmtMaterias->bind_param("i", $id_curso);
+    $stmtMaterias->bind_param("i", $id_curso);
     $stmtMaterias->execute();
     $resultMaterias = $stmtMaterias->get_result();
 

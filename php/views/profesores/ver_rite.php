@@ -72,11 +72,10 @@ include 'autenticacion_profesor.php';
     if (!empty($instanciaFiltro)) {
       echo "<h4>Instancia Seleccionada: $instanciaFiltro</h4>";
 
-      // Consulta para obtener y mostrar los alumnos inscritos en la materia seleccionada junto con sus notas y nombres de indicadores
+      // Consulta para obtener y mostrar los alumnos inscritos en la materia seleccionada junto con sus notas
       $query = "SELECT alumno.*, 
                 GROUP_CONCAT(CASE WHEN nota.instancia = ? THEN nota.calificacion ELSE NULL END ORDER BY nota.id) AS calificaciones,
-                AVG(CASE WHEN nota.instancia = ? THEN nota.calificacion ELSE NULL END) AS promedio,
-                GROUP_CONCAT(CASE WHEN nota.instancia = ? THEN nota.nombre ELSE NULL END ORDER BY nota.id) AS nombres_indicadores
+                AVG(CASE WHEN nota.instancia = ? THEN nota.calificacion ELSE NULL END) AS promedio
                 FROM alumno
                 INNER JOIN alumno_curso ON alumno.id = alumno_curso.id_alumno
                 INNER JOIN curso ON alumno_curso.id_curso = curso.id
@@ -86,7 +85,7 @@ include 'autenticacion_profesor.php';
                 GROUP BY alumno.id
                 ORDER BY alumno.apellidos, alumno.nombres";
       $stmt = $conn->prepare($query);
-      $stmt->bind_param("sssi", $instanciaFiltro, $instanciaFiltro, $instanciaFiltro, $materiaId);
+      $stmt->bind_param("ssi", $instanciaFiltro, $instanciaFiltro, $materiaId);
       $stmt->execute();
       $result = $stmt->get_result();
 
@@ -98,9 +97,7 @@ include 'autenticacion_profesor.php';
 
         while ($row = $result->fetch_assoc()) {
           $calificaciones = array_filter(explode(",", $row['calificaciones']));
-          $nombresIndicadores = array_filter(explode(",", $row['nombres_indicadores']));
           $row['calificaciones'] = $calificaciones;
-          $row['nombres_indicadores'] = $nombresIndicadores;
           $alumnos[] = $row;
 
           // Actualizar la cantidad máxima de notas
@@ -110,9 +107,13 @@ include 'autenticacion_profesor.php';
           <?php
           echo "<table class='table table-striped'><tr><th>Apellido</th><th>Nombre</th>";
 
-          // Generar dinámicamente los encabezados de las notas usando los nombres de indicadores
-          for ($i = 0; $i < $maxNotas; $i++) {
-            echo "<th>" . (isset($alumnos[0]['nombres_indicadores'][$i]) ? $alumnos[0]['nombres_indicadores'][$i] : "Indicador " . ($i + 1)) . "</th>";
+          // Generar dinámicamente los encabezados de las notas
+          if ($maxNotas == 0) {
+            echo "<th>Indicador</th>";
+          } else {
+            for ($i = 1; $i <= $maxNotas; $i++) {
+              echo "<th>Indicador $i</th>";
+            }
           }
           echo "<th>Promedio</th></tr>";
 
@@ -121,10 +122,13 @@ include 'autenticacion_profesor.php';
             echo "<tr><td>" . $alumno['apellidos'] . "</td><td>" . $alumno['nombres'] . "</td>";
 
             // Imprimir las notas del alumno
-            for ($i = 0; $i < $maxNotas; $i++) {
-              echo "<td>" . (isset($alumno['calificaciones'][$i]) ? $alumno['calificaciones'][$i] : "-") . "</td>";
+            if ($maxNotas == 0) {
+              echo "<td>-</td>";
+            } else {
+              for ($i = 0; $i < $maxNotas; $i++) {
+                echo "<td>" . (isset($alumno['calificaciones'][$i]) ? $alumno['calificaciones'][$i] : "-") . "</td>";
+              }
             }
-
             // Mostrar guiones si no hay promedio calculado
             echo "<td>" . (is_null($alumno['promedio']) ? "-" : number_format($alumno['promedio'], 2)) . "</td></tr>";
           }

@@ -3,11 +3,12 @@ include "../../getUserId.php";
 include "../../conn.php";
 ?>
 <head>
+  <!-- <link rel="stylesheet" href="./navb_secretaria.css"> -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
-<nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom border-secundary">
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
-    <a id="logo" class="navbar-brand" href="index.php">
+    <a id="logo" class="navbar-brand" href="menu.php">
       <img src="../../../img/LogoEESTN1.png" alt="Logo" style="height: 40px;">
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -17,7 +18,7 @@ include "../../conn.php";
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <!-- Dropdown para Alumnos -->
         <li class="nav-item">
-          <a class="nav-link <?php echo $current_page == 'alumnos.php?curso_id=0' ? 'active' : ''; ?>" aria-current="page" href="alumnos.php?id_curso=0">Ver alumnos</a>
+          <a class="nav-link <?php echo $current_page == 'agregar_alumnos.php' ? 'active' : ''; ?>" aria-current="page" href="alumno_curso.php">Ver alumnos</a>
         </li>
         <!-- Dropdown para Cursos -->
         <li class="nav-item dropdown">
@@ -25,8 +26,8 @@ include "../../conn.php";
             Asistencias
           </a>
           <ul class="dropdown-menu" aria-labelledby="cursosDropdown">
-            <li><a class="dropdown-item <?php echo $current_page == 'tomar_asistecia.php' ? 'active' : ''; ?>" href="tomar_asistencia.php">Tomar asistencia</a></li>
-            <li><a class="dropdown-item <?php echo $current_page == 'ver_asistencia.php' ? 'active' : ''; ?>" href="ver_asistencia.php">Ver asistencia</a></li>
+            <li><a class="dropdown-item <?php echo $current_page == 'tomarAsistencia.php' ? 'active' : ''; ?>" href="tomarAsistencia.php">Tomar asistencia</a></li>
+            <li><a class="dropdown-item <?php echo $current_page == '#' ? 'active' : ''; ?>" href="#">Ver asistencia</a></li>
           </ul>
         </li>
         <!-- Dropdown para Materias -->

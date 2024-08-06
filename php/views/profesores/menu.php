@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,20 +23,25 @@
         <h1>Menú</h1>
     </div>
     <div class="main-container">
-
         <div class="column">
-            <h2>ALUMNOS</h2>
-            <a href="ver_alumnos.php" class="btn btn-secondary">Ver Alumnos en curso</a>
+            <img src="../../../img/alumno.png" alt="Imagen de alumno">
+            <div class="button-container">
+                <a href="ver_alumnos.php" class="btn btn-secondary">Ver Alumnos en curso</a>
+            </div>
         </div>
         <div class="column">
-            <h2>R.I.T.E</h2>
-            <a href="ver_rite.php" class="btn btn-secondary">Ver RITE</a>
-            <a href="actualizar_rite.php" class="btn btn-secondary">Actualizar RITE</a>
-            <a href="gestionar_indicadores.php" class="btn btn-secondary">Gestionar indicadores</a>
+            <img src="../../../img/rite.png" alt="Imagen de RITE">
+            <div class="button-container">
+                <a href="ver_rite.php" class="btn btn-secondary">Ver RITE</a>
+                <a href="actualizar_rite.php" class="btn btn-secondary">Actualizar RITE</a>
+                <a href="gestionar_indicadores.php" class="btn btn-secondary">Gestionar indicadores</a>
+            </div>
         </div>
         <div class="column">
-            <h2>MATERIAS</h2>
-            <a href="ver_materia.php" class="btn btn-secondary">Ver Materias</a>
+            <img src="../../../img/materias.png" alt="Imagen de materias">
+            <div class="button-container">
+                <a href="ver_materia.php" class="btn btn-secondary">Ver Materias</a>
+            </div>
         </div>
     </div>
 </body>

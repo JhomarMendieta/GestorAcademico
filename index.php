@@ -24,6 +24,9 @@ switch ($ultimoSegmento) {
                 case "profesor":
                     header("Location: php/views/profesores/menu.php");
                     break;
+                case "directivo":
+                    header("Location: php/views/directivo/menu.php");
+                    break;
                 case "alumno":
                     header("Location: php/views/alumnos/menu.php");
                     break;

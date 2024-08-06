@@ -22,6 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $storedHash = $row["contrasenia"];
 
         if (password_verify($password, $storedHash)) {
+            
             $_SESSION["id"] = $row["id"];
             $_SESSION["nombre_usuario"] = $row["nombre_usuario"];
             $_SESSION["mail"] = $row["mail"];
@@ -30,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: ../index.php");
             exit; // Importante: salir del script después de redirigir
         } else {
-            echo "Credenciales inválidas"; // Mensaje genérico
+            echo "hola"; // Mensaje genérico
         }
     } else {
         echo "Credenciales inválidas"; // Mensaje genérico

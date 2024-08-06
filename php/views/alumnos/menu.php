@@ -21,20 +21,20 @@ include 'autenticacion_alumno.php';
 <!-- funcionalidad -->
 <div class="container">
     <div class="opciones">
-        <div class="opcion">
-            <h1>Alumnos</h1>
+        <div class="column">
+            <img src="../../../img/estudiante.png" alt="">
             <a type="button" class="btn btn-secondary" href="reinscripcion.php">Solicitud de reinscripción</a>
         </div>
-        <div class="opcion">
-            <h1>Materias</h1>
+        <div class="column">
+        <img src="../../../img/materia.png" alt="">
             <div class="materias-buttons">
                 <a type="button" class="btn btn-secondary" href="ver_materias.php">Ver materias</a>
                 <a type="button" class="btn btn-secondary" href="materias_adeudadas.php">Ver materias adeudadas</a>
                 <a type="button" class="btn btn-secondary" href="mesas.php">Gestionar mesas</a>
             </div>
         </div>
-        <div class="opcion">
-            <h1>R.I.T.E</h1>
+        <div class="column">
+            <img src="../../../img/rite.png" alt="">
             <a type="button" class="btn btn-secondary" href="rite.php">Ver RITE</a>
         </div>
         

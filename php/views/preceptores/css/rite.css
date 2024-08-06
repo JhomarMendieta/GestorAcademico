@@ -1,0 +1,51 @@
+.main{
+  width: 100%;
+  height: fit-content;
+  min-height: calc(100vh - 80px);
+}
+#materias{
+  width: calc(100% - 20px);
+  max-width: 1400px;
+  height: fit-content;
+  min-height: calc(100vh - 200px);
+  margin: 50px auto;
+  display: flex;
+  flex-direction: column;
+}
+#materias a{
+  text-decoration: none;
+  padding: 10px;
+  border-top: #686868 1px solid;
+  color: #000;
+  font-size: 2rem;
+}
+#materias a:last-child{
+  border-bottom: #686868 1px solid;
+}
+#materias a:hover{
+  color: #989898;
+}
+body.materias_none .cursos{
+  display: none;
+}
+.cursos{
+  width: calc(100% - 50px);
+  max-width: 1400px;
+  margin: 50px auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  place-items: center;
+  gap: 20px;
+}
+.cursos a{
+  background-color: #686868;
+  width: 300px;
+  height: 80px;
+  text-decoration: none;
+  color: #fff;
+  font-size: 3rem;
+  font-weight: bold;
+  border-radius: 5px;
+  display: grid;
+  place-items: center;
+}
