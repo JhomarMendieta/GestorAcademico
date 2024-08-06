@@ -119,10 +119,10 @@
                 </tbody>
             </table>
             <?php if (!$hayNotas): ?>
-                <p>Aún no se subió ninguna nota para la instancia seleccionada.</p>
+                <p class="fs-4 text-center bg-danger-subtle border border-danger rounded-3" >Aún no se subió ninguna nota para la instancia seleccionada.</p>
             <?php endif; ?>
         <?php else: ?>
-            <p>No se encontraron alumnos en el curso seleccionado.</p>
+            <p class="fs-4 text-center bg-danger-subtle border border-danger rounded-3">No se encontraron alumnos en el curso seleccionado.</p>
         <?php endif; ?>
         <a class="btn btn-secondary mt-3" href="javascript:history.back()">Volver</a>
     </main>

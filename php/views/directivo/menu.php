@@ -22,7 +22,7 @@
     <div class="container">
         <div class="opciones">
             <div class="column">
-                <img src="../../../img/estudiante.png" alt="">
+                <img src="../../../img/estudiantes.png" alt="">
                 <a type="button" class="btn btn-secondary" href="ver_alumnos.php">Ver Alumnos</a>
             </div>
             <div class="column">
