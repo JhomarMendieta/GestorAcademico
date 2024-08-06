@@ -4,46 +4,42 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="../../../img/LogoEESTN1.png" type="image/x-icon">
   <title>Document</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-  <link rel="stylesheet" href="css/navStyle.css">
   <link rel="stylesheet" href="css/main.css">
 </head>
 
 <body>
+  <?php
+    include("assets/menu.php");
+  ?>
+  <main class="body mt-5">
+      <div class="titulo-menu">
+          <h1 class="text-center p-4">Menú</h1>
+      </div>
+      <div class="main-container container-index">
+          <div class="column items-index">
+              <img src="" alt="">
+              <a href="alumnos.php?id_curso=0" class="btn btn-secondary">Ver Alumnos en curso</a>
+          </div>
+          <div class="column items-index">
+              <h2 class="text-center">ASISTENCIAS</h2>
+              <a href="tomar_asistencia.php?id_curso=0" class="btn btn-secondary">Tomar asistencia</a>
+              <a href="ver_asistencia.php" class="btn btn-secondary">Ver asistencia</a>
+          </div>
+          <div class="column items-index">
+              <h2 class="text-center">R.I.T.E.</h2>
+              <a href="rite.php?id_curso=0" class="btn btn-secondary">Ver RITE</a>
+          </div>
+          <div class="column items-index">
+              <h2 class="text-center">MATERIAS</h2>
+              <a href="ver_materia.php" class="btn btn-secondary">Ver materias</a>
+          </div>
+      </div>
+  </main>
 
-  <!-- navbar -->
-  <?php include 'nav_preseptor.php'; ?>
 
-  <!-- funcionalidad -->
-  <div class="container">
-    <div class="opciones">
-      <div class="column">
-        <img src="../../../img/estudiante.png" alt="">
-        <h2>Alumnos</h2>
-        <a type="button" class="btn btn-secondary" href="alumno_curso.php">Ver alumnos por curso</a>
-      </div>
-      <div class="column">
-        <img src="../../../img/asistensia.png" alt="">
-        <h2>Preceptor</h2>
-        <a type="button" class="btn btn-secondary" href="listado.php">Tomar lista</a>
-        <a type="button" class="btn btn-secondary" href=".php">Ver asistencia</a>
-      </div>
-      <div class="column">
-        <img src="../../../img/rite.png" alt="">
-        <h2>R.I.T.E</h2>
-        <div class="materias-buttons">
-          <a type="button" class="btn btn-secondary" href="rite.php">R.I.T.E</a>
-        </div>
-      </div>
-      <div class="column">
-        <img src="../../../img/materias.png" alt="">
-        <h2>Materias</h2>
-        <a type="button" class="btn btn-secondary" href="materias.php">Ver materias</a>
-      </div>
-    </div>
-  </div>
-
+  <script src="https://kit.fontawesome.com/d5f1649c82.js" crossorigin="anonymous"></script>
 </body>
 
 </html>

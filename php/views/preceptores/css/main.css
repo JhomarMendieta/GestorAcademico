@@ -1,81 +1,36 @@
 main.body{
     background-color: #fff;
     width: calc(100% - 40px);
-    max-width: 1400px;
+    max-width: 1000px;
     height: fit-content;
     min-height: calc(100vh - 200px);
     margin: 0px auto;
-    border: 2px solid #bbbbbb;
+    box-shadow: 1px 2px 10px #d0d0d0;
     border-radius: 10px  ;
-}  
-.items{
-    width: 100%;
-    height: fit-content;
-    padding: 10px;
+    padding: 10px 20px;
+}
+.container-index{
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-}
-.apartado .seccion{
-    height: 80px;
-    display: grid;
-    place-items: center;
-    gap: 10px;
-    margin: 10px 0px 0px 0px;
-}
-.apartado .seccion .icon i{
-    font-size: 3rem;
-}
-.apartado .seccion p.text_icon{
-    padding-top: 30px;
-    font-size: 2rem;
-    text-transform: uppercase;
-}
-.apartado .secciones{
-    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    justify-content: center;
     gap: 20px;
-    justify-content: center;
 }
-.apartado .secciones .opcion{
-    background-color: #686868;
-    width: 200px;
-    height: fit-content;
-    min-height: 40px;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-    display: grid;
-    place-items: center;
-    transition: all .2s ease;
-}
-.secciones .separacion{
-    width: 100%;
+.container-index .items-index{
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
+    gap: 10px;
 }
-.secciones .separacion .circulo{
-    background-color: #bbbbbb;
-    padding: 3px;
-    border-radius: 10px;
+
+.text-hover{
+    opacity: .7;
 }
-.secciones .separacion .linea{
-    background-color: #bbbbbb;
-    width: calc(100% - 30px);
-    height: 2px;
+.text-hover:hover{
+    opacity: 1;
 }
-.secciones .opcion:hover{
-    background-color: #9c9c9c;
+
+.td-size-curso:first-child{
+    width: calc(100% - 300px);
 }
-.secciones .opcion:active{
-    box-shadow: 0 0 0;
-    transform: translate(2px,2px);
-}
-@media (width < 700px) {
-    .items{
-        width: 100%;
-        height: fit-content;
-        padding: 10px;
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    }
+.td-size-curso:last-child{
+    width: 300px;
 }

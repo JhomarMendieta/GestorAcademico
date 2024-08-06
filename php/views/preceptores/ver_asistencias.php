@@ -18,7 +18,7 @@
                 include("assets/lista_cursos.php");
             }
             else{
-                include("assets/lista_alumnos_curso.php");
+                include("lista_alumnos_curso.php");
             }
         ?>
     </main>
