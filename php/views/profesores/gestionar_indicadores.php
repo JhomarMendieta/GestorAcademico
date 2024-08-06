@@ -80,7 +80,8 @@
         $materiaFilter = isset($_GET['materia_id']) ? $_GET['materia_id'] : '';
 
         // Obtener todos los nombres de notas e instancias filtrados por materia si se selecciona un filtro
-        $query = "SELECT nota.id, nota.nombre, nota.instancia, materia.nombre AS nombre_materia, curso.anio, curso.division 
+        $query = "SELECT nota.id, nota.nombre, nota.instancia, materia.nombre AS nombre_materia, curso.anio, curso.division,
+          IF(TIMESTAMPDIFF(HOUR, nota.fecha_creacion, NOW()) > 48, TRUE, FALSE) AS ha_pasado_48hs
           FROM nota
           INNER JOIN materia ON nota.id_materia = materia.id
           INNER JOIN curso ON materia.id_curso = curso.id
@@ -159,43 +160,63 @@
                             <td><?php echo $row['instancia']; ?></td>
                             <td><?php echo $row['nombre_materia']; ?></td>
                             <td><?php echo $row['anio'] . '°';  ?></td>
-                            <td><?php echo $row['division'] . '°';; ?></td>
+                            <td><?php echo $row['division'] . '°'; ?></td>
+                            <!-- <td>
+                                <?php if (!$row['ha_pasado_48hs']) : ?>
+                                    <button class="btn btn-success w-45 button-responsive2" onclick="showForm('form-edit-<?php echo $row['id']; ?>')">
+                                        Editar
+                                    </button>
+                                    <button class="btn btn-danger button-responsive" onclick="showForm('form-delete-<?php echo $row['id']; ?>')">
+                                        Borrar
+                                    </button>
+                                <?php else : ?>
+                                    <button class="btn btn-secondary" disabled>No editable</button>
+                                <?php endif; ?>
+                            </td> -->
                             <td>
-                                <button class="btn btn-success w-45 button-responsive2" onclick="showForm('form-edit-<?php echo $row['id']; ?>')">Editar</button>
-                                <button class="btn btn-danger button-responsive" onclick="showForm('form-delete-<?php echo $row['id']; ?>')">Borrar</button>
+                                <button class="btn btn-success w-45 button-responsive2" onclick="showForm('form-edit-<?php echo $row['id']; ?>')" <?php if ($row['ha_pasado_48hs']) echo 'disabled'; ?>>
+                                    Editar
+                                </button>
+                                <button class="btn btn-danger button-responsive" onclick="showForm('form-delete-<?php echo $row['id']; ?>')" <?php if ($row['ha_pasado_48hs']) echo 'disabled'; ?>>
+                                    Borrar
+                                </button>
                             </td>
                         </tr>
-                        <tr id="form-edit-<?php echo $row['id']; ?>" class="form-container" style="display:none;">
-                            <td colspan="6">
-                                <form method="POST" action="">
-                                    <input type="hidden" name="nota_id" value="<?php echo $row['id']; ?>">
-                                    <input type="hidden" name="materia_id" value='<?php echo $row['id_materia']; ?>'>
-                                    <input type="hidden" name="edit_indicator" value="edit">
-                                    <label for="nombre">Nombre:</label>
-                                    <input type="text" name="nombre" value="<?php echo $row['nombre']; ?>" required>
-                                    <label for="instancia">Instancia:</label>
-                                    <select name="instancia" required>
-                                        <option value="" disabled selected>Seleccione una Instancia</option>
-                                        <option value="MAYO" <?php if ($row['instancia'] == 'MAYO') echo 'selected'; ?>>MAYO</option>
-                                        <option value="JULIO" <?php if ($row['instancia'] == 'JULIO') echo 'selected'; ?>>JULIO</option>
-                                        <option value="SEPTIEMBRE" <?php if ($row['instancia'] == 'SEPTIEMBRE') echo 'selected'; ?>>SEPTIEMBRE</option>
-                                        <option value="NOVIEMBRE" <?php if ($row['instancia'] == 'NOVIEMBRE') echo 'selected'; ?>>NOVIEMBRE</option>
-                                    </select>
-                                    <button class="btn btn-primary" type="submit">Actualizar</button>
-                                </form>
-                            </td>
-                        </tr>
-                        <tr id="form-delete-<?php echo $row['id']; ?>" class="form-container" style="display:none;">
-                            <td colspan="6">
-                                <form method="POST" action="">
-                                    <input type="hidden" name="nota_id" value="<?php echo $row['id']; ?>">
-                                    <input type="hidden" name="delete_indicator" value="delete">
-                                    <p>¿Está seguro de que desea eliminar este indicador?</p>
-                                    <button class="btn btn-danger" type="submit">Eliminar</button>
-                                    <button class="btn btn-primary" type="button" onclick="hideForm('form-delete-<?php echo $row['id']; ?>')">Cancelar</button>
-                                </form>
-                            </td>
-                        </tr>
+                        <?php if (!$row['ha_pasado_48hs']) : ?>
+                            <!-- Formulario para editar -->
+                            <tr id="form-edit-<?php echo $row['id']; ?>" class="form-container" style="display:none;">
+                                <td colspan="6">
+                                    <form method="POST" action="">
+                                        <input type="hidden" name="nota_id" value="<?php echo $row['id']; ?>">
+                                        <input type="hidden" name="materia_id" value='<?php echo $row['id_materia']; ?>'>
+                                        <input type="hidden" name="edit_indicator" value="edit">
+                                        <label for="nombre">Nombre:</label>
+                                        <input type="text" name="nombre" value="<?php echo $row['nombre']; ?>" required>
+                                        <label for="instancia">Instancia:</label>
+                                        <select name="instancia" required>
+                                            <option value="" disabled selected>Seleccione una Instancia</option>
+                                            <option value="MAYO" <?php if ($row['instancia'] == 'MAYO') echo 'selected'; ?>>MAYO</option>
+                                            <option value="JULIO" <?php if ($row['instancia'] == 'JULIO') echo 'selected'; ?>>JULIO</option>
+                                            <option value="SEPTIEMBRE" <?php if ($row['instancia'] == 'SEPTIEMBRE') echo 'selected'; ?>>SEPTIEMBRE</option>
+                                            <option value="NOVIEMBRE" <?php if ($row['instancia'] == 'NOVIEMBRE') echo 'selected'; ?>>NOVIEMBRE</option>
+                                        </select>
+                                        <button class="btn btn-primary" type="submit">Actualizar</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <!-- Formulario para borrar -->
+                            <tr id="form-delete-<?php echo $row['id']; ?>" class="form-container" style="display:none;">
+                                <td colspan="6">
+                                    <form method="POST" action="">
+                                        <input type="hidden" name="nota_id" value="<?php echo $row['id']; ?>">
+                                        <input type="hidden" name="delete_indicator" value="delete">
+                                        <p>¿Está seguro de que desea eliminar este indicador?</p>
+                                        <button class="btn btn-danger" type="submit">Eliminar</button>
+                                        <button class="btn btn-primary" type="button" onclick="hideForm('form-delete-<?php echo $row['id']; ?>')">Cancelar</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <?php endif; ?>
                     <?php endwhile; ?>
                 </tbody>
             </table>
