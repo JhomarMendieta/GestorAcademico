@@ -1,69 +1,42 @@
-body {
-    background-color: white;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-.column {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #e0e0e0;
-    padding: 20px;
-    text-align: center;
-    flex: 1;
-}
-
-.button-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-end;
-    height: 100%;
-}
-
-.column img {
-    display: block;
-    margin: 0 auto 20px;
-}
-
-.container{
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 20px;
-    padding: 50px;
+main.body{
     background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
+    width: calc(100% - 40px);
+    max-width: 1000px;
+    height: fit-content;
+    min-height: calc(100vh - 200px);
+    margin: 0px auto;
+    box-shadow: 1px 2px 10px #d0d0d0;
+    border-radius: 10px  ;
+    padding: 20px;
+    margin-bottom: 30px;
+    margin-top: 30px;
 }
-
-div.opciones {
-    display: flex;
+.container-index{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     justify-content: center;
-    gap: 25px;
+    gap: 20px;
 }
-
-div.opcion {
+.container-index .items-index{
     display: flex;
     flex-direction: column;
-    align-items: center;
-    height: auto;
-    gap: 10px;
+    gap: 15px;
+    background-color: #f7f7f7;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 1px 2px 8px #d0d0d0;
 }
-
-div.container {
-    margin-top: 10%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.items-index p {
+    position: relative;
+    text-align: center;
+    font-weight: bold;
+    font-size: 20px;
 }
-
-#logo img {
-    height: 6vh;
+.items-index svg {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
-
 .navbar {
     min-height: 7vh;
     border-bottom: 1px grey solid;
@@ -73,27 +46,4 @@ div.container {
     div.opciones {
         flex-direction: column;
     }
-}
-
-h1 {
-    text-align: center;
-    margin-bottom: 20px; /* Añadido para separar los títulos de los botones */
-}
-
-.materias-buttons {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-}
-
-.btn {
-    width: 200px; 
-    text-align: center;
-    transition: transform 0.3s ease; 
-}
-
-
-.btn:hover {
-    transform: scale(1.1); 
 }
