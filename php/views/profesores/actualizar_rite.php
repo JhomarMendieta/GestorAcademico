@@ -81,9 +81,9 @@
     SELECT 
         m.id AS id_materia,
         CASE 
-            WHEN AVG(CASE WHEN n.instancia = 'JULIO' THEN n.calificacion ELSE NULL END) < 3 THEN 'TED'
-            WHEN AVG(CASE WHEN n.instancia = 'JULIO' THEN n.calificacion ELSE NULL END) < 4 THEN 'TEP'
-            WHEN AVG(CASE WHEN n.instancia = 'JULIO' THEN n.calificacion ELSE NULL END) >= 4 THEN 'TEA'
+            WHEN AVG(CASE WHEN n.instancia IN ('MAYO', 'JULIO') THEN n.calificacion ELSE NULL END) < 3 THEN 'TED'
+            WHEN AVG(CASE WHEN n.instancia IN ('MAYO', 'JULIO') THEN n.calificacion ELSE NULL END) < 4 THEN 'TEP'
+            WHEN AVG(CASE WHEN n.instancia IN ('MAYO', 'JULIO') THEN n.calificacion ELSE NULL END) >= 4 THEN 'TEA'
         END AS condicion_julio,
         CASE 
             WHEN AVG(CASE WHEN n.instancia IN ('SEPTIEMBRE', 'NOVIEMBRE') THEN n.calificacion ELSE NULL END) < 3 THEN 'TED'
