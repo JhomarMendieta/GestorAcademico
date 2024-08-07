@@ -8,6 +8,7 @@ main.body{
     box-shadow: 1px 2px 10px #d0d0d0;
     border-radius: 10px  ;
     padding: 20px;
+    margin-bottom: 30px;
 }
 .container-index{
     display: grid;
@@ -18,14 +19,20 @@ main.body{
 .container-index .items-index{
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 15px;
     background-color: #f7f7f7;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 1px 2px 8px #d0d0d0;
 }
-.container-index .items-index img{
-    height: 200px;
-    width: 80%;
-    margin: 0 auto;
+.items-index p {
+    position: relative;
+    text-align: center;
+    font-weight: bold;
+    font-size: 20px;
+}
+.items-index svg {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
